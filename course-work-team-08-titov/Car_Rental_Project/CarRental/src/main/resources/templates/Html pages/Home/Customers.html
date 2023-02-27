@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Пользователи</title>
+  <link href="../../../static/css/bootstrap.css" rel="stylesheet"/>
+  <link href="../../../static/css/Site.css" rel="stylesheet"/>
+
+  <link href="../../../static/css/Foother.css" rel="stylesheet" />
+  <!---->
+  <!---->
+
+</head>
+<body style="padding-bottom: 0px">
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <!--            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">-->
+      <!--                <span class="icon-bar"></span>-->
+      <!--                <span class="icon-bar"></span>-->
+      <!--                <span class="icon-bar"></span>-->
+      <!--            </button>-->
+      <img src="../../../static/img/logo.png" alt="" style="width: 40px; height: 40px; margin: 5px;">
+
+      <a class="navbar-brand navBar-item" href="../Home/Index.html">Car FY</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="navBar-item"><a href="../Home/About.html">Информация</a></li>
+        <li class="navBar-item"><a href="../Home/Contacts.html">Контакты</a></li>
+        <li class="navBar-item"><a href="../Car/IndexAll.html">Автопарк</a></li>
+        <li class="navBar-item"><a href="../Appeal/IndexAll.html">Вопросы</a></li>
+
+        <li class="navBar-item"><a href="../Contract/IndexAll.html">Мои аренды</a></li>
+        <li class="navBar-item"><a href="../Home/Customers.html">Пользователи</a></li>
+      </ul>
+
+      <ul>
+        <form action="/logout" class="navbar-right" method="post" id="logoutForm">
+          <input type="hidden" name="_csrf" value="${_csrf.token}">
+          <ul class="nav navbar-nav navbar-right">
+            <!--                        <li>-->
+            <!--                            <a style="color: #46F046; text-decoration: none; font-size: 18px; display: block; font-weight: 600" href="tel:+78005553535">+7 (800) 555-35-35</a>-->
+            <!--                        </li>-->
+            <li>
+              <a href="../Account/Index_Customer.html" title="Manage">Здравствуйте user@mail.ru!</a>
+            </li>
+            <li>
+              <!--              <a href="javascript:document.getElementById('logoutForm').submit()">Выйти</a>-->
+              <a href="../Home/Index.html">Выйти</a>
+            </li>
+            <li>
+              <a href="../Account/Log.html">Войти</a>
+            </li>
+          </ul>
+        </form>
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+<div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 80%;">
+
+  <p style="margin-top: 5%;"/>
+
+  <ul class="nav nav-tabs">
+    <li class="active">
+      <a data-toggle="tab" href="#Clients" style=" padding: 10px 5px 5px 5px;"><h4>Клиенты</h4></a>
+    </li>
+    <li>
+      <a data-toggle="tab" href="#Managers" style=" padding: 10px 5px 5px 5px;"><h4>Менеджеры</h4></a>
+    </li>
+    <li>
+      <a data-toggle="tab" href="#Admins" style=" padding: 10px 5px 5px 5px;"><h4>Администраторы</h4></a>
+    </li>
+  </ul>
+
+  <!--Block-->
+  <div class="tab-content">
+    <div id="Clients" class="tab-pane fade in active">
+      <table class="table">
+        <tr>
+          <th>
+            ФИО
+          </th>
+          <th>
+            Дата рождения
+          </th>
+          <th>
+            Паспортные данные
+          </th>
+          <th>
+            Номер ВУ
+          </th>
+          <th>
+            Адресс
+          </th>
+          <th>
+            Login
+          </th>
+          <th>
+            Телефон
+          </th>
+          <th>
+            user_ID
+          </th>
+          <th></th>
+        </tr>
+
+        <tr>
+          <td>
+            Титов Олег Эдуардович
+          </td>
+          <td>
+            26.11.2002 0:00:00
+          </td>
+          <td>
+            1234 5678
+          </td>
+          <td>
+            123456 66
+          </td>
+          <td>
+            Владимир
+          </td>
+          <td>
+            user@mail.ru
+          </td>
+          <td>
+            89157684701
+          </td>
+          <td>
+            3042038f-8a37-4e15-ae8c-816fa05e5919
+          </td>
+          <td>
+
+            <a href="/Customer/Delete/46001">Удалить</a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Новый клиент
+          </td>
+          <td>
+            01.01.2000 0:00:00
+          </td>
+          <td>
+            1234 5678
+          </td>
+          <td>
+            000000 00
+          </td>
+          <td>
+            Москва
+          </td>
+          <td>
+            user2@mail.ru
+          </td>
+          <td>
+            88005553535
+          </td>
+          <td>
+            985d7f6f-fb71-4d0f-bec2-e67ad22f22f3
+          </td>
+          <td>
+
+            <a href="/Customer/Delete/54001">Удалить</a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            TEST123
+          </td>
+          <td>
+            30.12.2022 0:00:00
+          </td>
+          <td>
+            1234 5678
+          </td>
+          <td>
+            TEST
+          </td>
+          <td>
+            TEST
+          </td>
+          <td>
+            TEST
+          </td>
+          <td>
+            TEST
+          </td>
+          <td>
+            TEST
+          </td>
+          <td>
+
+            <a href="#">Удалить</a>
+          </td>
+        </tr>
+
+      </table>
+    </div>
+    <div id="Managers" class="tab-pane fade in">
+
+      <table class="table">
+        <tr>
+          <th>
+            FIO
+          </th>
+          <th>
+            Login
+          </th>
+          <th>
+            Role
+          </th>
+          <th>
+            user_ID
+          </th>
+          <th></th>
+        </tr>
+
+        <tr>
+          <td>
+            Петров Пётр Петрович
+          </td>
+          <td>
+            manager@mail.ru
+          </td>
+          <td>
+            Менеджер
+          </td>
+          <td>
+            6ae262c2-ee20-4de2-b359-a52bbce17e2d
+          </td>
+          <td>
+
+            <a href="#">Удалить</a>
+          </td>
+        </tr>
+
+      </table>
+
+    </div>
+    <div id="Admins" class="tab-pane fade in">
+
+      <table class="table">
+        <tr>
+          <th>
+            FIO
+          </th>
+          <th>
+            Login
+          </th>
+          <th>
+            Role
+          </th>
+          <th>
+            user_ID
+          </th>
+          <th></th>
+        </tr>
+
+        <tr>
+          <td>
+            Иванов Иван Сидорович
+          </td>
+          <td>
+            admin@gmail.com
+          </td>
+          <td>
+            Admin
+          </td>
+          <td>
+            bb534361-58fb-49bc-a19c-3484d573cb18
+          </td>
+        </tr>
+
+      </table>
+
+    </div>
+  </div>
+  <!--Block-->
+
+  <br />
+
+</div><!-- /End Section Container -->
+
+<script src="../../../static/js/jquery-1.10.2.js"></script>
+<script src="../../../static/js/jquery-3.4.1.js"></script>
+<script src="../../../static/js/bootstrap.js"></script>
+<script src="../../../static/js/IndexScript.js"></script>
+
+</body>
+</html>

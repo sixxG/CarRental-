@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit</title>
+
+  <link href="../../../static/css/bootstrap.css" rel="stylesheet"/>
+  <link href="../../../static/css/Site.css" rel="stylesheet"/>
+
+  <link href="../../../static/css/Foother.css" rel="stylesheet" />
+  <!---->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!---->
+
+</head>
+<body style="padding-bottom: 0px">
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <!--            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">-->
+      <!--                <span class="icon-bar"></span>-->
+      <!--                <span class="icon-bar"></span>-->
+      <!--                <span class="icon-bar"></span>-->
+      <!--            </button>-->
+      <img src="../../../static/img/logo.png" alt="" style="width: 40px; height: 40px; margin: 5px;">
+
+      <a class="navbar-brand navBar-item" href="../Home/Index.html">Car FY</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="navBar-item"><a href="../Home/About.html">Информация</a></li>
+        <li class="navBar-item"><a href="../Home/Contacts.html">Контакты</a></li>
+        <li class="navBar-item"><a href="../Car/IndexAll.html">Автопарк</a></li>
+        <li class="navBar-item"><a href="../Appeal/IndexAll.html">Вопросы</a></li>
+
+        <li class="navBar-item"><a href="../Contract/IndexAll.html">Мои аренды</a></li>
+        <li class="navBar-item"><a href="../Home/Customers.html">Пользователи</a></li>
+      </ul>
+
+      <ul>
+        <form action="/logout" class="navbar-right" method="post" id="logoutForm">
+          <input type="hidden" name="_csrf" value="${_csrf.token}">
+          <ul class="nav navbar-nav navbar-right">
+            <!--                        <li>-->
+            <!--                            <a style="color: #46F046; text-decoration: none; font-size: 18px; display: block; font-weight: 600" href="tel:+78005553535">+7 (800) 555-35-35</a>-->
+            <!--                        </li>-->
+            <li>
+              <a href="../Account/Index_Customer.html" title="Manage">Здравствуйте user@mail.ru!</a>
+            </li>
+            <li>
+              <!--              <a href="javascript:document.getElementById('logoutForm').submit()">Выйти</a>-->
+              <a href="../Home/Index.html">Выйти</a>
+            </li>
+            <li>
+              <a href="../Account/Log.html">Войти</a>
+            </li>
+          </ul>
+        </form>
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+<div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 80%;">
+
+  <h2>Edit</h2>
+
+  <form action="/Contracts/Edit/1033" method="post"><input name="__RequestVerificationToken" type="hidden" value="uPMqljRguA3gnq2jTjQfBi4tQrBppOV_q9GGe37HL_xHBlntC0C7GiWXGp1W6aXiOGpxAiNG-ZzsSPya5CRi-HEaxKGhKG_oywGpNI6ZCGpVevSJ0WVfyEYLAWUma2ZvbabOghMoZwg1wflhdm4rQQ2" /><div class="form-horizontal">
+    <h4>Contract</h4>
+    <hr />
+
+    <input data-val="true" data-val-number="Значением поля ID должно быть число." data-val-required="Требуется поле ID." id="id" name="id" type="hidden" value="1033" />
+
+    <div class="form-group">
+      <label class="control-label col-md-2" for="FIO_Customer">ФИО Клиента</label>
+      <div class="col-md-10">
+        <input class="form-control text-box single-line" data-val="true" data-val-required="Требуется поле ФИО Клиента." id="FIO_Customer" name="FIO_Customer" type="text" value="Титов Олег Эдуардович" />
+        <span class="field-validation-valid text-danger" data-valmsg-for="FIO_Customer" data-valmsg-replace="true"></span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-md-2" for="FIO_Manager">ФИО Менеджера</label>
+      <div class="col-md-10">
+        <input class="form-control text-box single-line" id="FIO_Manager" name="FIO_Manager" type="text" value="Петров Пётр Петрович" />
+        <span class="field-validation-valid text-danger" data-valmsg-for="FIO_Manager" data-valmsg-replace="true"></span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-md-2" for="Car_Brand">Марка авто</label>
+      <div class="col-md-10">
+        <input class="form-control text-box single-line" id="Car_Brand" name="Car_Brand" type="text" value="ГАЗ 21" />
+        <span class="field-validation-valid text-danger" data-valmsg-for="Car_Brand" data-valmsg-replace="true"></span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-md-2" for="Car_Model">Модель авто</label>
+      <div class="col-md-10">
+        <input class="form-control text-box single-line" id="Car_Model" name="Car_Model" type="text" value="«Волга»" />
+        <span class="field-validation-valid text-danger" data-valmsg-for="Car_Model" data-valmsg-replace="true"></span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-md-2" for="Car_WIN_Number">WIN номер</label>
+      <div class="col-md-10">
+        <input class="form-control text-box single-line" id="Car_WIN_Number" name="Car_WIN_Number" type="text" value="VF7RD5FNABL000023" />
+        <span class="field-validation-valid text-danger" data-valmsg-for="Car_WIN_Number" data-valmsg-replace="true"></span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-md-2" for="Additional_Options">Доп. опции</label>
+      <div class="col-md-10">
+        <input class="form-control text-box single-line" id="Additional_Options" name="Additional_Options" type="text" value="Видеорегистратор; Автобокс;" />
+        <span class="field-validation-valid text-danger" data-valmsg-for="Additional_Options" data-valmsg-replace="true"></span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-md-2" for="Date_Start">Дата начала аренды</label>
+      <div class="col-md-10">
+        <input class="form-control text-box single-line" data-val="true" data-val-date="Поле Дата начала аренды должно содержать дату." data-val-required="Требуется поле Дата начала аренды." id="Date_Start" name="Date_Start" type="datetime" value="15.12.2022 22:07:00" />
+        <span class="field-validation-valid text-danger" data-valmsg-for="Date_Start" data-valmsg-replace="true"></span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-md-2" for="Date_End">Дата окончания аренды</label>
+      <div class="col-md-10">
+        <input class="form-control text-box single-line" data-val="true" data-val-date="Поле Дата окончания аренды должно содержать дату." data-val-required="Требуется поле Дата окончания аренды." id="Date_End" name="Date_End" type="datetime" value="15.12.2022 22:30:06" />
+        <span class="field-validation-valid text-danger" data-valmsg-for="Date_End" data-valmsg-replace="true"></span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-md-2" for="Price">Цена</label>
+      <div class="col-md-10">
+        <input class="form-control text-box single-line" data-val="true" data-val-number="Значением поля Цена должно быть число." data-val-required="Требуется поле Цена." id="Price" name="Price" type="text" value="87471" />
+        <span class="field-validation-valid text-danger" data-valmsg-for="Price" data-valmsg-replace="true"></span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-md-2" for="Condition">Состояние</label>
+      <div class="col-md-10">
+        <input class="form-control text-box single-line" id="Condition" name="Condition" type="text" value="Завершён" />
+        <span class="field-validation-valid text-danger" data-valmsg-for="Condition" data-valmsg-replace="true"></span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-md-2" for="Notes">Примечания</label>
+      <div class="col-md-10">
+        <input class="form-control text-box single-line" id="Notes" name="Notes" type="text" value="Хочу автомобиль" />
+        <span class="field-validation-valid text-danger" data-valmsg-for="Notes" data-valmsg-replace="true"></span>
+      </div>
+    </div>
+
+
+    <div class="form-group" style="display: none;">
+      <label class="control-label col-md-2" for="id_client">ID клиента</label>
+      <div class="col-md-10">
+        <input class="form-control text-box single-line" id="id_client" name="id_client" type="text" value="3042038f-8a37-4e15-ae8c-816fa05e5919" />
+
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-10">
+        <input type="submit" value="Save" class="btn btn-default" />
+      </div>
+    </div>
+  </div>
+  </form>
+  <div>
+    <a href="../Contract/IndexAll.html">Back to List</a>
+  </div>
+
+  <br />
+
+</div><!-- /End Section Container -->
+
+<div class="container navbar-header" style="width: 100%; padding: 0px;">
+  <!-- Footer 3
+  ==================================================================== -->
+  <footer id="footer-section-3" class="footer-page white-section footer" style="background: #404040; margin-top: 25px;">
+    <!-- Section Container -->
+    <div class="section-container" style=" width: 100%;">
+
+
+      <!-- container -->
+      <div class="container" style=" width: 100%;  height: 100%; align-content: center">
+        <!-- row -->
+        <!-- Widget Block ( Text ) -->
+        <div class="col-md-2 widget-block text-widget-block" style="text-align: left; width: 25%;">
+          <!-- Widget Block Container -->
+          <div class="widget-block-container">
+
+            <!-- Widget Block Content -->
+            <div class="widget-block-content" style="color: white; font-size: 16px; align-content: center; padding: 20px 20px 0px;">
+
+              <!-- Description -->
+              <p>Аренда и прокат автомобилей во Владимире. Владимир, Проспект Строителей 7Б, стр. 14, ООО «Прокат-Авто»</p>
+
+            </div><!-- /End Widget Block Content -->
+
+
+          </div><!-- /End Widget Block Container -->
+        </div><!-- /End Widget Block ( Text ) -->
+        <!-- Widget Block ( Link ) -->
+        <div class="col-md-2 widget-block link-widget-block" style="width: 17%;">
+          <!-- Widget Block Container -->
+          <div class="widget-block-container">
+
+
+            <!-- Widget Block Title -->
+            <div class="widget-block-title" style="color: white;">
+              <h4>Информация</h4>
+            </div><!-- /End Widget Block Title -->
+            <!-- Widget Block Content -->
+            <div class="widget-block-content">
+              <a href="../Home/About.html" class="footer_link" style="text-decoration: none; color: white; display: block">О нас</a>
+              <a href="../Home/Contacts.html" class="footer-link" style="text-decoration: none; color: white; display: block">Контакты</a>
+              <a href="../Car/IndexAll.html" class="footer-link" style="text-decoration: none; color: white; display: block">Автопарк</a>
+            </div><!-- /End Widget Block Content -->
+
+
+          </div><!-- /End Widget Block Container -->
+        </div><!-- /End Widget Block ( Link ) -->
+        <!-- Widget Block ( Link ) -->
+        <div class="col-md-2 widget-block link-widget-block" style="width: 19%;">
+          <!-- Widget Block Container -->
+          <div class="widget-block-container">
+
+            <!-- Widget Block Title -->
+            <div class="widget-block-title" style="color: white;">
+              <h4>Личный кабинет</h4>
+            </div><!-- /End Widget Block Title -->
+            <!-- Widget Block Content -->
+            <div class="widget-block-content">
+              <a href="../Account/Reg.html" style="text-decoration: none; color: white; display: block">Регистрация</a>
+              <a href="../Account/Log.html" style="text-decoration: none; color: white; display: block">Авторизация</a>
+            </div><!-- /End Widget Block Content -->
+
+          </div><!-- /End Widget Block Container -->
+        </div><!-- /End Widget Block ( Link ) -->
+        <!-- Widget Block ( Связь ) -->
+        <div class="col-md-2 widget-block social-widget-block" style="width: 19%;">
+          <!-- Widget Block Container -->
+          <div class="widget-block-container">
+
+            <!-- Widget Block Title -->
+            <div class="widget-block-title" style="color: white;">
+              <h4>Связаться с нами</h4>
+            </div><!-- /End Widget Block Title -->
+            <!-- Widget Block Content -->
+            <div class="widget-block-content">
+
+              <!-- Social Icons Block -->
+              <div class="social-icons-block social-icons-block-md social-icons-block-style-1">
+                <a style="color: white; text-decoration: none; font-size: 18px; display: block" href="tel:+78005553535">+7 (800) 555-35-35</a>
+                <p style="text-decoration: none; color: white; display: block">9:00 - 18:00 ежедневно</p>
+                <a style="color: white; text-decoration: none; display: block" href="mailto:CarRental@mail.ru">CarRental@mail.ru</a>
+              </div><!-- /End Social Icons Block -->
+
+            </div><!-- /End Widget Block Content -->
+
+
+          </div><!-- /End Widget Block Container -->
+        </div><!-- /End Widget Block ( Social ) -->
+        <!-- Widget Block ( Social ) -->
+        <div class="col-md-2 widget-block social-widget-block" style="width: 19%;">
+          <!-- Widget Block Container -->
+          <div class="widget-block-container">
+
+
+            <!-- Widget Block Title -->
+            <div class="widget-block-title" style="color: white;">
+              <h4>Мы в соц. сетях</h4>
+            </div><!-- /End Widget Block Title -->
+            <!-- Widget Block Content -->
+            <div class="widget-block-content">
+
+              <!-- Social Icons Block -->
+              <div class="social-icons-block social-icons-block-md social-icons-block-style-1">
+                <div class="social vk">
+                  <a href="#" target="_blank"><i class="fa fa-vk fa-2x"></i></a>
+                </div>
+
+                <div class="social youtube">
+                  <a href="#" target="_blank"><i class="fa fa-youtube fa-2x"></i></a>
+                </div>
+
+                <div class="social telegram">
+                  <a href="#" target="_blank"><i class="fa fa-paper-plane fa-2x"></i></a>
+                </div>
+              </div><!-- /End Social Icons Block -->
+
+            </div><!-- /End Widget Block Content -->
+
+
+          </div><!-- /End Widget Block Container -->
+        </div><!-- /End Widget Block ( Social ) -->
+
+
+      </div><!-- /End row -->
+    </div><!-- /End container -->
+  </footer><!-- /End Footer 3 -->
+</div>
+
+<script src="../../../static/js/jquery-1.10.2.js"></script>
+<script src="../../../static/js/jquery-3.4.1.js"></script>
+<script src="../../../static/js/bootstrap.js"></script>
+<script src="../../../static/js/IndexScript.js"></script>
+
+</body>
+</html>

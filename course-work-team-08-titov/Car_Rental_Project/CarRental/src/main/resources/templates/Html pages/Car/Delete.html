@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delete</title>
+
+  <link href="../../../static/css/bootstrap.css" rel="stylesheet"/>
+  <link href="../../../static/css/Site.css" rel="stylesheet"/>
+
+  <link href="../../../static/css/Foother.css" rel="stylesheet" />
+  <!---->
+  <!---->
+
+</head>
+<body style="padding-bottom: 0px">
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <!--            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">-->
+      <!--                <span class="icon-bar"></span>-->
+      <!--                <span class="icon-bar"></span>-->
+      <!--                <span class="icon-bar"></span>-->
+      <!--            </button>-->
+      <img src="../../../static/img/logo.png" alt="" style="width: 40px; height: 40px; margin: 5px;">
+
+      <a class="navbar-brand navBar-item" href="../Home/Index.html">Car FY</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="navBar-item"><a href="../Home/About.html">Информация</a></li>
+        <li class="navBar-item"><a href="../Home/Contacts.html">Контакты</a></li>
+        <li class="navBar-item"><a href="../Car/IndexAll.html">Автопарк</a></li>
+        <li class="navBar-item"><a href="../Appeal/IndexAll.html">Вопросы</a></li>
+
+        <li class="navBar-item"><a href="../Contract/IndexAll.html">Мои аренды</a></li>
+        <li class="navBar-item"><a href="../Home/Customers.html">Пользователи</a></li>
+      </ul>
+
+      <ul>
+        <form action="/logout" class="navbar-right" method="post" id="logoutForm">
+          <input type="hidden" name="_csrf" value="${_csrf.token}">
+          <ul class="nav navbar-nav navbar-right">
+            <!--                        <li>-->
+            <!--                            <a style="color: #46F046; text-decoration: none; font-size: 18px; display: block; font-weight: 600" href="tel:+78005553535">+7 (800) 555-35-35</a>-->
+            <!--                        </li>-->
+            <li>
+              <a href="../Account/Index_Customer.html" title="Manage">Здравствуйте user@mail.ru!</a>
+            </li>
+            <li>
+              <!--              <a href="javascript:document.getElementById('logoutForm').submit()">Выйти</a>-->
+              <a href="../Home/Index.html">Выйти</a>
+            </li>
+            <li>
+              <a href="../Account/Log.html">Войти</a>
+            </li>
+          </ul>
+        </form>
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+<div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 80%;">
+
+  <h2>Delete</h2>
+
+  <h3>Are you sure you want to delete this?</h3>
+  <div>
+    <h4 style="color: red;"></h4>
+    <hr />
+    <dl class="dl-horizontal">
+      <dt>
+        WIN
+      </dt>
+
+      <dd>
+        VF7RD5FNABL000010
+      </dd>
+
+      <dt>
+        Марка
+      </dt>
+
+      <dd>
+        BMW
+      </dd>
+
+      <dt>
+        Модель
+      </dt>
+
+      <dd>
+        X1
+      </dd>
+
+      <dt>
+        Кузов
+      </dt>
+
+      <dd>
+        Хетчбэк
+      </dd>
+
+      <dt>
+        Класс
+      </dt>
+
+      <dd>
+        Эконом
+      </dd>
+
+      <dt>
+        Год выпуска
+      </dt>
+
+      <dd>
+        2010
+      </dd>
+
+      <dt>
+        Пробег
+      </dt>
+
+      <dd>
+        90000
+      </dd>
+
+      <dt>
+        Цвет
+      </dt>
+
+      <dd>
+        Коричневый
+      </dd>
+
+      <dt>
+        КП
+      </dt>
+
+      <dd>
+        Автоматическая
+      </dd>
+
+      <dt>
+        Привод
+      </dt>
+
+      <dd>
+        Задний
+      </dd>
+
+      <dt>
+        Мощность
+      </dt>
+
+      <dd>
+        150
+      </dd>
+
+      <dt>
+        Цена в день
+      </dt>
+
+      <dd>
+        2999
+      </dd>
+
+      <dt>
+        Состояние
+      </dt>
+
+      <dd>
+        Свободна
+      </dd>
+
+      <img src="/Image/bmwX1-22-12-29-11.jpeg" style="margin: 10px;
+                        height: 300px;
+                        width: 620px"
+           id="imagePreview" />
+
+    </dl>
+
+    <form action="/Car/Delete/67001" method="post">
+      <div class="form-actions no-color">
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a href="../Car/IndexAll.html">Back to List</a>
+      </div>
+    </form>
+  </div>
+
+  <br />
+
+</div><!-- /End Section Container -->
+
+<script src="../../../static/js/jquery-1.10.2.js"></script>
+<script src="../../../static/js/jquery-3.4.1.js"></script>
+<script src="../../../static/js/bootstrap.js"></script>
+<script src="../../../static/js/IndexScript.js"></script>
+
+</body>
+</html>

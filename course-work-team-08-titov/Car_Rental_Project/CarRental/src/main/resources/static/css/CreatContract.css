@@ -1,0 +1,35 @@
+﻿body {
+}
+
+.bloc-input-checkBox {
+    width: 20px;
+    height: 20px;
+    margin: 0 auto;
+    display: block;
+}
+
+.labelForCheckBox {
+    display: block;
+    margin: 0;
+    padding: 2px;
+}
+
+.inputChaildChest {
+    padding: 2px;
+    display: block;
+    width: 5%;
+}
+
+.timeRentalHeader {
+    width: 100%;
+    display: flex;
+    margin: 0 auto;
+    text-align: left;
+    font-weight: 600
+}
+
+.dateStart {
+    display: flex;
+    margin-left: 25px;
+    margin-bottom: 10px;
+}

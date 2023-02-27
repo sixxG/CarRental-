@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Авторизация</title>
+
+  <link href="../../../static/css/bootstrap.css" rel="stylesheet"/>
+  <link href="../../../static/css/Site.css" rel="stylesheet"/>
+
+  <link href="../../../static/css/LogIN_OUT.css" rel="stylesheet" />
+  <link href="../../../static/css/LogIN_OUT.css" rel="stylesheet">
+
+  <!---->
+  <!---->
+
+</head>
+<body style="padding-bottom: 0px">
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <!--            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">-->
+      <!--                <span class="icon-bar"></span>-->
+      <!--                <span class="icon-bar"></span>-->
+      <!--                <span class="icon-bar"></span>-->
+      <!--            </button>-->
+      <img src="../../../static/img/logo.png" alt="" style="width: 40px; height: 40px; margin: 5px;">
+
+      <a class="navbar-brand navBar-item" href="../Home/Index.html">Car FY</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="navBar-item"><a href="../Home/About.html">Информация</a></li>
+        <li class="navBar-item"><a href="../Home/Contacts.html">Контакты</a></li>
+        <li class="navBar-item"><a href="../Car/IndexAll.html">Автопарк</a></li>
+        <li class="navBar-item"><a href="../Appeal/IndexAll.html">Вопросы</a></li>
+
+        <li class="navBar-item"><a href="../Contract/IndexAll.html">Мои аренды</a></li>
+        <li class="navBar-item"><a href="../Home/Customers.html">Пользователи</a></li>
+      </ul>
+
+      <ul>
+        <form action="/logout" class="navbar-right" method="post" id="logoutForm">
+          <input type="hidden" name="_csrf" value="${_csrf.token}">
+          <ul class="nav navbar-nav navbar-right">
+            <!--                        <li>-->
+            <!--                            <a style="color: #46F046; text-decoration: none; font-size: 18px; display: block; font-weight: 600" href="tel:+78005553535">+7 (800) 555-35-35</a>-->
+            <!--                        </li>-->
+            <li>
+              <a href="../Account/Index_Customer.html" title="Manage">Здравствуйте user@mail.ru!</a>
+            </li>
+            <li>
+              <!--              <a href="javascript:document.getElementById('logoutForm').submit()">Выйти</a>-->
+              <a href="../Home/Index.html">Выйти</a>
+            </li>
+            <li>
+              <a href="../Account/Log.html">Войти</a>
+            </li>
+          </ul>
+        </form>
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+<div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 80%;">
+
+  <div class="bloc-log">
+
+    <div class="bloc-header">
+      <p class="bloc-header-header">Вход</p>
+      <p class="bloc-header-info">Введите свои учётные данные</p>
+    </div>
+
+    <hr style="color: #5394FD; margin: 5px" />
+    <br />
+
+    <form action="/login" class="form-horizontal" method="post">
+      <input type="hidden" name="_csrf" value="${_csrf.token}">
+      <div class="form-group" style="width: 100%; margin: 0 auto;">
+        <label class="bloc-input">Имя пользователя</label>
+        <br />
+        <div class="bloc-input-info">
+          <input type="text" name="username" id="username" class="bloc-input-input">
+        </div>
+      </div>
+      <div class="form-group" style="width: 100%; margin: 0 auto;">
+        <label class="bloc-input">Пароль</label>
+        <br />
+        <div class="bloc-input-info">
+          <input type="password" name="password" id="password" class="bloc-input-input">
+        </div>
+      </div>
+      <!--            <div class="bloc-input-chek">-->
+
+      <!--                <div class="checkbox" style="width: 100%; text-align: left; color: white;">-->
+      <!--                    <input class="bloc-input-checkBox" data-val="true" data-val-required="Требуется поле Запомнить меня." id="RememberMe" name="RememberMe" type="checkbox" value="true" /><input name="RememberMe" type="hidden" value="false" />-->
+      <!--                    <label for="RememberMe">Запомнить меня</label>-->
+      <!--                </div>-->
+
+      <!--            </div>-->
+      <br />
+      <hr style="color: #5394FD; margin: 5px" />
+      <br />
+      <div class="form-group" style="text-align: center; width: 100%; margin: 0 auto">
+        <input type="submit" value="ВОЙТИ" class="log-btn" />
+      </div>
+      <br />
+      <div style="display: flex;">
+        <div style="padding: 0; display: inline-block; width: 60%;">
+          <a href="Reg.html">Регистрация нового пользователя</a>
+        </div>
+
+        <!--                <div style="padding: 0; display: inline-block; text-align: right; width: 40%;">-->
+
+        <!--                    <a href="/Account/ForgotPassword?class=OtherLogInFich">Забыли пароль?</a>-->
+        <!--                </div>-->
+      </div>
+    </form>
+
+  </div>
+
+  <br />
+
+</div><!-- /End Section Container -->
+
+<script src="../../../static/js/jquery-1.10.2.js"></script>
+<script src="../../../static/js/jquery-3.4.1.js"></script>
+<script src="../../../static/js/bootstrap.js"></script>
+<script src="../../../static/js/IndexScript.js"></script>
+
+<script src="../../../static/js/jquery.validate.js"></script>
+<script src="../../../static/js/jquery.validate.unobtrusive.js"></script>
+
+</body>
+</html>
