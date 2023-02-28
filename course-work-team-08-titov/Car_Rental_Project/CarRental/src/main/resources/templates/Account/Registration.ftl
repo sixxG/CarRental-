@@ -25,7 +25,7 @@
             <!--                    <li style="display:none"></li>-->
             <!--                </ul>-->
             <!--            </div>-->
-
+            ${message?if_exists}
 
             <div class="form-group" style="width: 100%; margin: 0 auto;">
                 <label class="bloc-input">Имя пользователя</label>

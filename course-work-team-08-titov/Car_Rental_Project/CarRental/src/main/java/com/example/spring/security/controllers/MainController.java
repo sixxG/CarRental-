@@ -41,19 +41,14 @@ public class MainController {
 
         return "Home/Main";
     }
-
-    @GetMapping("/authenticated")
-    public String pageForAuthenticatedUsers(Principal principal) {
-
-        User user = userService.findByUsername(principal.getName());
-        Authentication a = SecurityContextHolder.getContext().getAuthentication();
-
-//        return "secured part of web service " + user.getUsername() + " " + user.toString();
-        return "Main";
-    }
-
-    @GetMapping("/only_for_admins")
-    public String pageOnlyForAdmins() {
-        return "admins page";
-    }
+//
+//    @GetMapping("/authenticated")
+//    public String pageForAuthenticatedUsers(Principal principal) {
+//
+//        User user = userService.findByUsername(principal.getName());
+//        Authentication a = SecurityContextHolder.getContext().getAuthentication();
+//
+////        return "secured part of web service " + user.getUsername() + " " + user.toString();
+//        return "Main";
+//    }
 }
