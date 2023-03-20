@@ -3,6 +3,7 @@ package com.example.spring.security.models;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 @Entity
 @Data
@@ -11,25 +12,53 @@ public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotEmpty(message = "WIN не должен быть пустым!")
+    @Size(min = 17, max = 17, message = "Размер WIN номера должен составлять 17 символов!")
     private String WIN_Number;
+    @NotEmpty(message = "Укажите бренд автомобиля!")
+    @Size(min = 1, max = 20, message = "Название производителя авто не может превышать 20 символов!")
     private String brand;
     private String model;
+    @NotEmpty(message = "Укажите кузов автомобиля!")
+    @Size(min = 3, max = 15, message = "Кузов авто не может превышать 15 символов!")
     private String body;
+    @NotEmpty(message = "Укажите класс автомобиля!")
+    @Size(min = 5, max = 20, message = "Класс авто не может превышать 20 символов!")
     private String level;
+    @NotEmpty(message = "Укажите год выпуска автомобиля!")
+    @Future(message = "Год авто не может быть в будущем!")
     private int year;
+    @NotEmpty(message = "Укажите пробег автомобиля!")
     private int mileage;
+    @NotEmpty(message = "Укажите пробег автомобиля!")
+    @Size(min = 3, max = 15, message = "Цвет авто не может превышать 15 символов!")
     private String color;
+    @NotEmpty(message = "Укажите тип КП автомобиля!")
+    @Size(min = 3, max = 15, message = "Тип КП не может превышать 15 символов!")
     private String transmission;
+    @NotEmpty(message = "Укажите привод автомобиля!")
+    @Size(min = 3, max = 15, message = "Привод не может превышать 15 символов!")
     private String drive;
+    @NotEmpty(message = "Укажите мощность автомобиля!")
+    @Min(value = 30)
+    @Max(value = 5000)
     private int power;
-    private double price;
+    @NotEmpty(message = "Укажите цену проката за день для автомобиля!")
+    @Min(value = 500)
+    @Max(value = 200000)
+    private int price;
+    @NotEmpty(message = "Укажите статус автомобиля!")
+    @Size(min = 3, max = 15, message = "Статус не может превышать 15 символов!")
     private String status;
+    @NotEmpty(message = "Укажите статус автомобиля!")
     private String image;
+    @NotEmpty(message = "Укажите описание автомобиля!")
+    @Size(min = 3, max = 10000, message = "Описание не может превышать 10000 символов!")
     private String description;
 
     public Car() {
     }
-    public Car(String WIN_Number, String brand, String model, String body, String level, int year, int mileage, String color, String transmission, String drive, int power, double price, String status, String image, String description) {
+    public Car(String WIN_Number, String brand, String model, String body, String level, int year, int mileage, String color, String transmission, String drive, int power, int price, String status, String image, String description) {
         this.WIN_Number = WIN_Number;
         this.brand = brand;
         this.model = model;
@@ -44,134 +73,6 @@ public class Car {
         this.price = price;
         this.status = status;
         this.image = image;
-        this.description = description;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getWIN_Number() {
-        return WIN_Number;
-    }
-
-    public void setWIN_Number(String WIN_Number) {
-        this.WIN_Number = WIN_Number;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
-    }
-
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public int getMileage() {
-        return mileage;
-    }
-
-    public void setMileage(int mileage) {
-        this.mileage = mileage;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getTransmission() {
-        return transmission;
-    }
-
-    public void setTransmission(String transmission) {
-        this.transmission = transmission;
-    }
-
-    public String getDrive() {
-        return drive;
-    }
-
-    public void setDrive(String drive) {
-        this.drive = drive;
-    }
-
-    public int getPower() {
-        return power;
-    }
-
-    public void setPower(int power) {
-        this.power = power;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatusn(String status) {
-        this.status = status;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
         this.description = description;
     }
 }

@@ -3,7 +3,8 @@
 
 <@c.page>
 
-<@nav_bar.nav_bar></@nav_bar.nav_bar>
+    <link href="/static/css/LogIN_OUT.css" rel="stylesheet" />
+    <link href="/static/css/LogIN_OUT.css" rel="stylesheet">
 
 <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 80%;">
 

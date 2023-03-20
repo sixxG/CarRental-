@@ -3,27 +3,110 @@
 
 <@c.page>
 
-<@nav_bar.nav_bar></@nav_bar.nav_bar>
-List of users
+    <div style="display: block; width: 50%; margin: 0 auto">
 
-    <table>
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Role</th>
-        </tr>
-        </thead>
-        <tbody>
-        <#list users as user>
-        <tr>
-            <td>${user.username}</td>
-            <td><#list user.roles as role>${role.name}<#sep>, </#list></td>
-            <td>
-                <a href="/user/${user.id}">Edit</a>
-            </td>
-        </tr>
-        </#list>
-        </tbody>
-    </table>
+        <ul class="nav nav-tabs" style="margin-top: 10%; ">
+            <li class="active">
+                <a data-toggle="tab" href="#users" style=" padding: 10px 5px 5px 5px;"><h4>Пользователи</h4></a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#admins" style=" padding: 10px 5px 5px 5px;"><h4>Администраторы</h4></a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#managers" style=" padding: 10px 5px 5px 5px;"><h4>Менеджеры</h4></a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="users" class="tab-pane fade in active">
+                <table class="table" style="width: 100%;">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Role</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <#list users as user>
+                        <tr>
+                            <td>${user.id}</td>
+                            <td>${user.username}</td>
+                            <td>
+                                <#list user.roles as role>
+                                    <p>${role.name} </p>
+                                </#list>
+                            </td>
+                            <td>
+                                <a href="/user/${user.id}">Edit</a>
+                            </td>
+                        </tr>
+                    </#list>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="admins" class="tab-pane fade in">
+                <table class="table" style="width: 100%;">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Role</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <#list admins as admin>
+                        <tr>
+                            <td>${admin.id}</td>
+                            <td>${admin.username}</td>
+                            <td>
+                                <#list admin.roles as role>
+                                    <p>${role.name} </p>
+                                </#list>
+                            </td>
+                            <td>
+                                <a href="/user/${admin.id}">Edit</a>
+                            </td>
+                        </tr>
+                    </#list>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="managers" class="tab-pane fade in">
+                <table class="table" style="width: 100%;">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Role</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <#list managers as manager>
+                        <tr>
+                            <td>${manager.id}</td>
+                            <td>${manager.username}</td>
+                            <td>
+                                <#list manager.roles as role>
+                                    <p>${role.name} </p>
+                                </#list>
+                            </td>
+                            <td>
+                                <a href="/user/${manager.id}">Edit</a>
+                            </td>
+                        </tr>
+                    </#list>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
 
 </@c.page>

@@ -22,3 +22,15 @@ select,
 textarea {
     max-width: 280px;
 }*/
+
+
+.singOut {
+    border: 0px;
+    background-color: rgba(0,0,0,0%);
+    color: #9d9d9d;
+    padding: 15px;
+}
+
+.singOut:hover {
+    color: white;
+}

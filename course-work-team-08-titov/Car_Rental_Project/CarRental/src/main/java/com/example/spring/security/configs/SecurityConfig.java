@@ -30,67 +30,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/only_for_admins/**").hasRole("ADMIN")
+                .antMatchers("/", "/static/**").permitAll()
                 .and()
                     .formLogin()
                     .loginPage("/login")
                     .permitAll()
                 .and()
                     .logout()
-                    //.logoutSuccessUrl("/login")
+                    .logoutSuccessUrl("/")
                     .permitAll();
 //                   .csrf().disable();
     }
-
-    //Создаём пользователей в памяти
-//    @Bean
-//    public UserDetailsService users() {
-//        UserDetails user = User.builder()
-//                .username("user")
-//                .password("{bcrypt}$2a$12$CjcDWIS9ZYYI4Evo2n2gP.kbj.mNlAnmArrwj/sm7acCdlMtZk8vq")
-//                .roles("USER")
-//                .build();
-//
-//        UserDetails admin = User.builder()
-//                .username("admin")
-//                .password("{bcrypt}$2a$12$CjcDWIS9ZYYI4Evo2n2gP.kbj.mNlAnmArrwj/sm7acCdlMtZk8vq")
-//                .roles("ADMIN","USER")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(user, admin);
-//    }
-
-
-// jdbcAuthentication
-//    @Bean
-//    public JdbcUserDetailsManager users(DataSource dataSource) {
-//        UserDetails user = User.builder()
-//            .username("user")
-//            .password("{bcrypt}$2a$12$CjcDWIS9ZYYI4Evo2n2gP.kbj.mNlAnmArrwj/sm7acCdlMtZk8vq")
-//            .roles("USER")
-//            .build();
-//
-//        UserDetails admin = User.builder()
-//                .username("admin")
-//                .password("{bcrypt}$2a$12$CjcDWIS9ZYYI4Evo2n2gP.kbj.mNlAnmArrwj/sm7acCdlMtZk8vq")
-//                .roles("ADMIN","USER")
-//                .build();
-//
-//        JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
-//
-//        if(users.userExists(user.getUsername())) {
-//            users.deleteUser(user.getUsername());
-//        }
-//
-//        if(users.userExists(admin.getUsername())) {
-//            users.deleteUser(admin.getUsername());
-//        }
-//        users.createUser(user);
-//        users.createUser(admin);
-//
-//        return users;
-//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

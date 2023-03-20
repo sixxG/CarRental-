@@ -34,15 +34,19 @@ public class RegistrationController {
     @PostMapping("/registration")
     public String addUser(User user, Map<String, Object> model) {
         User userFromDB = userRepository.findByUsername(user.getUsername());
-
         if (userFromDB != null) {
             model.put("message", "User exists!");
             return "Account/Registration";
         }
 
+        if (userRepository.findByEmail(user.getEmail()) != null) {
+            model.put("message", "Email is already used!");
+            return "Account/Registration";
+        }
+
 //        String s = "USER";
         Collection<Role> roles = new ArrayList<>();
-        roles.add(roleRepository.findByName("ROLE_USER"));
+        roles.add(roleRepository.findByName("USER"));
 //        roles.add(roleRepository.findByName("USER"));
         user.setRoles(roles);
         user.setPassword(String.valueOf(passwordEncoder.encode(user.getPassword())));

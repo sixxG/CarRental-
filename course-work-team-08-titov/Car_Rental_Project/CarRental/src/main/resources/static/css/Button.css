@@ -17,3 +17,28 @@
     opacity: 0.8;
     color: white;
 }
+
+/*Наверх кнопка*/
+.back-to-top:-webkit-any-link {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    /*background-color: #007bff;*/
+    color: #fff;
+    border-radius: 50%;
+    font-size: 50px;
+    text-align: center;
+    line-height: 50px;
+    z-index: 99;
+    opacity: 0.7;
+    transition: opacity 0.3s ease-in-out;
+    text-decoration: none;
+}
+
+.back-to-top:hover {
+    opacity: 1;
+}
+

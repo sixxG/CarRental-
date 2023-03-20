@@ -1,45 +1,58 @@
 package com.example.spring.security.controllers;
 
-import com.example.spring.security.models.User;
+import com.example.spring.security.models.Car;
+import com.example.spring.security.repositories.CarRepository;
+import com.example.spring.security.repositories.UserRepository;
 import com.example.spring.security.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class MainController {
 
-    private UserService userService;
+    private final CarRepository carRepository;
 
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
+    public MainController(CarRepository carRepository) {
+        this.carRepository = carRepository;
     }
-
     @GetMapping("/")
-    public String homePage(Model model, Principal principal) {
+    public String homePage(Model model) {
 
-        if(principal != null) {
-            model.addAttribute("name", principal.getName());
-        } else {
-            model.addAttribute("name", "Somebody");
+        List<Car> cars = carRepository.findAll();
+        Set<Car> popularCars = new HashSet<>();
+
+        if (cars.size() != 0) {
+            Random random = new Random();
+            for (int i = 0; i < 3; i++) {
+                popularCars.add(cars.get(random.nextInt(cars.size())));
+            }
         }
 
+        model.addAttribute("cars", popularCars);
+
+        Set<String> brandList =  cars.stream().map(Car::getBrand).collect(Collectors.toSet());
+
+        model.addAttribute("carsBrand", brandList.stream().sorted().collect(Collectors.toList()));
+
         return "Home/Main";
     }
 
-    @GetMapping("/Boot")
-    public String testSpringBootPage(@RequestParam(name = "name", required = false, defaultValue = "World") String name, Map<String, Object> model) {
-        model.put("name", name);
+    @GetMapping("/about")
+    public String aboutPage(Model model,Principal principal) {
 
-        return "Home/Main";
+        return "Home/About";
+    }
+
+    @GetMapping("/contacts")
+    public String contactsPage() {
+
+        return "Home/Contacts";
     }
 //
 //    @GetMapping("/authenticated")

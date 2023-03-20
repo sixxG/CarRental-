@@ -3,7 +3,8 @@
 
 <@c.page>
 
-    <@nav_bar.nav_bar></@nav_bar.nav_bar>
+    <link href="/static/css/LogIN_OUT.css" rel="stylesheet" />
+    <link href="/static/css/LogIN_OUT.css" rel="stylesheet">
 
 <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 80%;">
 
@@ -25,7 +26,7 @@
             <!--                    <li style="display:none"></li>-->
             <!--                </ul>-->
             <!--            </div>-->
-            ${message?if_exists}
+            <span style="color: red; font-weight: 600; font-size: 14px; text-align: center; width: 100%;">${message?if_exists}</span>
 
             <div class="form-group" style="width: 100%; margin: 0 auto;">
                 <label class="bloc-input">Имя пользователя</label>
@@ -51,7 +52,7 @@
             <br />
 
             <div class="form-group" style="text-align: center; width: 100%; margin: 0 auto">
-                <input type="submit" value="ЗАРЕГИСТРИРОВАТЬСЯ" class="log-btn" style="font-size:30px"/>
+                <input type="submit" value="ЗАРЕГИСТРИРОВАТЬСЯ" class="log-btn" style="font-size:26px"/>
             </div>
 
             <br />
