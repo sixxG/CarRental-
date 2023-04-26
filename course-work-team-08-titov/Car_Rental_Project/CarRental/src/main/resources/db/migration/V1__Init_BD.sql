@@ -54,11 +54,11 @@ create table users_roles (
 
 alter table users_roles
     add constraint FKj6m8fwv7oqv74fcehir1a9ffy
-    foreign key (role_id) references roles (id);
+    foreign key (role_id) references roles (id) on DELETE cascade;
 
 alter table users_roles
     add constraint FK2o0jvgh89lemvvo17cbqvdxaa
-    foreign key (user_id) references users (id);
+    foreign key (user_id) references users (id) on DELETE cascade;
 
 create table contracts (
    id integer not null auto_increment,

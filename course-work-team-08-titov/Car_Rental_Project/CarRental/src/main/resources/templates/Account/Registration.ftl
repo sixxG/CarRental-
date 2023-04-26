@@ -4,7 +4,7 @@
 <@c.page>
 
     <link href="/static/css/LogIN_OUT.css" rel="stylesheet" />
-    <link href="/static/css/LogIN_OUT.css" rel="stylesheet">
+    <link href="/static/css/LogIN_OUT.css" rel="stylesheet"/>
 
 <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 80%;">
 
@@ -12,7 +12,7 @@
     <form action="/registration" class="form-horizontal" method="post">
         <div class="bloc-log">
 
-            <input type="hidden" name="_csrf" value="${_csrf.token}">
+            <input type="hidden" name="_csrf" value="${_csrf.token}"/>
 
             <div class="bloc-header">
                 <p class="bloc-header-header">Регистрация</p>
@@ -31,19 +31,19 @@
             <div class="form-group" style="width: 100%; margin: 0 auto;">
                 <label class="bloc-input">Имя пользователя</label>
                 <div class="bloc-input-info">
-                    <input type="text" name="username" class="bloc-input-input">
+                    <input type="text" name="username" class="bloc-input-input"/>
                 </div>
             </div>
             <div class="form-group" style="width: 100%; margin: 0 auto;">
                 <label class="bloc-input">Email</label>
                 <div class="bloc-input-info">
-                    <input type="email" name="email" class="bloc-input-input">
+                    <input type="email" name="email" class="bloc-input-input"/>
                 </div>
             </div>
             <div class="form-group" style="width: 100%; margin: 0 auto;">
                 <label class="bloc-input">Password</label>
                 <div class="bloc-input-info">
-                    <input type="password" name="password" class="bloc-input-input">
+                    <input type="password" name="password" class="bloc-input-input"/>
                 </div>
             </div>
 
@@ -52,7 +52,7 @@
             <br />
 
             <div class="form-group" style="text-align: center; width: 100%; margin: 0 auto">
-                <input type="submit" value="ЗАРЕГИСТРИРОВАТЬСЯ" class="log-btn" style="font-size:26px"/>
+                <input type="submit" value="ЗАРЕГИСТРИРОВАТЬСЯ" data-id="ЗАРЕГИСТРИРОВАТЬСЯ" class="log-btn" style="font-size:26px"/>
             </div>
 
             <br />

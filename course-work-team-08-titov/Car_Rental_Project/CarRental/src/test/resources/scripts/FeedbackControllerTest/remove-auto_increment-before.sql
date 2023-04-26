@@ -1,0 +1,1 @@
+ALTER TABLE feedbacks AUTO_INCREMENT=0;

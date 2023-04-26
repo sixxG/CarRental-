@@ -127,22 +127,6 @@
 
                     <hr style="color: #5394FD; margin: 5px" />
 
-<#--                    <#if isUser>-->
-<#--                        <#if contract.getStatus() = "Не подтверждён">-->
-<#--                            <form action="#" method="post">-->
-<#--                                <input type="submit" value="Отменить" class="btn-canceled button" style="width: 100%" />-->
-<#--                            </form>-->
-<#--                        </#if>-->
-
-<#--                        <#if contract.getStatus() = "Действует">-->
-<#--                            <form action="#" method="post">-->
-<#--                                <button style="font-size: 25px; background: #46F046; margin-bottom: 10px; width: 100%; display: block" class="btn-canceled butto" onclick="NotFinish()">-->
-<#--                                    Завершить-->
-<#--                                </button>-->
-<#--                            </form>-->
-<#--                        </#if>-->
-<#--                    </#if>-->
-
                 </div>
 
                 <button type="submit">Save</button>
@@ -150,6 +134,5 @@
         </div>
 
     </div>
-    <!---->
 
 </@c.page>

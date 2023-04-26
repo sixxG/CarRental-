@@ -1,40 +1,42 @@
 <#macro byStatus contracts contractStatus>
 
-    <table class="table">
-        <tr>
-            <th>
-                Клиент
-            </th>
-            <th>
-                ФИО Менеджера
-            </th>
-            <th>
-                Авто
-            </th>
-            <th>
-                Доп. опции
-            </th>
-            <th>
-                Дата начала аренды
-            </th>
-            <th>
-                Дата окончания аренды
-            </th>
-            <th>
-                Цена
-            </th>
-            <th>
-                Состояние
-            </th>
-            <th>
-                Примечания
-            </th>
-        </tr>
+    <#if !contracts?has_content>
+        <h1 style="font-weight: 600; text-align: center">Таких аренд не найдено!</h1>
 
-        <#list contracts as contract>
+        <#else >
+            <table class="table">
+                <tr>
+                    <th>
+                        Клиент
+                    </th>
+                    <th>
+                        ФИО Менеджера
+                    </th>
+                    <th>
+                        Авто
+                    </th>
+                    <th>
+                        Доп. опции
+                    </th>
+                    <th>
+                        Дата начала аренды
+                    </th>
+                    <th>
+                        Дата окончания аренды
+                    </th>
+                    <th>
+                        Цена
+                    </th>
+                    <th>
+                        Состояние
+                    </th>
+                    <th>
+                        Примечания
+                    </th>
+                </tr>
 
-            <#if contractStatus != "All">
-                <#if contract.getStatus() == contractStatus>
+                <#list contracts?sort_by("dateStart")?reverse as contract>
+
                     <tr>
                         <td>
                             <a href="/user">${contract.getUser().getFio()!"error"}</a>
@@ -122,59 +124,10 @@
                         </td>
 
                     </tr>
-                </#if>
 
-                <#else >
-                    <tr>
-                        <td>
-                            <a href="/user">${contract.getUser().getFio()!"error"}</a>
-                        </td>
-                        <td>
-                            ${contract.getFioManager()!""}
-                        </td>
-                        <td>
-                            <a href="/car/details?id=${contract.getCar().getId()}">
-                                ${contract.getCar().getBrand()!"error"} ${contract.getCar().getModel()!"error"}
-                            </a>
-                        </td>
-                        <td>
-                            ${contract.getAdditionalOptions()!"error"}
-                        </td>
-                        <td>
-                            ${contract.getDateStart()!"error"}
-                        </td>
-                        <td>
-                            ${contract.getDateEnd()!"error"}
-                        </td>
-                        <td>
-                            ${contract.getPrice()?c!"error"}
-                        </td>
-                        <td>
-                            ${contract.getStatus()!"error"}
-                        </td>
-                        <td>
-                            ${contract.getNote()!"error"}
-                        </td>
-                        <td>
-                            <div style="display: flex;">
-                                <a href="/contract/details?id=${contract.getId()}" style="color: black">
-                                    <button type="button" class="bi bi-info">
-                                        <i class="fas fa-info" style="font-size: 20px"></i>
-                                    </button>
-                                </a>
-                                <a href="/contract/edit?id=${contract.getId()}" style="color: black">
-                                    <button type="button" class="bi bi-edit">
-                                        <i class="fas fa-edit" style="font-size: 20px"></i>
-                                    </button>
-                                </a>
-                            </div>
-                        </td>
+                </#list>
 
-                    </tr>
-            </#if>
-
-        </#list>
-
-    </table>
+            </table>
+    </#if>
 
 </#macro>

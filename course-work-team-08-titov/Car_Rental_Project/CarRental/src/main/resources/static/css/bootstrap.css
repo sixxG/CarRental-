@@ -12,6 +12,12 @@ html {
 body {
   margin: 0;
 }
+
+.invalid-feedback {
+  color: red;
+  font-weight: 600;
+}
+
 article,
 aside,
 details,

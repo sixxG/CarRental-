@@ -2,38 +2,33 @@ package com.example.spring.security.controllers;
 
 import com.example.spring.security.models.Role;
 import com.example.spring.security.models.User;
-import com.example.spring.security.repositories.RoleRepository;
-import com.example.spring.security.repositories.UserRepository;
+import com.example.spring.security.services.RoleService;
 import com.example.spring.security.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
-//only for admins
 @PreAuthorize("hasAuthority('ADMIN')")
 public class UserController {
 
-    @Autowired
-    public UserService userService;
-    @Autowired
-    public UserRepository userRepository;
-    @Autowired
-    private RoleRepository roleRepository;
+    private final UserService userService;
+    private final RoleService roleService;
+
+    public UserController(UserService userService, RoleService roleService) {
+        this.userService = userService;
+        this.roleService = roleService;
+    }
 
     @GetMapping
-    public String userList(Model model, Principal principal) {
-
-        List<User> clients = userRepository.findAll();
+    public String userList(Model model) {
+        List<User> clients = userService.findAll();
 
         model.addAttribute("users", clients.stream().filter(user -> user.getRoles().contains(new Role(2, "USER"))).collect(Collectors.toList()));
         model.addAttribute("admins", clients.stream().filter(admin -> admin.getRoles().contains(new Role(1, "ADMIN"))).collect(Collectors.toList()));
@@ -45,7 +40,7 @@ public class UserController {
     @GetMapping("{user}")
     public String userEditForm(@PathVariable User user, Model model) {
         model.addAttribute("user", user);
-        model.addAttribute("roles", roleRepository.findAll());
+        model.addAttribute("roles", roleService.findAll());
 
         return "User/userEdit";
     }
@@ -53,17 +48,15 @@ public class UserController {
     @PostMapping
     public String userSave(
             @RequestParam Map<String, String> form,
-            @RequestParam("userId") User user, Model model) {
+            @RequestParam("userId") int userId, Model model) {
 
-        user.setUsername(form.get("userName"));
-
-        boolean ifAdded = userService.addUser(user, form);
+        boolean ifAdded = userService.addUser(userId, form);
 
         if (ifAdded) {
             return "redirect:/user";
         } else {
-            model.addAttribute("user", user);
-            model.addAttribute("roles", roleRepository.findAll());
+            model.addAttribute("user", userService.findById(userId));
+            model.addAttribute("roles", roleService.findAll());
 
             return "User/userEdit";
         }

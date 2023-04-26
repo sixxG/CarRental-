@@ -46,7 +46,7 @@
             <hr style="color: #5394FD; margin: 5px" />
             <br />
             <div class="form-group" style="text-align: center; width: 100%; margin: 0 auto">
-                <input type="submit" value="ВОЙТИ" class="log-btn" />
+                <input type="submit" value="ВОЙТИ" data-id="ВОЙТИ" class="log-btn" />
             </div>
             <br />
             <div style="display: flex;">

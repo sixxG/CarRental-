@@ -1,6 +1,6 @@
 <#macro foother>
     <!---->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <!---->
 
 <div class="container navbar-header" style="width: 100%; padding: 0px;">
@@ -45,7 +45,7 @@
                             <a href="/about" class="footer_link" style="text-decoration: none; color: white; display: block">О нас</a>
                             <a href="/contacts" class="footer-link" style="text-decoration: none; color: white; display: block">Контакты</a>
                             <a href="/car" class="footer-link" style="text-decoration: none; color: white; display: block">Автопарк</a>
-                            <a href="/appeal?numberPage=0" class="footer-link" style="text-decoration: none; color: white; display: block">Вопросы/отзывы</a>
+                            <a href="/appeal?numberPage=0&amp;;" class="footer-link" style="text-decoration: none; color: white; display: block">Вопросы/отзывы</a>
                         </div><!-- /End Widget Block Content -->
 
 

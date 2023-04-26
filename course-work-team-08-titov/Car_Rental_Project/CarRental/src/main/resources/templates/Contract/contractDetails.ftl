@@ -11,9 +11,9 @@
 
         <div style="text-align: center; width: 100%; margin-top: 6%;">
             <#if isUser>
-                <a class="AllCar" href="/contract">к списку</a>
+                <a class="AllCar" href="/contract?page=1">к списку</a>
                 <#else >
-                    <a class="AllCar" href="/contract/list">к списку</a>
+                    <a class="AllCar" href="/contract/list/all?page=1">к списку</a>
             </#if>
         </div>
 
@@ -21,17 +21,47 @@
         <div class="container-fluid bloc" style="background: rgba(40,40,40, 0.15);width: 100%; height: 100%; border-radius: 15px">
             <div class="col-lg-2" style="background: #ffffff; border-radius: 15px; margin: 15px; width: 40%; height: 100%; align-content:center;">
 
-                <p style="font-size: 24px; color: black; width: 100%; text-align:center; margin: 0;">Получение</p>
-                <hr style="color: #5394FD; margin: 5px" />
+                <div>
+                    <p style="font-size: 24px; color: black; width: 100%; text-align:center; margin: 0;">Получение</p>
+                    <hr style="color: #5394FD; margin: 5px" />
 
-                <div style="width: 100%;">
-                    <input class="input" type="text" value="${contract.getDateStart()}" readonly>
+                    <div style="width: 100%;">
+                        <input class="input" type="text" value="${contract.getDateStart()}" readonly>
+                    </div>
+
+                    <p style="font-size: 16px; color: black; width: 100%; text-align:left; margin: 0;">Место получения</p>
+                    <div style="width: 100%;">
+                        <input class="input" type="text" value="${contract.typeReceipt}" readonly>
+                    </div>
+                    <#if contract.typeReceipt = "Офис">
+                        <a href="https://yandex.ru/maps/?text=Владимир, Проспект Строителей 7Б, стр. 14" target="_blank" class="toMapLink">Показать на карте</a>
+                    <#elseif contract.typeReceipt = "Автовокзал">
+                        <a href="https://yandex.ru/maps/?text=Владимирский автовокзал" target="_blank" class="toMapLink">Показать на карте</a>
+                    <#else>
+                        <a href="https://yandex.ru/maps/?text=Владимир, ${contract.typeReceipt}" target="_blank" class="toMapLink">Показать на карте</a>
+                    </#if>
+                    <hr style="color: #5394FD; margin: 5px" />
                 </div>
 
-                <p style="font-size: 24px; color: black; width: 100%; text-align:center; margin: 0;">Возврат</p>
-
                 <div>
-                    <input class="input" type="text" value="${contract.getDateEnd()}" readonly>
+                    <p style="font-size: 24px; color: black; width: 100%; text-align:center; margin: 0;">Возврат</p>
+
+                    <div>
+                        <input class="input" type="text" value="${contract.getDateEnd()}" readonly>
+                    </div>
+
+                    <p style="font-size: 16px; color: black; width: 100%; text-align:left; margin: 0;">Место возврата</p>
+                    <div style="width: 100%;">
+                        <input class="input" type="text" value="${contract.typeReturn}" readonly>
+                    </div>
+                    <#if contract.typeReturn = "Офис">
+                        <a href="https://yandex.ru/maps/?text=Владимир, Проспект Строителей 7Б, стр. 14" target="_blank" class="toMapLink">Показать на карте</a>
+                        <#elseif contract.typeReturn = "Автовокзал">
+                            <a href="https://yandex.ru/maps/?text=Владимирский автовокзал" target="_blank" class="toMapLink">Показать на карте</a>
+                        <#else>
+                        <a href="https://yandex.ru/maps/?text=Владимир, ${contract.typeReturn}" target="_blank" class="toMapLink">Показать на карте</a>
+                    </#if>
+                    <hr style="color: #5394FD; margin: 5px" />
                 </div>
 
                 <p style="font-size: 24px; color: black; width: 100%; text-align:center; margin: 0;">Данные клиента</p>
@@ -135,43 +165,68 @@
 
                 <#if isUser>
                     <#if contract.getStatus() = "Не подтверждён">
-                        <form action="#" method="post">
+                        <form action="cancel" method="post">
+                            <input type="hidden" name="_csrf" value="${_csrf.token}">
+                            <input type="hidden" name="id" value="${contract.getId()}">
                             <input type="submit" value="Отменить" class="btn-canceled button" style="width: 100%" />
                         </form>
                     </#if>
 
                     <#if contract.getStatus() = "Действует">
-                        <form action="#" method="post">
-                            <button style="font-size: 25px; background: #46F046; margin-bottom: 10px; width: 100%; display: block" class="btn-canceled butto" onclick="NotFinish()">
+                        <form action="finish" method="post">
+                            <button style="font-size: 25px; background: #46F046; margin-bottom: 10px; width: 100%; display: block" class="btn-canceled button" onclick="NotFinish()">
+                                <input type="hidden" name="_csrf" value="${_csrf.token}">
+                                <input type="hidden" name="id" value="${contract.getId()}">
                                 Завершить
                             </button>
                         </form>
                     </#if>
                 </#if>
 
-                <#if isAdmin>
+                <#if isAdmin || isManager>
                     <#if contract.getStatus() = "Не подтверждён">
-                        <form action="#" method="post">
+                        <form action="confirm" method="post">
+                            <input type="hidden" name="_csrf" value="${_csrf.token}">
+                            <input type="hidden" name="id" value="${contract.getId()}">
                             <input type="submit" value="Подтвердить" class="btn-confirm button" style="width: 100%" />
                         </form>
                     </#if>
 
-                    <#if contract.getStatus() = "Действует">
-                        <form action="#" method="post">
-                            <button style="font-size: 25px; background: #46F046; margin-bottom: 10px; width: 100%; display: block" class="btn-canceled butto" onclick="NotFinish()">
+                    <#if contract.getStatus() = "Подтверждён">
+                        <form action="start" method="post">
+                            <input type="hidden" name="_csrf" value="${_csrf.token}">
+                            <input type="hidden" name="id" value="${contract.getId()}">
+                            <button style="font-size: 25px; background: #46F046; margin-bottom: 10px; width: 100%; display: block" class="btn-canceled button" onclick="NotFinish()">
+                                Начать
+                            </button>
+                        </form>
+                    </#if>
+
+                    <#if contract.getStatus() = "Действует" || contract.getStatus() = "Ожидает оплаты штрафа">
+                        <form action="finish" method="post">
+                            <button style="font-size: 25px; background: #46F046; margin-bottom: 10px; width: 100%; display: block" class="btn-canceled button" onclick="NotFinish()">
+                                <input type="hidden" name="_csrf" value="${_csrf.token}">
+                                <input type="hidden" name="id" value="${contract.getId()}">
                                 Завершить
                             </button>
                         </form>
+                    </#if>
 
-                        <form action="#" method="post">
-                            <button style="font-size: 25px; background: #46F046; margin-bottom: 10px; width: 100%; display: block" class="btn-canceled butto" onclick="NotFinish()">
+                    <#if contract.getStatus() = "Действует" || contract.getStatus() = "Завершён">
+                        <form action="fine" method="post">
+                            <button style="width: 100%;" class="btn-canceled button" onclick="NotFinish()">
+                                <input type="hidden" name="_csrf" value="${_csrf.token}">
+                                <input type="hidden" name="id" value="${contract.getId()}">
                                 Назначить штраф
                             </button>
                         </form>
                     </#if>
 
-                    <#if contract.getStatus() != "Завершён">
-                        <form action="#" method="post">
+                    <#if contract.getStatus() != "Завершён" && contract.getStatus() != "Отменён"
+                            && contract.getStatus() != "Ожидает оплаты штрафа" && contract.getStatus() != "Действует">
+                        <form action="cancel" method="post">
+                            <input type="hidden" name="_csrf" value="${_csrf.token}">
+                            <input type="hidden" name="id" value="${contract.getId()}">
                             <input type="submit" value="Отменить" class="btn-canceled button" style="width: 100%" />
                         </form>
                     </#if>

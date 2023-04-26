@@ -4,19 +4,13 @@
 <#import "../parts/car.ftl" as carParts>
 
 <@c.page>
-<#--<div>-->
-<#--    <form action="/logout" method="post">-->
-<#--        <input type="submit" value="Sign Out">-->
-<#--        <input type="hidden" name="_csrf" value="${_csrf.token}">-->
-<#--    </form>-->
-<#--</div>-->
     <link href="/static/css/Contact_CSS.css" rel="stylesheet" />
     <link href="/static/css/Button.css" rel="stylesheet" />
     <link href="/static/css/About.css" rel="stylesheet" />
 
     <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 80%;">
 
-        <br>
+        <br/>
 
         <!--Slider-->
         <div id="myCarousel" class="carousel slide" data-ride="carousel" style="margin-top: 4%;">
@@ -30,7 +24,7 @@
             <!-- Wrapper for slides -->
             <div class="carousel-inner">
                 <div class="item active" style="height: 500px;">
-                    <img src="/static/img/slider/slider1.jpg" alt="Chania" style="height: 500px; width: 100%">
+                    <img src="/static/img/slider/slider1.jpg" alt="Chania" style="height: 500px; width: 100%"/>
                     <div class="carousel-caption" style="background: rgba(40, 40, 40, 0.5)">
                         <h3>Аренда</h3>
                         <p>Прозрачные условия аренды для всех!</p>
@@ -38,7 +32,7 @@
                 </div>
 
                 <div class="item">
-                    <img src="/static/img/slider/slider6.jpg" alt="Chicago" style="height: 500px; width: 100%">
+                    <img src="/static/img/slider/slider6.jpg" alt="Chicago" style="height: 500px; width: 100%"/>
                     <div class="carousel-caption" style="background: rgba(40, 40, 40, 0.5)">
                         <h3>Автопарк</h3>
                         <p>У нас огромный автопарк, где вы можете выбрать авто под любые нужды!</p>
@@ -46,7 +40,7 @@
                 </div>
 
                 <div class="item">
-                    <img src="/static/img/slider/slider3.jpeg" alt="New York" style="height: 500px; width: 100%;">
+                    <img src="/static/img/slider/slider3.jpeg" alt="New York" style="height: 500px; width: 100%;"/>
                     <div class="carousel-caption" style="background: rgba(40, 40, 40, 0.5)">
                         <h3>Почему мы?</h3>
                         <p>Почему стоит выбрать именно нас? Потому что!</p>
@@ -76,22 +70,22 @@
 
         <!--Popular cars-->
 
-        <a href="/car" class="popularCarHeader">Популярные авто →</a>
+        <a href="/car" class="carHeader" style="text-align: left">Популярные авто →</a>
 
-        <div style="width: 100%">
+        <div style="width: 100%" id="popular_cars">
             <#list cars as car>
-                <div class="col-xl-3 col-lg-4">
+                <div class="col-xl-3 col-lg-4" data-id="${car.id}">
                     <div class="bg-info img-rounded shadow-sm">
 
                         <div style="padding: 15px; margin: 10px">
                             <img src="/imageCar/${car.image}" width="100%" height="220px" />
                             <p>
-                            <h4>
-                                <b>
-                                    ${car.brand} ${car.model}
-                                    , ${car.year} ${car.level}
-                                </b>
-                            </h4>
+                                <h4>
+                                    <b>
+                                        ${car.brand} ${car.model}
+                                        , ${car.year?c} ${car.level}
+                                    </b>
+                                </h4>
                             </p>
                             <hr />
 
@@ -106,17 +100,16 @@
                             <div class="auto-description-edn" style=" vertical-align: top; font-size: 14px; width: 47%; display: inline-block; text-align: right;">
                                 <p class="auto-description">${car.transmission}</p>
                                 <p class="auto-description">${car.drive}</p>
-                                <p class="auto-description">&gt;${car.mileage}</p>
-                                <p class="auto-description">${car.power} лс.</p>
+                                <p class="auto-description">&gt;${car.mileage?c}</p>
+                                <p class="auto-description">${car.power?c} лс.</p>
                                 <p class="auto-description">${car.body}</p>
                             </div>
 
                             <div class="bg-info">
-                                <h4><b>от ${car.price}</b> / сутки</h4>
+                                <h4><b>от ${car.price?c}</b> / сутки</h4>
                             </div>
 
-                            <h4 class="text-success text-uppercase" style="text-align: center">
-                            </h4>
+                            <h4 class="text-success text-uppercase" style="text-align: center"></h4>
                             <div style="width:100%; height:100%; text-align:center;">
                                 <a class="btn-details" href="/car/details?id=${car.id}">Подробнее</a>
                             </div>
@@ -130,7 +123,7 @@
 
         <!--Why us-->
 
-        <h1 class="whyUsHeader">Почемму стоит выбрать нас?</h1>
+        <h1 class="whyUsHeader">Почему стоит выбрать нас?</h1>
 
         <br />
 
@@ -139,14 +132,14 @@
             <div class="WHY_Us_block_notAtive">
                 <img src="/static/img/slider/slider4.jpg" class="WHY_US_img"/>
                 <div class="WHY_US_Text">
-                    Наша компания ещё не вышла нарынок, но уже имеет огромную известность среди автолюбителей!
+                    Наша компания ещё не вышла на рынок, но уже имеет огромную известность среди автолюбителей!
                 </div>
             </div>
 
             <div class="WHY_Us_block_notAtive">
                 <img src="/static/img/slider/slider5.jpg" class="WHY_US_img" />
                 <div class="WHY_US_Text">
-                    Все наши автомобили имеют строховку КАСКО и ОСАГО. Так что, вы слёгкостью можете повторять все безумные трюки из GTA!
+                    Все наши автомобили имеют страховку КАСКО и ОСАГО. Так что, вы с лёгкостью можете повторять все безумные трюки из GTA!
                 </div>
             </div>
 
@@ -160,13 +153,6 @@
         </div>
 
         <!--Why us-->
-
-
-<#--        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>-->
-<#--        <!--    <script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.9.2/dist/umd/popper.min.js"></script>&ndash;&gt;-->
-<#--        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>-->
-
-
         <br />
 
     </div>

@@ -42,6 +42,8 @@
                                 <a href="/user/${user.id}">Edit</a>
                             </td>
                         </tr>
+                        <#else >
+                        <h1>Пользователей с такой ролью не существует!</h1>
                     </#list>
                     </tbody>
                 </table>
@@ -60,8 +62,8 @@
                     <tbody>
                     <#list admins as admin>
                         <tr>
-                            <td>${admin.id}</td>
-                            <td>${admin.username}</td>
+                            <td data-id="${admin.id}">${admin.id}</td>
+                            <td data-id="${admin.username}">${admin.username}</td>
                             <td>
                                 <#list admin.roles as role>
                                     <p>${role.name} </p>
@@ -71,6 +73,8 @@
                                 <a href="/user/${admin.id}">Edit</a>
                             </td>
                         </tr>
+                        <#else >
+                            <h1>Пользователей с такой ролью не существует!</h1>
                     </#list>
                     </tbody>
                 </table>
@@ -100,6 +104,8 @@
                                 <a href="/user/${manager.id}">Edit</a>
                             </td>
                         </tr>
+                        <#else >
+                            <h1>Пользователей с такой ролью не существует!</h1>
                     </#list>
                     </tbody>
                 </table>

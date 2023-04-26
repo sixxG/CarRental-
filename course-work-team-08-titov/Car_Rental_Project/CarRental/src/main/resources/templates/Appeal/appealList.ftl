@@ -33,9 +33,9 @@
         <div class="tab-content">
             <div id="questions" class="tab-pane fade in">
 
-                <br>
+                <br/>
                 <h2 style="text-align: center; font-weight: 600">Популярные вопросы</h2>
-                <br>
+                <br/>
 
                 <div class="questionBloc">
                     <div>
@@ -170,62 +170,73 @@
             <div id="appeals" class="tab-pane fade in active">
                 <!-- Appeal form -->
                 <#if user?? && isFeedbackExist>
-                    <div class="questionBloc" style="width: 30%; display: flex; margin: 0 auto">
-                        <form action="/feedback" method="post" style="padding: 10px;">
+                    <div>
+                        <p>
+                            <a class="question" style="text-align: center; text-decoration: none" data-toggle="collapse" href="#makeFeddback">
+                                Оставить отзыв
+                            </a>
+                        </p>
+                        <div class="collapse" id="makeFeddback">
+                            <div>
+                                <div class="questionBloc" style="width: 30%; display: flex; margin: 0 auto">
+                                    <form action="/feedback" method="post" style="padding: 10px;">
 
-                            <input type="hidden" name="_csrf" value="${_csrf.token}">
+                                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
 
-                            <div class="mb-3 row">
-                                <label for="staticEmail" class="col-form-label" style="text-align: center; width: 100%;">Выберите количество звезд:</label>
-                                <div class="col-sm-10 stars" id="staticEmail" style="width: 100%; display: flex; margin: 0 auto; justify-content: center">
-                                    <span class="star" data-value="1">&#9733;</span>
-                                    <span class="star" data-value="2">&#9733;</span>
-                                    <span class="star" data-value="3">&#9733;</span>
-                                    <span class="star" data-value="4">&#9733;</span>
-                                    <span class="star" data-value="5">&#9733;</span>
+                                        <div class="mb-3 row">
+                                            <label for="staticEmail" class="col-form-label" style="text-align: center; width: 100%;">Выберите количество звезд:</label>
+                                            <div class="col-sm-10 stars" id="staticEmail" style="width: 100%; display: flex; margin: 0 auto; justify-content: center">
+                                                <span class="star" data-value="1">&#9733;</span>
+                                                <span class="star" data-value="2">&#9733;</span>
+                                                <span class="star" data-value="3">&#9733;</span>
+                                                <span class="star" data-value="4">&#9733;</span>
+                                                <span class="star" data-value="5">&#9733;</span>
+                                            </div>
+                                            <input type="hidden" id="stars-value" name="score" value="0" required="required"/>
+                                        </div>
+
+                                        <script>
+                                            //выбор звёзд
+                                            const stars = document.querySelectorAll('.star');
+
+                                            stars.forEach(star => {
+                                                star.addEventListener('click', () => {
+                                                    const value = star.getAttribute('data-value');
+                                                    const starsValue = document.getElementById('stars-value');
+                                                    starsValue.value = value;
+
+                                                    // Выделяем выбранные звезды
+                                                    stars.forEach(s => {
+                                                        if (s.getAttribute('data-value') <= value) {
+                                                            s.classList.add('selected');
+                                                        } else {
+                                                            s.classList.remove('selected');
+                                                        }
+                                                    });
+                                                });
+                                            });
+                                        </script>
+
+                                        <div class="mb-3 row">
+                                            <label for="AppealBody" class="col-form-label" style="width: 100%; text-align: center">Оставьте свой отзыв:</label>
+                                            <div class="col-sm-10"  style="width: 100%;">
+                                                <textarea name="AppealBody" class="form-control"  id="AppealBody" style="width: 100%; resize: vertical" required="required"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3 row" style="width: 100%; text-align: center">
+                                            <label for="anonymous" class="col-form-label">Анонимный отзыв:</label>
+                                            <input type="checkbox" id="anonymous" name="anonymous" onchange="validate()"/>
+                                            <input type="hidden" id="chekAnonymous" name="chekAnonymous" value=""/>
+                                        </div>
+                                        <input type="submit" value="Отправить" onclick="validate()" style="width: 100%;font-size: 20px; background: #46F046; padding: 5px; border-radius: 15px; border: 2px solid #46F046"/>
+
+                                    </form>
                                 </div>
-                                <input type="hidden" id="stars-value" name="score" value="0">
                             </div>
-
-                            <script>
-                                //выбор звёзд
-                                const stars = document.querySelectorAll('.star');
-
-                                stars.forEach(star => {
-                                    star.addEventListener('click', () => {
-                                        const value = star.getAttribute('data-value');
-                                        const starsValue = document.getElementById('stars-value');
-                                        starsValue.value = value;
-
-                                        // Выделяем выбранные звезды
-                                        stars.forEach(s => {
-                                            if (s.getAttribute('data-value') <= value) {
-                                                s.classList.add('selected');
-                                            } else {
-                                                s.classList.remove('selected');
-                                            }
-                                        });
-                                    });
-                                });
-                            </script>
-
-                            <div class="mb-3 row">
-                                <label for="AppealBody" class="col-form-label" style="width: 100%; text-align: center">Оставьте свой отзыв:</label>
-                                <div class="col-sm-10"  style="width: 100%;">
-                                    <textarea name="AppealBody" class="form-control"  id="AppealBody" style="width: 100%; resize: vertical"></textarea>
-                                </div>
-                            </div>
-
-                            <div class="mb-3 row" style="width: 100%; text-align: center">
-                                <label for="anonymous" class="col-form-label">Анонимный отзыв:</label>
-                                <input type="checkbox" id="anonymous" name="anonymous" onchange="validate()">
-                                <input type="hidden" id="chekAnonymous" name="chekAnonymous" value="">
-                            </div>
-                            <input type="submit" value="Отправить" onclick="validate()" style="width: 100%;font-size: 20px; background: #46F046; padding: 5px; border-radius: 15px; border: 2px solid #46F046">
-
-                        </form>
+                        </div>
                     </div>
-                    <br>
+                    <br/>
                 </#if>
 
                 <!-- Appeal form -->
@@ -233,28 +244,35 @@
                 <div class="koguvcavis-varazdel">
                     <div class="sestim-donials">
                         <h1>Отзывы</h1>
+
+                        <#if isAdmin || isManager>
+                            <h4 style="display: inline-block;">Кол-во отзывов: ${countFeedbacks}</h4>
+                            <h4 style="display: inline-block; margin-left: 10px; color: green">Процент положительных: ${percentPositive}%</h4>
+                            <h4 style="display: inline-block; margin-left: 10px; color: red">Процент отрицательных: ${percentNegative}%</h4>
+                        </#if>
+
                         <div class="sectionesag"></div>
                         <div style="display: block; width: 100%; text-align: center; padding: 15px;">
-                            <a href="/appeal?numberPage=0" id="allFeedback" class="appealSortedBy">Все отзыва</a>
-                            <a href="/appeal/bydate" id="byDate" class="appealSortedBy">Сортировать по дате публикации</a>
-                            <a href="/appeal/byscore?revert=no" id="revertNO" class="appealSortedBy">Сортировать по оценке по возрастанию</a>
-                            <a href="/appeal/byscore?revert=yes" id="revertYES"  class="appealSortedBy">Сортировать по оценке по убыванию</a>
+                            <a href="/appeal?numberPage=0" id="allFeedback" class="appealSortedBy">Все отзывы</a>
+                            <a href="/appeal/bydate?numberPage=0" id="byDate" class="appealSortedBy">Сортировать по дате публикации</a>
+                            <a href="/appeal/byscore?numberPage=0&revert=no" id="revertNO" class="appealSortedBy">Сортировать по оценке по возрастанию</a>
+                            <a href="/appeal/byscore?numberPage=0&revert=yes" id="revertYES"  class="appealSortedBy">Сортировать по оценке по убыванию</a>
                         </div>
 
                         <script>
                             //активный тип сортировки
                             const isrevertURL = new URLSearchParams(window.location.search);
+                            const urlParamsAppeal = document.location.pathname;
 
                             const isRevert = isrevertURL.get('revert');
                             const isSorted = isrevertURL.get('numberPage');
-                            console.log(isRevert);
-                            console.log(isSorted);
+                            const isByDate = urlParamsAppeal.search('/bydate') !== -1;
 
-                            if (isRevert === null && isSorted === null) {
+                            if (isByDate) {
                                 document.getElementById("revertYES").classList.remove("appealSortedByActive");
                                 document.getElementById("revertNO").classList.remove("appealSortedByActive");
                                 document.getElementById("byDate").classList.add("appealSortedByActive");
-                            } else if (isSorted !== null) {
+                            } else if (isSorted !== null && isRevert === null) {
                                 document.getElementById("revertYES").classList.remove("appealSortedByActive");
                                 document.getElementById("revertNO").classList.remove("appealSortedByActive");
                                 document.getElementById("byDate").classList.remove("appealSortedByActive");
@@ -272,7 +290,7 @@
                         <div class="sagestim-lonials">
 
                             <#list feedbacks as feedback>
-                                <div class="vemotau-vokusipol">
+                                <div class="vemotau-vokusipol" data-id="feedback_${feedback.id}">
                                     <div class="testimonial">
                                         <#if feedback.author = "Анонимный пользователь">
                                             <img src="https://avatars.mds.yandex.net/i?id=e2a359ae13e92835fdc492a249a50c30683f7429-8485986-images-thumbs&n=13" alt="">
@@ -306,7 +324,7 @@
                                         <#if isAdmin>
                                             <form action="/appeal/delete?id=${feedback.id}" method="post">
 
-                                                <input type="hidden" name="_csrf" value="${_csrf.token}">
+                                                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
 
                                                 <button type="submit" style="border: 0px; align-items: center; padding: 5px;">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
@@ -322,7 +340,7 @@
 
                                 <#else >
                                 <h1 style="display: block; width: 100%; text-align: center">
-                                    Отзывов пока нет!<br>
+                                    Отзывов пока нет!<br/>
                                     Будьте первым, кто оценит услуги нашей компании!
                                 </h1>
 
@@ -335,17 +353,45 @@
 
 
                 <#-- Number pages -->
-                <#if countPage!=0>
+                <script>
+                    const path = urlParamsAppeal.toString();
+                    const appealParams = window.location.search;
+                    console.log("path: " + path);
+                    console.log("params: " + appealParams);
+                    let firstParam = appealParams.split("&");
+                    console.log(firstParam);
+                    if (firstParam.length > 1) {
+                        firstParam = firstParam.at(1);
+                        //firstParam = firstParam.slice(1, firstParam.length);
+                    } else {
+                        firstParam = firstParam.at(0);
+                        firstParam = firstParam.slice(1, firstParam.length);
+                    }
+                    console.log("firstParam: " + firstParam);
+
+                    function changeHref(id) {
+                        const previouslyHref = document.getElementById(id).getAttribute("href");
+                        let currentPath = "/";
+                        if (firstParam != null && !firstParam.includes("numberPage")) {
+                            currentPath = path + previouslyHref + "&" + firstParam;
+                        } else {
+                            currentPath = path + previouslyHref;
+                        }
+                        document.getElementById(id).setAttribute("href", currentPath)
+                        console.log("result path: " + currentPath);
+                    }
+                </script>
+                <#if (countPage > 0)>
                     <div style="width: 100%; align-items: center;">
 
                         <ul class="pagination" style="position: absolute; left: 45%">
-                            <li id="page_0">
-                                <a href="/appeal?numberPage=0">Start</a>
-                            </li>
                             <#list 1..countPage as page>
-                                <li  id="page_${page}">
-                                    <a href="/appeal?numberPage=${page}">${page}</a>
-                                </li>
+                                <li  id="page_${page-1}">
+                                <a href="?numberPage=${page-1}" id="a_${page}">${page}</a>
+                                    <script>
+                                        changeHref("a_${page}");
+                                    </script>
+                            </li>
                             </#list>
                         </ul>
 

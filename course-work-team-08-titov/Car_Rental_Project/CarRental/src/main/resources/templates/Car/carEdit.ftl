@@ -10,6 +10,7 @@
         <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 100%;">
 
             <form action="/car/edit" enctype="multipart/form-data" method="post">
+                <input type="hidden" name="_csrf" value="${_csrf.token}">
                 <@carParts.createForm></@carParts.createForm>
             </form>
 

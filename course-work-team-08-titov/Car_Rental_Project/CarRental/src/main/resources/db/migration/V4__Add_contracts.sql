@@ -1,50 +1,55 @@
-INSERT INTO contracts (id, additional_options, status, date_end, type_return, type_receipt, date_start,
+INSERT INTO contracts (id, additional_options, status, date_start, type_return, type_receipt, date_end,
                        fio_manager, note, price, car_id, client_id)
-    VALUES ('1', 'Видеорегистратор: 1; Авто бокс: 1; Детское кресло: 3; ', 'Не подтверждён', '2023-03-24 16:00:00', 'Офис', 'Офис',
-            '2023-03-20 12:00:00', 'Иванов Иван Иванович', 'note 1', '40000', '2', '2');
+VALUES ('1', 'Авто бокс: 1; Видеорегистратор: 1; Детское кресло: 1; ', 'Завершён', '2023-03-15 18:00:00',
+        'Автовокзал', 'Автовокзал', '2023-03-22 10:00:00', 'Сидоров Виктор Сергеевич',
+        'Пожалуйста, повесть в машину еловый освежитель воздуха', '60000', '3', '3');
 
-INSERT INTO contracts (id, additional_options, status, date_end, type_return, type_receipt, date_start,
+INSERT INTO contracts (id, additional_options, status, date_start, type_return, type_receipt, date_end,
                        fio_manager, note, price, car_id, client_id)
-    VALUES ('2', 'Видеорегистратор: 1; Детское кресло: 1; ', 'Действует', '2023-03-22 16:00:00', 'Офис', 'Офис',
-        '2023-03-18 12:00:00', 'Иванов Иван Иванович', 'note 2', '15000', '3', '2');
+VALUES ('2', 'Детское кресло: 1; Видеорегистратор: 1; ', 'Завершён', '2023-03-26 12:00:00',
+        'Офис', 'Офис', '2023-03-30 09:00:00', 'Сидоров Виктор Сергеевич',
+        'Штраф: не полный бак. Помойте авто перед выдачей, у меня аллергия на пыль', '45000', '4', '3');
 
-INSERT INTO contracts (id, additional_options, status, date_end, type_return, type_receipt, date_start,
+INSERT INTO contracts (id, additional_options, status, date_start, type_return, type_receipt, date_end,
                        fio_manager, note, price, car_id, client_id)
-    VALUES ('3', 'Видеорегистратор: 1; ', 'Завершён', '2023-02-22 12:00:00', 'Офис', 'Офис',
-        '2023-02-12 12:00:00', 'Иванов Иван Иванович', 'note 3', '70000', '4', '2');
+VALUES ('3', 'Видеорегистратор: 1; ', 'Завершён', '2023-03-25 15:00:00',
+        'Железнодорожный вокзал', 'Улица Кирова 7', '2023-04-01 10:00:00', 'Сидоров Виктор Сергеевич',
+        '', '55000', '5', '3');
 
-INSERT INTO contracts (id, additional_options, status, date_end, type_return, type_receipt, date_start,
+INSERT INTO contracts (id, additional_options, status, date_start, type_return, type_receipt, date_end,
                        fio_manager, note, price, car_id, client_id)
-    VALUES ('4', 'Авто бокс: 1; ', 'Отменён', '2023-02-24 15:00:00', 'Офис', 'Офис',
-        '2023-02-12 19:00:00', 'Иванов Иван Иванович', 'note 4', '55400', '5', '2');
+VALUES ('4', 'Детское кресло: 3; Авто бокс: 1; Видеорегистратор: 1; ', 'Отменён', '2023-03-29 10:00:00',
+        'Автовокзал', 'Улица Пушкина дом Колотушкина', '2023-04-5 15:00:00', 'Сидоров Виктор Сергеевич',
+        'Хочу летающую машину', '70000', '6', '3');
 
-INSERT INTO contracts (id, additional_options, status, date_end, type_return, type_receipt, date_start,
+INSERT INTO contracts (id, additional_options, status, date_start, type_return, type_receipt, date_end,
                        fio_manager, note, price, car_id, client_id)
-    VALUES ('5', 'Видеорегистратор: 1; Детское кресло: 1; ', 'Завершён', '2023-01-05 16:00:00', 'Офис', 'Офис',
-        '2023-01-01 12:00:00', 'Иванов Иван Иванович', 'note 5', '12000', '6', '2');
+VALUES ('5', 'Видеорегистратор: 1; Детское кресло: 1; ', 'Завершён', '2023-04-01 18:00:00',
+        'Автовокзал', 'Офис', '2023-04-09 10:00:00', 'Сидоров Виктор Сергеевич', '', '55000', '1', '4');
 
-INSERT INTO contracts (id, additional_options, status, date_end, type_return, type_receipt, date_start,
+INSERT INTO contracts (id, additional_options, status, date_start, type_return, type_receipt, date_end,
                        fio_manager, note, price, car_id, client_id)
-    VALUES ('6', '', 'Подтверждён', '2023-03-28 16:00:00', 'Офис', 'Офис',
-        '2023-03-24 16:00:00', 'Иванов Иван Иванович', 'note 6', '100000', '7', '2');
+VALUES ('6', 'Видеорегистратор: 1; ', 'Завершён', '2023-03-03 12:00:00',
+        'Офис', 'Автовокзал', '2023-03-15 14:00:00', 'Сидоров Виктор Сергеевич', '', '75000', '3', '4');
 
-INSERT INTO contracts (id, additional_options, status, date_end, type_return, type_receipt, date_start,
+INSERT INTO contracts (id, additional_options, status, date_start, type_return, type_receipt, date_end,
+                    note, price, car_id, client_id)
+VALUES ('7', 'Видеорегистратор: 1; Детское кресло: 2; ', 'Отменён', '2023-04-05 10:00:00',
+        'Автовокзал', 'Офис', '2023-04-10 16:00:00',  '', '60000', '2', '4');
+
+INSERT INTO contracts (id, additional_options, status, date_start, type_return, type_receipt, date_end,
                        fio_manager, note, price, car_id, client_id)
-    VALUES ('7', 'Видеорегистратор: 1; Авто бокс: 1; Детское кресло: 3; ', 'Ожидает оплаты штрафа', '2023-02-20 16:00:00', 'Офис', 'Офис',
-        '2023-02-24 12:00:00', 'Иванов Иван Иванович', 'note 7', '40000', '8', '2');
+VALUES ('8', 'Детское кресло: 3; ', 'Ожидает оплаты штрафа', '2023-04-08 12:00:00',
+        'Офис', 'Улица Ленина 10', '2023-04-12 14:00:00', 'Сидоров Виктор Сергеевич',
+        'Штраф: не полный бак.', '45000', '5', '3');
 
-INSERT INTO contracts (id, additional_options, status, date_end, type_return, type_receipt, date_start,
+INSERT INTO contracts (id, additional_options, status, date_start, type_return, type_receipt, date_end,
+                       note, price, car_id, client_id)
+VALUES ('9', 'Авто бокс: 1; ', 'Не подтверждён', '2023-04-15 16:00:00',
+        'Автовокзал', 'Офис', '2023-04-23 12:00:00', '', '50000', '4', '4');
+
+INSERT INTO contracts (id, additional_options, status, date_start, type_return, type_receipt, date_end,
                        fio_manager, note, price, car_id, client_id)
-    VALUES ('8', 'Видеорегистратор: 1; ', 'Действует', '2023-03-15 11:00:00', 'Офис', 'Офис',
-        '2023-03-11 12:00:00', 'Иванов Иван Иванович', 'note 8', '20000', '9', '2');
-
-INSERT INTO contracts (id, additional_options, status, date_end, type_return, type_receipt, date_start,
-                       fio_manager, note, price, car_id, client_id)
-    VALUES ('9', 'Видеорегистратор: 1; Авто бокс: 1; Детское кресло: 1; ', 'Завершён', '2023-01-25 16:00:00', 'Офис', 'Офис',
-        '2023-01-11 12:00:00', 'Иванов Иван Иванович', 'note 9', '85000', '10', '2');
-
-INSERT INTO contracts (id, additional_options, status, date_end, type_return, type_receipt, date_start,
-                       fio_manager, note, price, car_id, client_id)
-    VALUES ('10', 'Авто бокс: 1; ', 'Действует', '2023-03-22 16:00:00', 'Офис', 'Офис',
-        '2023-03-11 17:30:00', 'Иванов Иван Иванович', 'note 10', '60000', '1', '2');
-
+VALUES ('10', 'Видеорегистратор: 1; Авто бокс: 1;', 'Завершён', '2023-03-01 12:00:00', 'Автовокзал', 'Автовокзал',
+        '2023-03-12 14:00:00', 'Сидоров Виктор Сергеевич', 'Штраф: просроченный срок сдачи авто на 6 часов. (1500 руб)',
+        '30000', '3', '4');

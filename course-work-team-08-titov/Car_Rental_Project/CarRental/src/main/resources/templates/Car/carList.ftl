@@ -6,11 +6,12 @@
 <link href="/static/css/Button.css" rel="stylesheet" />
 <link href="/static/css/Contact_CSS.css" rel="stylesheet" />
 <link href="/static/css/CarList.css" rel="stylesheet" />
+<link href="/static/css/Details.css" rel="stylesheet" />
 <@c.page>
 
     <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 80%;">
 
-        <#if isAdmin>
+        <#if isAdmin || isManager>
             <!--new nav-->
             <ul class="nav nav-tabs" style="margin-top: 6%;">
                 <li class="active">
@@ -28,21 +29,24 @@
         <div class="tab-content" style="width: 100%; margin-top: 1%;">
             <div id="listCar" class="tab-pane fade in active" style="width: 100%;">
                 <div style="width: 100%; text-align: center;">
-                    <a class="AllCar" href="/car/all?numberPage=0">Все авто</a>
+                    <a class="carHeader" href="/car/all?numberPage=0">Все авто</a>
                 </div>
                 <br>
                 <@carParts.search></@carParts.search>
 
                 <@carParts.classes></@carParts.classes>
                 <br>
+                <select id="sort-select">
+                    <option value="asc">Сортировать по возрастанию цены</option>
+                    <option value="desc">Сортировать по убыванию цены</option>
+                </select>
                 <br>
-
                 <!-- Gallery item  -->
-                <div class="carsBlock">
+                <div>
 
-                    <#list cars as car>
+                    <#list cars?sort_by("price") as car>
                         <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
-                            <div class="bg-info img-rounded shadow-sm">
+                            <div class="bg-info img-rounded shadow-sm" style="height: 560px; margin-bottom: 5px">
 
                                 <div style="padding: 15px; margin: 10px">
                                     <img src="/imageCar/${car.image}" width="100%" height="220px" />
@@ -52,7 +56,7 @@
                                                 ${car.brand}
                                                 ${car.model}
                                                 ,
-                                                ${car.year}
+                                                ${car.year?c}
                                                 ${car.level}
                                             </b>
                                         </h4>
@@ -69,22 +73,26 @@
                                     <div class="auto-description-edn">
                                         <p class="auto-description">${car.transmission}</p>
                                         <p class="auto-description">${car.drive}</p>
-                                        <p class="auto-description">&gt;${car.mileage}</p>
-                                        <p class="auto-description">${car.power} лс.</p>
+                                        <p class="auto-description">&gt;${car.mileage?c}</p>
+                                        <p class="auto-description">${car.power?c} лс.</p>
                                         <p class="auto-description">${car.body}</p>
                                     </div>
 
                                     <div class="bg-info">
-                                        <h4 class="carPrice"><b>от ${car.price}</b> / сутки</h4>
+                                        <h4 class="carPrice"><b>от ${car.price?c}</b> / сутки</h4>
                                     </div>
 
                                     <#if isAdmin>
                                         <h4 class="text-success text-uppercase" style="text-align: center">
-                                            <b style="color: green">${car.status}</b>
+                                            <#if car.status == "Забронирована">
+                                                <b style="color: red">${car.status}</b>
+                                                <#else >
+                                                    <b style="color: green">${car.status}</b>
+                                            </#if>
                                         </h4>
                                     </#if>
 
-                                    <div style="width:100%; height:100%; text-align:center;">
+                                    <div style="width:100%; text-align:center;">
                                         <a class="btn-details" href="/car/details?id=${car.id}">Подробнее</a>
                                     </div>
                                 </div>
@@ -94,16 +102,24 @@
                         <h1 style="display: block; width: 100%; text-align: center">Таких авто нет(</h1>
                     </#list>
 
+                    <script>
+                        const sortSelect = document.getElementById('sort-select');
+                        sortSelect.addEventListener('change', function() {
+                            const sortDirection = sortSelect.value === 'asc' ? '' : '?reverse';
+                            console.log(sortDirection);
+                        });
+                    </script>
                 </div>
             </div>
 
-            <#if isAdmin>
+            <#if isAdmin || isManager>
                 <div id="AddCar" class="tab-pane fade in">
 
                     <div style="margin-top: 5%">
                         <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 100%;">
 
                             <form action="/car" enctype="multipart/form-data" method="post">
+                                <input type="hidden" name="_csrf" value="${_csrf.token}">
                                 <@carParts.createForm></@carParts.createForm>
                             </form>
 
@@ -138,11 +154,9 @@
 
         <script>
             //активная страница с отзывами
-            const urlParam = new URLSearchParams(window.location.search);
+            const urlParamListCar = new URLSearchParams(window.location.search);
 
-            console.log(urlParam);
-
-            const numberPage = urlParam.get('numberPage');
+            const numberPage = urlParamListCar.get('numberPage');
             document.getElementById("page_" + numberPage).classList.add("active");
         </script>
         <!--Block-->
@@ -150,42 +164,3 @@
     </div>
 
 </@c.page>
-
-<script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const carClass = urlParams.get('carClass');
-
-    let Element = document.querySelector('#myParam');
-    // обращение к интересующему свойству и присвоение нового цвета
-    document.getElementById(carClass).style.color = '#00ff00';
-    document.getElementById(carClass).style.fontWeight = 600;
-
-</script>
-
-<script>
-    const urlParam = new URLSearchParams(window.location.search);
-
-    console.log(urlParam);
-
-    const PriceOT = urlParam.get('PriceOT');
-    const PriceDO = urlParam.get('PriceDO');
-    const ListBrand = urlParam.get('ListBrand');
-    const ListTypeTransmition = urlParam.get('ListTypeTransmition');
-
-    document.getElementById("PriceOT").value = PriceOT;
-    document.getElementById("PriceDO").value = PriceDO;
-
-    if (ListBrand === null) {
-        document.getElementById("ListBrand").value = "";
-    } else {
-        document.getElementById("ListBrand").value = ListBrand;
-    }
-
-    if (ListTypeTransmition === null) {
-        document.getElementById("ListTypeTransmition").value = "";
-    } else {
-        document.getElementById("ListTypeTransmition").value = ListTypeTransmition;
-    }
-
-
-</script>

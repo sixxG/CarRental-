@@ -1,11 +1,8 @@
 package com.example.spring.security.controllers;
 
-import com.example.spring.security.models.Feedback;
 import com.example.spring.security.models.User;
-import com.example.spring.security.repositories.FeedbackRepository;
-import com.example.spring.security.repositories.UserRepository;
+import com.example.spring.security.services.FeedbackService;
 import com.example.spring.security.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,31 +11,27 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 @Controller
 @RequestMapping("/account")
+@PreAuthorize("isAuthenticated()")
 public class AccountController {
-    @Autowired
-    public UserService userService;
-    @Autowired
-    public UserRepository userRepository;
-    @Autowired
-    public FeedbackRepository feedbackRepository;
+
+    public final UserService userService;
+    public final FeedbackService feedbackService;
+
+    public AccountController(UserService userService, FeedbackService feedbackService) {
+        this.userService = userService;
+        this.feedbackService = feedbackService;
+    }
 
     @GetMapping
     public String userAccount (@RequestParam String name, Model model) {
-
-
-        if (feedbackRepository.findByAuthor(name) != null) {
-            Feedback usersFeedback = feedbackRepository.findByAuthor(name);
-            model.addAttribute("usersFeedback", usersFeedback);
-        }
-
-        model.addAttribute("client", userRepository.findByUsername(name));
+        model.addAttribute("usersFeedback", feedbackService.findByAuthor(name));
+        model.addAttribute("client", userService.findByUsername(name));
 
         return "User/userAccount";
     }
@@ -46,7 +39,6 @@ public class AccountController {
     @PostMapping
     public String saveAccount (@RequestParam Map<String, String> form,
                                @RequestParam("userId") User user, Model model) {
-
         user.setFio(form.get("fio"));
         user.setBirthDate(LocalDate.parse(form.get("birthDate")));
         user.setEmail(form.get("email"));
@@ -54,9 +46,32 @@ public class AccountController {
         user.setPhone(form.get("phone"));
         user.setDriverLicense(form.get("driverLicense"));
 
-        userRepository.save(user);
-        model.addAttribute("client", userRepository.findById(user.getId()));
+        userService.saveUser(user);
+        model.addAttribute("client", userService.findById(user.getId()));
 
         return "redirect:/account?name=" + user.getUsername();
+    }
+
+    @GetMapping("/change_password")
+    public String userChangePasswordForm(Model model) {
+
+        model.addAttribute("errorPassword", null);
+
+        return "User/userChangePassword";
+    }
+
+    @PostMapping("/change_password")
+    public String userChangePassword(@RequestParam Map<String, String> form, Principal client, Model model) {
+
+        User user = userService.findByUsername(client.getName());
+
+        Map<String, Object> response = userService.changePassword(form, user);
+
+        if ((boolean) response.get("response")) {
+            model.addAttribute("successPassword", response.get("successPassword"));
+        } else {
+            model.addAttribute("error", response.get("error"));
+        }
+        return "User/userChangePassword";
     }
 }

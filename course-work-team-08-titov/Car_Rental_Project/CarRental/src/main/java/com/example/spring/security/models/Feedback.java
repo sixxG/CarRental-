@@ -25,6 +25,14 @@ public class Feedback {
         this.author = author;
     }
 
+    public Feedback(int id, String body, Date date, int score, String author) {
+        this.id = id;
+        this.body = body;
+        this.date = date;
+        this.score = score;
+        this.author = author;
+    }
+
     public Feedback() {
     }
 

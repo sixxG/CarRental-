@@ -4,34 +4,50 @@
 
     <link href="/static/css/Site.css" rel="stylesheet"/>
 
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-inverse navbar-fixed-top" style="border: 0;">
         <div class="container">
             <div class="navbar-header">
                 <#--Error-->
-                <img src="/static/img/logo.png" alt="logo" style="width: 40px; height: 40px; margin: 5px;">
+                <img src="/static/img/logo.png" alt="logo" style="width: 40px; height: 40px; margin: 5px;"/>
 
                 <a class="navbar-brand navBar-item" href="/" id="/">Car FY</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="navBar-item"><a id="/about" href="/about">Информация</a></li>
-                    <li class="navBar-item"><a id="/contacts" href="/contacts">Контакты</a></li>
+                    <#if isAdmin || isManager>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">О компании
+                                <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li class="navBar-item"><a id="/about" href="/about">Информация</a></li>
+                                <li class="navBar-item"><a id="/contacts" href="/contacts">Контакты</a></li>
+                            </ul>
+                        </li>
+
+                        <#else >
+                            <li class="navBar-item"><a id="/about" href="/about">Информация</a></li>
+                            <li class="navBar-item"><a id="/contacts" href="/contacts">Контакты</a></li>
+                    </#if>
                     <li class="navBar-item"><a id="/car" href="/car">Автопарк</a></li>
                     <li class="navBar-item"><a id="/appeal" href="/appeal?numberPage=0">Вопросы</a></li>
 
-                    <#if user?? && !isAdmin>
-                        <li class="navBar-item"><a id="/contract" href="/contract">Мои аренды</a></li>
+                    <#if user?? && !isAdmin && !isManager>
+                        <li class="navBar-item"><a id="/contract" href="/contract?page=1">Мои аренды</a></li>
+                    </#if>
+
+                    <#if isAdmin || isManager>
+                        <li class="navBar-item"><a id="/contract" href="/contract/list/all?page=1">Аренды</a></li>
                     </#if>
 
                     <#if isAdmin>
-                        <li class="navBar-item"><a id="/contract" href="/contract/list">Аренды</a></li>
                         <li class="navBar-item"><a id="/user" href="/user">Пользователи</a></li>
+                        <li class="navBar-item"><a id="/reports" href="/reports/cars">Отчёты</a></li>
                     </#if>
                 </ul>
 
                 <ul>
                     <form action="/logout" class="navbar-right" method="post" id="logoutForm" style="margin-bottom: 0">
-                        <input type="hidden" name="_csrf" value="${_csrf.token}">
+                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                         <ul class="nav navbar-nav navbar-right">
                             <li>
                                 <a style="color: #46F046; text-decoration: none; font-size: 18px; display: block; font-weight: 600" href="tel:+78005553535">+7 (800) 555-35-35</a>
@@ -64,9 +80,13 @@
     <script>
         const urlParams = document.location.pathname;
         console.log(urlParams.toString());
+        const page = urlParams.split("/");
+        const activePage = "/" + page.at(1);
+        console.log(page);
+        console.log(activePage);
 
-        document.getElementById(urlParams).style.color = '#fff';
-        document.getElementById(urlParams).style.backgroundColor = rgba(238, 238, 238, 0.7);
+        document.getElementById(activePage).style.color = '#fff';
+        document.getElementById(activePage).style.backgroundColor = '#a1a1a1';
 
     </script>
 </#macro>

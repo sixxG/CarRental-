@@ -1,261 +1,153 @@
 package com.example.spring.security.controllers;
 
-import com.example.spring.security.models.*;
-import com.example.spring.security.repositories.CarRepository;
-import com.example.spring.security.repositories.ContractRepository;
-import com.example.spring.security.repositories.UserRepository;
+import com.example.spring.security.models.Car;
 import com.example.spring.security.services.CarService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.spring.security.services.UserService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 @Controller
-//@RequestMapping("/car")
 public class CarController {
-    @Autowired
-    private CarRepository carRepository;
-    @Autowired
-    private CarService carService;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private ContractRepository contractRepository;
+    private final CarService carService;
+    private final UserService userService;
     @Value("${upload.path}")
     private String uploadPath;
+
+    public CarController(CarService carService, UserService userService) {
+        this.carService = carService;
+        this.userService = userService;
+    }
 
     @GetMapping("/car/all")
     public String carList(@RequestParam(required = false) int numberPage, Model model) {
 
-        List<Car> cars = carRepository.findAll();
-        Set<String> brandList =  cars.stream().map(Car::getBrand).collect(Collectors.toSet());
+        Map<String, Object> response = carService.getCarList(numberPage, 10);
 
-        model.addAttribute("countPage", cars.size()/10);
-        model.addAttribute("cars", cars.stream().skip(10L *numberPage).limit(10).collect(Collectors.toList()));
+        model.addAttribute("countPage", response.get("countPage"));
+        model.addAttribute("cars", response.get("cars"));
 
-        model.addAttribute("carsBrand", brandList.stream().sorted().collect(Collectors.toList()));
+        model.addAttribute("carsBrand", response.get("carsBrand"));
 
         return "Car/carList";
     }
-
     @GetMapping("/car")
     public String carListByClass(Model model) {
-        List<Car> carList = carRepository.findAll();
-        Set<String> brandList = carList.stream()
-                .sorted(Comparator.comparing(Car::getBrand))
-                .map(Car::getBrand)
-                .collect(Collectors.toSet());
+        Map<String, Object> response = carService.getCarsByClasses();
 
-        model.addAttribute("carsBrand", brandList.stream().sorted().collect(Collectors.toList()));
+        model.addAttribute("carsBrand", response.get("carsBrand"));
 
-        model.addAttribute("EconomyCar", carList.stream().filter(car -> car.getLevel().equals("Эконом")).limit(3).collect(Collectors.toList()));
-        model.addAttribute("ComfortCar", carList.stream().filter(car -> car.getLevel().equals("Комфорт")).limit(3).collect(Collectors.toList()));
-        model.addAttribute("BusinessCar", carList.stream().filter(car -> car.getLevel().equals("Бизнес")).limit(3).collect(Collectors.toList()));
-        model.addAttribute("PremiumCar", carList.stream().filter(car -> car.getLevel().equals("Premium")).limit(3).collect(Collectors.toList()));
-        model.addAttribute("SuvCar", carList.stream().filter(car -> car.getLevel().equals("Внедорожники")).limit(3).collect(Collectors.toList()));
-        model.addAttribute("BusCar", carList.stream().filter(car -> car.getLevel().equals("Минивэны")).limit(3).collect(Collectors.toList()));
-        model.addAttribute("UniqueCar", carList.stream().filter(car -> car.getLevel().equals("Уникальные авто")).limit(3).collect(Collectors.toList()));
+        model.addAttribute("EconomyCar", response.get("EconomyCar"));
+        model.addAttribute("ComfortCar", response.get("ComfortCar"));
+        model.addAttribute("BusinessCar", response.get("BusinessCar"));
+        model.addAttribute("PremiumCar", response.get("PremiumCar"));
+        model.addAttribute("SuvCar", response.get("SuvCar"));
+        model.addAttribute("BusCar", response.get("BusCar"));
+        model.addAttribute("UniqueCar", response.get("UniqueCar"));
 
         return "Car/carByClass";
     }
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @GetMapping("/addCar")
     public String addCarForm() {
         return "Car/carCreate";
     }
-
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @GetMapping("/car/delete")
     public String deleteCarPage(@RequestParam int id, Model model) {
+        Map<String, Object> response = carService.getDataForDeleteCarPage(id);
 
-        Car car = carRepository.findById(id);
-        List<Contract> activeContract = contractRepository.findAll().stream()
-                .filter(contract -> contract.getCar().getId() == id)
-                .filter(contract1 -> !contract1.getStatus().equals(ContractCondition.COMPLETED.toString())
-                        && !contract1.getStatus().equals(ContractCondition.CANCELED.toString())
-                        && !contract1.getStatus().equals(ContractCondition.AWAITING_PAYMENT_FINE.toString())).collect(Collectors.toList());
-
-        if (activeContract.size() != 0) {
-            model.addAttribute("isHasActiveContract", true);
-            model.addAttribute("contractId", activeContract.get(0).getId());
-        }
-        else {
-            model.addAttribute("isHasActiveContract", false);
-        }
-        model.addAttribute("car", car);
+        model.addAttribute("contractId", response.get("contractId"));
+        model.addAttribute("isHasActiveContract", response.get("isHasActiveContract"));
+        model.addAttribute("car", response.get("car"));
 
         return "Car/carDelete";
     }
-
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @PostMapping("/car/delete")
     public String deleteCar(@RequestParam int id) {
-
-        File fileToDelete = new File(uploadPath + "/" + carRepository.findById(id).getImage());
-
-
-        if (fileToDelete.exists()) {
-            fileToDelete.delete();
-        }
-
-        carRepository.deleteById(id);
+        carService.deleteCar(id);
 
         return "redirect:/car";
     }
-
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @GetMapping("/car/edit")
     public String editCarPage(@RequestParam int id, Model model) {
-
-        model.addAttribute("carEdit", carRepository.findById(id));
+        model.addAttribute("carEdit", carService.findById(id));
 
         return "Car/carEdit";
     }
-
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @PostMapping("/car/edit")
     public String editCar(@Valid Car car, @RequestParam("newImage") MultipartFile file) throws IOException {
-
-        if (file.getOriginalFilename().isEmpty()) {
-            carRepository.save(car);
-        } else {
-
-            File fileToDelete = new File(uploadPath + "/" + carRepository.findById(car.getId()).getImage());
-
-            if (fileToDelete.exists()) {
-                fileToDelete.delete();
-            }
-
-            carService.addCar(car, file);
-        }
+        carService.editeCar(car, file);
 
         return "redirect:/car/details?id=" + car.getId();
     }
-
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @PostMapping("/car")
-    public String add(@RequestParam("newImage") MultipartFile file,
-                      @Valid Car carValid, BindingResult bindingResult, Model model) throws IOException {
+    public String add(@Valid Car car, BindingResult bindingResult,
+                      @RequestParam("newImage") MultipartFile file, Model model) throws IOException {
+        Map<String, Object> response = carService.addCar(car, bindingResult, file);
+        if ((boolean) response.get("ifError")) {
+            return "Car/carCreate";
+        }
+        else {
+            model.addAttribute("carsBrand", response.get("carsBrand"));
+            model.addAttribute("cars", response.get("cars"));
 
-//        if (bindingResult.hasErrors()) {
-//            Map<String, String> errorMap = bindingResult.getFieldErrors().stream().collect(Collectors.toMap(
-//                    fieldError -> fieldError.getField() + "Error",
-//                    FieldError::getDefaultMessage
-//            ));
-//
-//            model.addAttribute("map", errorMap);
-//            model.addAttribute("car", carValid);
-//
-//            return "Car/carCreate";
-//        } else {
-            boolean ifAdded = carService.addCar(carValid, file);
-
-            List<Car> cars = carRepository.findAll();
-
-            Set<String> brandList =  cars.stream().map(Car::getBrand).collect(Collectors.toSet());
-
-            model.addAttribute("carsBrand", brandList.stream().sorted().collect(Collectors.toList()));
-            model.addAttribute("cars", cars);
-
-            if (ifAdded) {
+            if ((boolean)response.get("ifAdded")) {
                 return "redirect:/car";
             } else {
                 return "redirect:/addCar";
             }
-//        }
+        }
     }
 
     @GetMapping("/car/details")
     public String carDetails(@RequestParam int id, Model model, Principal user) {
+        Map<String, Object> response = carService.getDataForDetailsCarPage(id, user);
 
-        if (user != null) {
-            User client = userRepository.findByUsername(user.getName());
+        model.addAttribute("isHasActiveContract", response.get("isHasActiveContract"));
 
-            List<Contract> activeContract = contractRepository.findAll().stream()
-                    .filter(contract -> contract.getUser().getId() == client.getId())
-                    .filter(contract1 -> !contract1.getStatus().equals(ContractCondition.COMPLETED.toString())
-                            && !contract1.getStatus().equals(ContractCondition.CANCELED.toString())
-                            && !contract1.getStatus().equals(ContractCondition.AWAITING_PAYMENT_FINE.toString())).collect(Collectors.toList());
+        model.addAttribute("car", response.get("car"));
+        model.addAttribute("activeContract", response.get("activeContract"));
 
-            if (activeContract.size() != 0) {
-                model.addAttribute("isHasActiveContract", true);
-            }
-            else {
-                model.addAttribute("isHasActiveContract", false);
-            }
-        }
-
-        model.addAttribute("car", carRepository.findById(id));
+        model.addAttribute("dateEnd", response.get("carRentingForDate"));
 
         return "Car/carDetails";
     }
 
     @GetMapping("/findCar")
-    public String findCar(@RequestParam(name = "PriceOT", required = false, defaultValue = "0") int PriceOT,
-                          @RequestParam(name = "PriceDO", required = false, defaultValue = "0") int PriceDO,
-                          @RequestParam(name = "ListBrand", required = false) String Brand,
-                          @RequestParam(name = "ListTypeTransmition", required = false) String Transmition,
-                          Model model) {
-        boolean isPriceOt = PriceOT != 0;
-        boolean isPriceDo = PriceDO != 0;
+    public String findCar(@RequestParam Map<String, String> form, Model model) {
+        Map<String, Object> response = carService.findCar(form);
 
-        List<Car> cars = carRepository.findAll();
-        List<Car> carsByParam = new ArrayList<>();
-
-        int PriceOt = isPriceOt ? PriceOT:0;
-        int PriceDo = isPriceDo ? PriceDO:Integer.MAX_VALUE;
-
-
-        if (!Brand.equals("") && !Transmition.equals("")) {
-            carsByParam = cars.stream().filter(car ->
-                            car.getBrand().equals(Brand) && car.getTransmission().equals(Transmition)
-                            && car.getPrice() >= PriceOt && car.getPrice() <= PriceDo)
-                    .collect(Collectors.toList());
-            model.addAttribute("cars", carsByParam);
-        } else if (!Brand.equals("")) {
-            carsByParam = cars.stream().filter(car ->
-                            car.getBrand().equals(Brand)
-                                    && car.getPrice() >= PriceOt && car.getPrice() <= PriceDo)
-                    .collect(Collectors.toList());
-            model.addAttribute("cars", carsByParam);
-        } else if (!Transmition.equals("")){
-            carsByParam = cars.stream().filter(car ->
-                            car.getTransmission().equals(Transmition)
-                                    && car.getPrice() >= PriceOt && car.getPrice() <= PriceDo)
-                    .collect(Collectors.toList());
-            model.addAttribute("cars", carsByParam);
-        } else {
-            carsByParam = cars.stream().filter(car -> car.getPrice() >= PriceOt && car.getPrice() <= PriceDo).collect(Collectors.toList());
-            model.addAttribute("cars", carsByParam);
-        }
-        Set<String> brandList =  cars.stream()
-                .map(Car::getBrand)
-                .collect(Collectors.toSet());
-
-        model.addAttribute("countPage", 0);
-        model.addAttribute("cars", carsByParam);
-
-
-        model.addAttribute("carsBrand", brandList.stream().sorted().collect(Collectors.toList()));
+        model.addAttribute("countPage", response.get("countPage"));
+        model.addAttribute("cars", response.get("cars"));
+        model.addAttribute("carsBrand", response.get("carsBrand"));
 
         return "Car/carList";
     }
 
     @GetMapping("/carbyclass")
-    public String carByClass(@RequestParam String carClass, @RequestParam int numberPage,  Model model) {
+    public String carByClass(@RequestParam String carClass, @RequestParam(defaultValue = "0") int numberPage,  Model model) {
 
-        List<Car> cars = carRepository.findAll().stream().filter(car -> car.getLevel().equals(carClass)).collect(Collectors.toList());
+        Map<String, Object> response = carService.findCarsByClass(carClass, numberPage, 10);
 
-        model.addAttribute("countPage", cars.size()/10);
-        model.addAttribute("cars", cars.stream().skip(10L *numberPage).limit(10).collect(Collectors.toList()));
-
-        Set<String> brandList =  cars.stream().map(Car::getBrand).collect(Collectors.toSet());
-
-        model.addAttribute("carsBrand", brandList.stream().sorted().collect(Collectors.toList()));
+        model.addAttribute("countPage", response.get("countPage"));
+        model.addAttribute("cars", response.get("cars"));
+        model.addAttribute("carsBrand", response.get("carsBrand"));
 
         return "Car/carList";
     }

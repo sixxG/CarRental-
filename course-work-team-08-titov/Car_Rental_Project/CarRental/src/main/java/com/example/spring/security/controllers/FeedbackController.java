@@ -1,10 +1,6 @@
 package com.example.spring.security.controllers;
 
-import com.example.spring.security.models.Feedback;
-import com.example.spring.security.repositories.FeedbackRepository;
 import com.example.spring.security.services.FeedbackService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,110 +9,78 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.text.ParseException;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 public class FeedbackController {
-    @Autowired
-    private FeedbackRepository feedbackRepository;
+    private final FeedbackService feedbackService;
 
-    @Autowired
-    private FeedbackService feedbackService;
+    public FeedbackController(FeedbackService feedbackService) {
+        this.feedbackService = feedbackService;
+    }
 
     @GetMapping("/appeal")
-    public String appealList(Model model, Principal user, @RequestParam int numberPage) {
+    public String appealList(Model model, Principal user, @RequestParam(defaultValue = "0") int numberPage) {
+        Map<String, Object> response = feedbackService.getFeedbackList(numberPage, user);
 
-        List<Feedback> feedbackList = feedbackRepository.findAll();
+        model.addAttribute("isFeedbackExist", response.get("isFeedbackExist"));
 
-        if (user != null) {
-            List<Feedback> x = feedbackList.stream().filter(feedback -> feedback.getAuthor().equals(user.getName())).collect(Collectors.toList());
-            model.addAttribute("isFeedbackExist",x.isEmpty());
-        } else {
-            model.addAttribute("isFeedbackExist", false);
-        }
-        model.addAttribute("countPage", feedbackList.size()/10);
-        model.addAttribute("feedbacks", feedbackList.stream().skip(10L *numberPage).limit(10).collect(Collectors.toList()));
+        model.addAttribute("countFeedbacks", response.get("countFeedbacks").toString());
+        model.addAttribute("percentPositive", response.get("percentPositive").toString());
+        model.addAttribute("percentNegative", response.get("percentNegative").toString());
+
+        model.addAttribute("countPage", response.get("countPage"));
+        model.addAttribute("feedbacks", response.get("feedbacks"));
 
         return "Appeal/appealList";
     }
 
     @PostMapping("/feedback")
-    public String addFeedback(@RequestParam Map<String, String> form, Principal user, Model model) {
-
+    public String addFeedback(@RequestParam Map<String, String> form, Principal user) throws ParseException {
         feedbackService.addFeedback(form, user.getName());
-
-        List<Feedback> feedbackList = feedbackRepository.findAll();
-        model.addAttribute("countPage", feedbackList.size()/10);
-
         return "redirect:/appeal?numberPage=0";
     }
 
     @PostMapping("/feedback/edit")
-    public String editFeedback(@RequestParam Map<String, String> form,Principal user, Model model, HttpServletRequest request) {
-
-        if (feedbackService.editFeedback(form, user.getName())) {
-            model.addAttribute("message", "Что-то не так! Попробуйте ещё раз или позднее");
-        }
-
+    public String editFeedback(@RequestParam Map<String, String> form,Principal user, HttpServletRequest request) throws ParseException {
+        feedbackService.editFeedback(form, user.getName());
         return "redirect:" + request.getHeader("referer");
     }
 
     @GetMapping("/appeal/bydate")
-    public String sortAppealByDate(Model model, Principal user) {
+    public String sortAppealByDate(Model model, Principal user, @RequestParam(defaultValue = "0") int numberPage) {
+        Map<String, Object> response = feedbackService.sortFeedbackByDate(user, numberPage, 3);
 
-        List<Feedback> feedbackList = feedbackRepository.findAll()
-                .stream()
-                .sorted(Comparator.comparing(Feedback::getDate))
-                .collect(Collectors.toList());
+        model.addAttribute("countFeedbacks", response.get("countFeedbacks").toString());
+        model.addAttribute("percentPositive", response.get("percentPositive").toString());
+        model.addAttribute("percentNegative", response.get("percentNegative").toString());
 
-        if (user != null) {
-            List<Feedback> x = feedbackList.stream().filter(feedback -> feedback.getAuthor().equals(user.getName())).collect(Collectors.toList());
-            model.addAttribute("isFeedbackExist",x.isEmpty());
-        } else {
-            model.addAttribute("isFeedbackExist", false);
-        }
-
-        model.addAttribute("feedbacks", feedbackList);
-        model.addAttribute("countPage", 1);
+        model.addAttribute("isFeedbackExist", response.get("isFeedbackExist"));
+        model.addAttribute("feedbacks", response.get("feedbacks"));
+        model.addAttribute("countPage", response.get("countPage"));
 
         return "Appeal/appealList";
-        //return "redirect:/appeal?numberPage=0";
     }
 
     @GetMapping("/appeal/byscore")
-    public String sortAppealByScore(@RequestParam String revert, Model model, Principal user) {
-        List<Feedback> feedbackList = feedbackRepository.findAll().stream().sorted(Comparator.comparing(Feedback::getScore)).collect(Collectors.toList());
+    public String sortAppealByScore(@RequestParam String revert, @RequestParam(defaultValue = "0") int numberPage, Model model, Principal user) {
+        Map<String, Object> response = feedbackService.sortFeedbackByScore(revert, numberPage, 3, user);
 
-        if (user != null) {
-            List<Feedback> x = feedbackList.stream().filter(feedback -> feedback.getAuthor().equals(user.getName())).collect(Collectors.toList());
-            model.addAttribute("isFeedbackExist",x.isEmpty());
-        } else {
-            model.addAttribute("isFeedbackExist", false);
-        }
+        model.addAttribute("countFeedbacks", response.get("countFeedbacks").toString());
+        model.addAttribute("percentPositive", response.get("percentPositive").toString());
+        model.addAttribute("percentNegative", response.get("percentNegative").toString());
 
-        if (revert.equals("yes")) {
-            model.addAttribute("feedbacks", feedbackList.stream().sorted(Comparator.comparing(Feedback::getScore).reversed()).collect(Collectors.toList()));
-        } else {
-            model.addAttribute("feedbacks", feedbackList);
-        }
-
-        model.addAttribute("countPage", 1);
+        model.addAttribute("isFeedbackExist", response.get("isFeedbackExist"));
+        model.addAttribute("feedbacks", response.get("feedbacks"));
+        model.addAttribute("countPage", response.get("countPage"));
 
         return "Appeal/appealList";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/appeal/delete")
     public String deleteFeedback(@RequestParam int id, HttpServletRequest request) {
-
-        Feedback feedback = feedbackRepository.findById(id);
-
-        feedbackRepository.delete(feedback);
-
+        feedbackService.deleteById(id);
         return "redirect:" + request.getHeader("referer");
     }
 }

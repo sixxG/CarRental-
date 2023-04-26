@@ -1,12 +1,10 @@
 package com.example.spring.security.controllers;
 
 import com.example.spring.security.models.*;
-import com.example.spring.security.repositories.CarRepository;
-import com.example.spring.security.repositories.ContractRepository;
-import com.example.spring.security.repositories.UserRepository;
+import com.example.spring.security.services.CarService;
 import com.example.spring.security.services.ContractService;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.spring.security.services.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,121 +17,85 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/contract")
 @PreAuthorize("isAuthenticated()")
 public class ContractController {
+    private final ContractService contractService;
+    private final CarService carService;
+    private final UserService userService;
 
-    @Autowired
-    private ContractRepository contractRepository;
-    @Autowired
-    private CarRepository carRepository;
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ContractService contractService;
+    public ContractController(ContractService contractService, CarService carService, UserService userService) {
+        this.contractService = contractService;
+        this.carService = carService;
+        this.userService = userService;
+    }
 
     @GetMapping("")
-    public String indexContractListForClient(Model model, Principal user) {
+    public String indexContractListForClient(@RequestParam int page, Model model, Principal user) {
+        Map<String, Object> response = contractService.getDataForIndexContractListForClient(page, 5, user);
 
-        User client = userRepository.findByUsername(user.getName());
-        List<Contract> contracts = contractRepository.findAll()
-                .stream().filter(contract -> contract.getUser().getId() == client.getId()).collect(Collectors.toList());
+        model.addAttribute("countPage", response.get("countPage"));
 
-        if (contracts.size() != 0) {
-            List<Contract> activeContract = contracts.stream()
-                    .filter(contract1 -> !contract1.getStatus().equals(ContractCondition.COMPLETED.toString())
-                            && !contract1.getStatus().equals(ContractCondition.CANCELED.toString())
-                            && !contract1.getStatus().equals(ContractCondition.AWAITING_PAYMENT_FINE.toString())).collect(Collectors.toList());
+        model.addAttribute("rentalHours", response.get("rentalHours"));
+        model.addAttribute("activeContract", response.get("activeContract"));
 
-            Car car = activeContract != null ? carRepository.findById(activeContract.get(0).getCar().getId()) : null;
+        model.addAttribute("client", response.get("client"));
+        model.addAttribute("contracts", response.get("contracts"));
 
-            LocalDateTime dateStart = activeContract.get(0).getDateStart();
-            LocalDateTime dateEnd = activeContract.get(0).getDateEnd();
-            Duration duration = Duration.between(dateStart, dateEnd);
-
-            long rentalHours = duration.toHours();
-
-            model.addAttribute("rentalHours", rentalHours);
-            model.addAttribute("car", car);
-            model.addAttribute("activeContract", activeContract.get(0));
-        } else {
-            model.addAttribute("car", null);
-            model.addAttribute("activeContract", null);
-        }
-
-        model.addAttribute("client", client);
-        model.addAttribute("contracts", contracts);
+        model.addAttribute("canceledContracts", response.get("canceledContracts"));
+        model.addAttribute("finishedContracts", response.get("finishedContracts"));
+        model.addAttribute("finedContracts", response.get("finedContracts"));
 
         return "Contract/indexForClient";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/list")
-    public String listContracts(Model model) {
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    @GetMapping("/list/all")
+    public String listContracts(@RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String status, Model model, Principal systemUser) {
+        Map<String, Object> response;
+        if (status == null) {
+            response = contractService.getDataListContracts(page, 5, systemUser);
+        } else {
+            response = contractService.getDataListContractsByStatus(page, 5, status, systemUser);
+        }
 
-        List<String> usersFIO = userRepository.findAll().stream()
-                .filter(user -> user.getRoles().contains(new Role(2, "USER")))
-                .map(User::getFio)
-                .collect(Collectors.toList());
+        model.addAttribute("countPage", response.get("countPage"));
 
-        Set<String> carsBrand = carRepository.findAll().stream()
-                .map(Car::getBrand).collect(Collectors.toSet());
+        model.addAttribute("emptyFIO", response.get("emptyFIO"));
 
-        List<Contract> contracts = contractRepository.findAll();
-
-        model.addAttribute("users", usersFIO);
-        model.addAttribute("cars", carsBrand);
-        model.addAttribute("contracts", contracts);
+        model.addAttribute("users", response.get("users"));
+        model.addAttribute("cars", response.get("cars"));
+        model.addAttribute("contracts", response.get("contracts"));
 
         return "Contract/listContracts";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @PostMapping("/search")
     public String searchContract(@RequestParam Map<String, String> form, Model model) {
+        Map<String, Object> response = contractService.searchContract(form);
 
-        String client = !Objects.equals(form.get("Client"), "") ? form.get("Client") : null;
-        String carBrand = !Objects.equals(form.get("CarBrand"), "") ? form.get("CarBrand") : null;
-        LocalDateTime dateStart = !Objects.equals(form.get("DateStart"), "") ? LocalDateTime.parse(form.get("DateStart")+"T00:00") : null;
-        LocalDateTime dateEnd = !Objects.equals(form.get("DateEnd"), "") ? LocalDateTime.parse(form.get("DateEnd")+"T00:00") : null;
+        model.addAttribute("brand", form.get("CarBrand"));
+        model.addAttribute("client", form.get("Client"));
+        model.addAttribute("dateStart", form.get("DateStart"));
+        model.addAttribute("dateEnd", form.get("DateEnd"));
 
-        List<Contract> contracts = contractRepository.findAll();
-
-        List<Contract> searchedContract = contracts.stream()
-                .filter(contract -> client == null || contract.getUser().getFio().equals(client))
-                .filter(contract -> carBrand == null || contract.getCar().getBrand().equals(carBrand))
-                .filter(contract -> dateStart == null || contract.getDateStart().isAfter(dateStart) || contract.getDateStart().isEqual(dateStart))
-                .filter(contract -> dateEnd == null || contract.getDateEnd().isBefore(dateEnd) || contract.getDateEnd().isEqual(dateEnd))
-                .collect(Collectors.toList());
-
-        List<String> usersFIO = userRepository.findAll().stream()
-                .filter(user -> user.getRoles().contains(new Role(2, "USER")))
-                .map(User::getFio)
-                .collect(Collectors.toList());
-
-        Set<String> carsBrand = carRepository.findAll().stream()
-                .map(Car::getBrand).collect(Collectors.toSet());
-
-        model.addAttribute("contracts", searchedContract);
-        model.addAttribute("users", usersFIO);
-        model.addAttribute("cars", carsBrand);
+        model.addAttribute("contracts", response.get("contracts"));
+        model.addAttribute("users", response.get("users"));
+        model.addAttribute("cars", response.get("cars"));
 
         return "Contract/listContracts";
     }
 
     @PostMapping("/create")
     public String createContractForm(@RequestParam Map<String, String> form, Model model, Principal user) {
-
-        Car car = carRepository.findById(Integer.parseInt(form.get("car_id")));
-        User client = userRepository.findByUsername(user.getName());
+        Car car = carService.findById(Integer.parseInt(form.get("car_id")));
+        User client = userService.findByUsername(user.getName());
         model.addAttribute("car", car);
         model.addAttribute("client", client);
         model.addAttribute("dateStart", form.get("dateStart"));
@@ -144,65 +106,27 @@ public class ContractController {
 
     @PostMapping("/save")
     public String createContracts(@RequestParam Map<String, String> form, Model model) {
+        Map<String, Object> response = contractService.createContract(form);
 
-        User user = userRepository.findByUsername(form.get("userName"));
-        Car car = carRepository.findById(Integer.parseInt(form.get("car_id")));
+        if (response.get("errorDate") != null) {
+            // Разница между датами меньше одного дня
+            model.addAttribute("car", response.get("car"));
+            model.addAttribute("client", response.get("client"));
+            model.addAttribute("dateStart", response.get("dateStart"));
+            model.addAttribute("dateEnd", response.get("dateEnd"));
 
-        user.setFio(form.get("FIO_Customer"));
-        user.setEmail(form.get("email"));
-        user.setPhone(form.get("phone"));
-        user.setAddress(form.get("address"));
-        user.setDriverLicense(form.get("driverLicense"));
+            model.addAttribute("errorDate", response.get("errorDate"));
+            model.addAttribute("priceRental", response.get("priceRental"));
+            return "Contract/contractCreate";
+        }
 
-        String dateStartStr = form.get("Date_Start");
-        String dateEndStr = form.get("Date_End");
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-        StringBuilder Start= new StringBuilder(dateStartStr.substring(0, 10));
-        Start.append(" ");
-        Start.append(dateStartStr.substring(11, 16));
-
-        StringBuilder End= new StringBuilder(dateEndStr.substring(0, 10));
-        End.append(" ");
-        End.append(dateEndStr.substring(11, 16));
-
-        LocalDateTime dateStart = LocalDateTime.parse(Start, formatter);
-        LocalDateTime dateEnd = LocalDateTime.parse(End, formatter);
-
-        String registrator = form.get("Registrator") != null ? form.get("Registrator") : "";
-        String AutoBox = form.get("AutoBox") != null ? form.get("AutoBox") : "";
-        String interest = form.get("interest") != null ? form.get("interest") : "";
-
-        Start.delete(0, Start.length());
-
-        if (!registrator.equals(""))
-            Start.append("Видеорегистратор: 1; ");
-        else Start.append(registrator);
-
-        if (!AutoBox.equals(""))
-            Start.append("Авто бокс: 1; ");
-        else Start.append(AutoBox);
-
-        if (!interest.equals("0"))
-            Start.append("Детское кресло: ").append(interest).append("; ");
-
-        double price = Double.parseDouble(form.get("Price"));
-
-        Contract contract = new Contract(null, Start.toString(), dateStart, form.get("placeReceipt"), dateEnd,
-                form.get("placeReturn"),price, ContractCondition.valueOf("NOT_CONFIRMED").toString(),
-                form.get("Notes"), car, user);
-
-        contractRepository.save(contract);
-        userRepository.save(user);
-
-        return "redirect:/contract";
+        return "redirect:/contract?page=1";
     }
 
     @GetMapping("/details")
     public String detailsContract(@RequestParam int id, Model model) {
 
-        Contract contract = contractRepository.findById(id);
+        Contract contract = contractService.findById(id);
 
         LocalDateTime dateStart = contract.getDateStart();
         LocalDateTime dateEnd = contract.getDateEnd();
@@ -229,20 +153,20 @@ public class ContractController {
         return "Contract/contractDetails";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @PostMapping("/delete")
     public String deleteContract(@RequestParam int id, HttpServletRequest request) {
 
-        contractRepository.deleteById(id);
+        contractService.deleteById(id);
 
         return "redirect:" + request.getHeader("referer");
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @GetMapping("/edit")
     public String editContractForm(@RequestParam int id, Model model) {
 
-        Contract contract = contractRepository.findById(id);
+        Contract contract = contractService.findById(id);
 
         LocalDateTime dateStart = contract.getDateStart();
         LocalDateTime dateEnd = contract.getDateEnd();
@@ -259,17 +183,99 @@ public class ContractController {
         return "Contract/contractEdit";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @PostMapping("/edit")
     public String editContract(@Valid Contract contract) {
 
-        Contract contractBeforeEdit = contractRepository.findById(contract.getId());
+        Contract contractBeforeEdit = contractService.findById(contract.getId());
 
         contractBeforeEdit.setNote(contract.getNote());
         contractBeforeEdit.setFioManager(contract.getFioManager());
 
-        contractRepository.save(contractBeforeEdit);
+        contractService.save(contractBeforeEdit);
 
         return "redirect:details?id=" + contract.getId();
+    }
+
+    @PostMapping("/confirm")
+    public String confirmContract(@RequestParam int id, Principal user) {
+        User manager = userService.findByUsername(user.getName());
+        Contract contract = contractService.findById(id);
+
+        contract.setFioManager(manager.getFio());
+        contract.setStatus(ContractCondition.CONFIRMED.toString());
+
+        contractService.save(contract);
+
+        return "redirect:list/all?page=1";
+    }
+
+    @PostMapping("/cancel")
+    public String cancelContract(@RequestParam int id, Principal user) {
+
+        Contract contract = contractService.findById(id);
+        User client = userService.findByUsername(user.getName());
+
+        contract.getCar().setStatus("Свободна");
+        carService.saveCar(contract.getCar());
+
+        if (client.getRoles().contains(new Role(2, "USER"))) {
+            contract.setStatus(ContractCondition.CANCELED.toString());
+            contractService.save(contract);
+            return "redirect:/contract?page=1";
+        } else {
+            contract.setFioManager(client.getFio());
+            contract.setStatus(ContractCondition.CANCELED.toString());
+            contractService.save(contract);
+            return "redirect:list/all?page=1";
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    @PostMapping("/start")
+    public String startContract(@RequestParam int id, Principal user) {
+        User manager = userService.findByUsername(user.getName());
+        Contract contract = contractService.findById(id);
+
+        contract.setFioManager(manager.getFio());
+        contract.setStatus(ContractCondition.WORKING.toString());
+
+        contractService.save(contract);
+
+        return "redirect:list/all?page=1";
+    }
+
+    @PostMapping("/finish")
+    public String finishContract(@RequestParam int id, Principal user) {
+        User client = userService.findByUsername(user.getName());
+        Contract contract = contractService.findById(id);
+
+        contract.getCar().setStatus("Свободна");
+        carService.saveCar(contract.getCar());
+
+        if (client.getRoles().contains(new Role(2, "USER"))) {
+            contract.setStatus(ContractCondition.COMPLETED.toString());
+            contractService.save(contract);
+            return "redirect:/contract?page=1";
+        } else {
+            contract.setFioManager(client.getFio());
+            contract.setStatus(ContractCondition.COMPLETED.toString());
+            contractService.save(contract);
+            return "redirect:list/all?page=1";
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    @PostMapping("/fine")
+    public String fineContract(@RequestParam int id, Principal user) {
+        User manager = userService.findByUsername(user.getName());
+        Contract contract = contractService.findById(id);
+
+        contract.setFioManager(manager.getFio());
+        contract.setStatus(ContractCondition.AWAITING_PAYMENT_FINE.toString());
+
+        contractService.save(contract);
+
+        return "redirect:list/all?page=1";
     }
 }

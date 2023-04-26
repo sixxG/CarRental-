@@ -13,26 +13,26 @@
 
     <hr style="color: #5394FD; margin: 5px; background: #5394FD; border: 0.5px solid #5394FD " />
 
-    <#if activeContract?has_content>
+    <#if activeContract??>
         <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 100%;">
 
         <div style="display: flex; background: rgba(40,40,40,0.15); width: 100%; height: 100%; border-radius: 15px; padding: 10px; margin-bottom: 10px;">
             <div style="padding: 0; display: inline-block; width: 50%" id="Renta">
-                <a href="/car/details?id=${car.id}" style="font-size: 32px; color: black; text-align: center;">Автомобиль</a>
-                <img src="/imageCar/${car.image}" width="260" height="160" style="border-radius: 15px;">
-                <p style="font-size: 24px; color: black; font-weight: 600; text-align: center; margin-top: 5px;">${car.brand} ${car.model}</p>
+                <a href="/car/details?id=${activeContract.getCar().id}" style="font-size: 32px; color: black; text-align: center;">Автомобиль</a>
+                <img src="/imageCar/${activeContract.getCar().image}" width="260" height="160" style="border-radius: 15px;">
+                <p style="font-size: 24px; color: black; font-weight: 600; text-align: center; margin-top: 5px;">${activeContract.getCar().brand} ${activeContract.getCar().model}</p>
             </div>
 
             <div style="padding: 0; display: inline-block; width: 50%; margin-left: 15px;">
                 <p style="font-size: 32px; color: black;">Дата получения</p>
-                <p style="font-size: 26px; color: #404040;" id="dateStart">${activeContract.dateStart!"some error"}</p>
+                <p style="font-size: 26px; color: #404040;">${(activeContract.dateStart).format('yyyy-MM-dd HH:mm:ss')}</p>
                 <p style="font-size: 32px; color: black;">Доп. опции</p>
                 <p style="font-size: 20px; color: #404040;">Видеорегистратор;<br> Автобокс; <br> Детское-кресло;3</p>
             </div>
 
             <div style="padding: 0; display: inline-block; width: 50%; margin-left: 15px;">
                 <p style="font-size: 32px; color: black;">Дата возврата</p>
-                <p style="font-size: 26px; color: #404040;" id="dateEnd">${activeContract.dateEnd!"some error"}</p>
+                <p style="font-size: 26px; color: #404040;" id="dateEnd">${(activeContract.dateEnd).format('yyyy-MM-dd HH:mm:ss')}</p>
                 <p style="font-size: 32px; color: black;">Примечания</p>
                 <p style="font-size: 20px; color: #404040;">Хочу автомобиль</p>
             </div>
@@ -45,14 +45,22 @@
 
                 <div id="Finished" style="display: flex;">
                     <#if activeContract.getStatus() = "Действует">
-                        <button style="font-size: 25px; background: #46F046; margin-bottom: 10px; width: 100%; display: block" class="btn-canceled butto" onclick="NotFinish()">
-                            Завершить
-                        </button>
+                        <form action="/contract/finish" method="post" style="width: 100%;">
+                            <button style="font-size: 25px; background: #46F046; margin-bottom: 10px; width: 100%; display: block" class="btn-canceled button" onclick="NotFinish()">
+                                <input type="hidden" name="_csrf" value="${_csrf.token}">
+                                <input type="hidden" name="id" value="${activeContract.getId()}">
+                                Завершить
+                            </button>
+                        </form>
                     </#if>
 
                     <#if activeContract.getStatus() = "Не подтверждён">
                         <div id="Canceled" style="width: 90%; display: block;">
-                            <input type="submit" value="Отменить" class="btn-canceled butto" style="width: 100%;margin-left: 15px; display: block" />
+                            <form action="contract/cancel" method="post">
+                                <input type="hidden" name="_csrf" value="${_csrf.token}">
+                                <input type="hidden" name="id" value="${activeContract.getId()}">
+                                <input type="submit" value="Отменить" class="btn-canceled button" style="width: 100%" />
+                            </form>
                         </div>
                     </#if>
                 </div>
@@ -81,149 +89,239 @@
             <a data-toggle="tab" href="#ALL" style="font-size: 36px; color: black; padding: 10px 5px 5px 5px;"><h4>Все</h4></a>
         </li>
         <li>
-            <a data-toggle="tab" href="#Canceled" style="padding: 10px 5px 5px 5px;"><h4>Отменённые</h4></a>
+            <a data-toggle="tab" href="#CanceledContract" style="padding: 10px 5px 5px 5px;"><h4>Отменённые</h4></a>
         </li>
         <li>
-            <a data-toggle="tab" href="#Finishedd" style="padding: 10px 5px 5px 5px;"><h4>Завершённые</h4></a>
+            <a data-toggle="tab" href="#FinishedC" style="padding: 10px 5px 5px 5px;"><h4>Завершённые</h4></a>
+        </li>
+        <li>
+            <a data-toggle="tab" href="#Fined" style="padding: 10px 5px 5px 5px;"><h4>Ожидают оплаты штрафа</h4></a>
         </li>
 
     </ul>
+
+    <#if countPage != 0>
+        <nav aria-label="...">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="/contract?page=1">Start</a>
+                </li>
+                <#list 1..countPage as page>
+                    <li class="page-item" id="page_item_${page}">
+                        <a class="page-link" id="button_${page}" href="/contract?page=${page}">${page}</a>
+                    </li>
+                </#list>
+                <li class="page-item">
+                    <a class="page-link" href="/contract?page=${countPage}">End</a>
+                </li>
+            </ul>
+        </nav>
+    </#if>
 
     <div class="tab-content" style="margin-bottom: 5%;">
         <div id="ALL" class="tab-pane fade in active">
             <br />
 
-            <#list contracts as contract>
-                <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 100%;">
+            <#if contracts?has_content>
+                <#list contracts?sort_by("dateStart")?reverse as contract>
+                    <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 100%;">
 
-                    <div style="display: flex; background: rgba(40,40,40,0.15); width: 100%; height: 100%; border-radius: 15px; padding: 10px; margin-bottom: 10px;">
-                        <div style="padding: 0; display: inline-block; width: 50%" id="Renta">
-                            <a href="/car/details?id=${contract.car.id}" style="font-size: 32px; color: black; text-align: center;">Автомобиль</a>
-                            <img src="/imageCar/${contract.car.image}" width="260" height="160" style="border-radius: 15px;">
-                            <p style="font-size: 24px; color: black; font-weight: 600; text-align: center; margin-top: 5px;">${contract.car.brand} ${contract.car.model}</p>
+                        <div style="display: flex; background: rgba(40,40,40,0.15); width: 100%; height: 100%; border-radius: 15px; padding: 10px; margin-bottom: 10px;">
+                            <div style="padding: 0; display: inline-block; width: 50%" id="Renta">
+                                <a href="/car/details?id=${contract.car.id}" style="font-size: 32px; color: black; text-align: center;">Автомобиль</a>
+                                <img src="/imageCar/${contract.car.image}" width="260" height="160" style="border-radius: 15px;">
+                                <p style="font-size: 24px; color: black; font-weight: 600; text-align: center; margin-top: 5px;">${contract.car.brand} ${contract.car.model}</p>
+                            </div>
+
+                            <div style="padding: 0; display: inline-block; width: 50%; margin-left: 15px;">
+                                <p style="font-size: 32px; color: black;">Дата получения</p>
+                                <p style="font-size: 26px; color: #404040;">${(contract.dateStart).format('yyyy-MM-dd HH:mm:ss')}</p>
+                                <p style="font-size: 32px; color: black;">Доп. опции</p>
+                                <p style="font-size: 20px; color: #404040;">Видеорегистратор;<br> Автобокс; <br> Детское-кресло;3</p>
+                            </div>
+
+                            <div style="padding: 0; display: inline-block; width: 50%; margin-left: 15px;">
+                                <p style="font-size: 32px; color: black;">Дата возврата</p>
+                                <p style="font-size: 26px; color: #404040;">${(contract.dateEnd).format('yyyy-MM-dd HH:mm:ss')}</p>
+                                <p style="font-size: 32px; color: black;">Примечания</p>
+                                <p style="font-size: 20px; color: #404040;">Хочу автомобиль</p>
+                                <p style="font-size: 32px; color: black;">Статус</p>
+                                <p style="font-size: 26px; color: #404040;">${contract.status!"some error"}</p>
+                            </div>
+
+                            <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">
+                                <p style="font-size: 32px; color: black;">Цена</p>
+                                <p style="font-size: 32px; color: red;">${contract.price!"some error"}</p>
+                                <a href="/contract/details?id=${contract.getId()}" style="font-size: 25px; padding: 0px; width: 100%;">Подробнее</a>
+                            </div>
                         </div>
-
-                        <div style="padding: 0; display: inline-block; width: 50%; margin-left: 15px;">
-                            <p style="font-size: 32px; color: black;">Дата получения</p>
-                            <p style="font-size: 26px; color: #404040;" id="dateStart">${contract.dateStart!"some error"}</p>
-                            <p style="font-size: 32px; color: black;">Доп. опции</p>
-                            <p style="font-size: 20px; color: #404040;">Видеорегистратор;<br> Автобокс; <br> Детское-кресло;3</p>
-                        </div>
-
-                        <div style="padding: 0; display: inline-block; width: 50%; margin-left: 15px;">
-                            <p style="font-size: 32px; color: black;">Дата возврата</p>
-                            <p style="font-size: 26px; color: #404040;" id="dateEnd">${contract.dateEnd!"some error"}</p>
-                            <p style="font-size: 32px; color: black;">Примечания</p>
-                            <p style="font-size: 20px; color: #404040;">Хочу автомобиль</p>
-                        </div>
-
-                        <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">
-                            <p style="font-size: 32px; color: black;">Цена</p>
-                            <p style="font-size: 32px; color: red;">${contract.price!"some error"}</p>
-                        </div>
-
+                        <br />
 
                     </div>
-                    <br />
-
-                    <br />
-
-                </div>
                 <#else >
                     <h1 style="text-align:center;">У вас ещё не было аренд!</h1>
                     <br />
-            </#list>
+                </#list>
+            </#if>
 
         </div>
-<#--        <div id="Canceled" class="tab-pane fade in">-->
-<#--            <br />-->
 
-<#--            <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 80%;">-->
+        <div id="CanceledContract" class="tab-pane fade in">
+            <br />
+            <#if canceledContracts?has_content>
+                <#list canceledContracts?sort_by("dateStart")?reverse as contractCanceled>
+                    <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 80%;">
+                        <div style="display: flex; background: rgba(40,40,40,0.15); width: 100%; height: 100%; border-radius: 15px; padding: 10px; margin-bottom: 10px;">
+                            <div style="padding: 0; display: inline-block; width: 50%" id="Renta">
+                                <a class="AllCar" href="/car/details?id=${contractCanceled.getCar().getId()}">Автомобиль</a>
+                                <p style="font-size: 24px; color: black;">${contractCanceled.getCar().getBrand()} ${contractCanceled.getCar().getModel()!""}</p>
+                                <a href="/contract/details?id=${contractCanceled.getId()}" style="font-size: 25px; padding: 0; width: 100%;">Подробнее</a>
+                            </div>
 
-<#--                <div style="display: flex; background: rgba(40,40,40,0.15); width: 100%; height: 100%; border-radius: 15px; padding: 10px; margin-bottom: 10px;">-->
-<#--                    <div style="padding: 0; display: inline-block; width: 50%" id="Renta">-->
-<#--                        <p style="font-size: 32px; color: black;">Автомобиль</p>-->
-<#--                        <p style="font-size: 24px; color: black;">BMW X1</p>-->
-<#--                        <a class="btnDetails_Contract" href="/Contracts/Details/1050">Подробнее</a>-->
-<#--                    </div>-->
+                            <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">
+                                <p style="font-size: 32px; color: black;">Дата получения</p>
+                                <p style="font-size: 32px; color: #404040;">${(contractCanceled.dateStart).format('yyyy-MM-dd HH:mm:ss')}</p>
+                            </div>
 
-<#--                    <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">-->
-<#--                        <p style="font-size: 32px; color: black;">Дата получения</p>-->
-<#--                        <p style="font-size: 32px; color: #404040;">29.12.2022 21:08:00</p>-->
-<#--                    </div>-->
+                            <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">
+                                <p style="font-size: 32px; color: black;">Дата возврата</p>
+                                <p style="font-size: 32px; color: #404040;">${(contractCanceled.dateEnd).format('yyyy-MM-dd HH:mm:ss')}</p>
+                            </div>
 
-<#--                    <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">-->
-<#--                        <p style="font-size: 32px; color: black;">Дата возврата</p>-->
-<#--                        <p style="font-size: 32px; color: #404040;">05.01.2023 12:00:00</p>-->
-<#--                    </div>-->
+                            <div style="display: block; width: 50%;">
+                                <p style="font-size: 32px; color: black;">Доп. опции</p>
+                                <p style="font-size: 20px; color: #404040;">${contractCanceled.getAdditionalOptions()}</p>
+                                <p style="font-size: 32px; color: black;">Примечания</p>
+                                <p style="font-size: 20px; color: #404040;">${contractCanceled.getNote()}</p>
+                            </div>
 
-<#--                    <div style="display: block; width: 50%;">-->
-<#--                        <p style="font-size: 32px; color: black;">Доп. опции</p>-->
-<#--                        <p style="font-size: 20px; color: #404040;">Видеорегистратор; Автобокс; Детское-кресло;3</p>-->
-<#--                        <p style="font-size: 32px; color: black;">Примечания</p>-->
-<#--                        <p style="font-size: 20px; color: #404040;">Хочу автомобиль</p>-->
-<#--                    </div>-->
+                            <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">
+                                <p style="font-size: 32px; color: black;">Цена</p>
+                                <p style="font-size: 32px; color: red;">${contractCanceled.getPrice()}</p>
+                                <p style="font-size: 32px; color: black;">Состояние</p>
+                                <p style="font-size: 20px; color: #404040;">${contractCanceled.getStatus()}</p>
+                            </div>
+                        </div>
+                        <br />
 
-<#--                    <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">-->
-<#--                        <p style="font-size: 32px; color: black;">Цена</p>-->
-<#--                        <p style="font-size: 32px; color: red;">22800</p>-->
-<#--                        <p style="font-size: 32px; color: black;">Состояние</p>-->
-<#--                        <p style="font-size: 20px; color: #404040;">Отменён</p>-->
-<#--                    </div>-->
+                    </div><!-- /End Section Container -->
+                <#else >
+                    <h1 style="text-align:center;">У вас ещё не было аренд!</h1>
+                    <br />
+                </#list>
+            </#if>
 
+        </div>
 
-<#--                </div>-->
-<#--                <br />-->
+        <div id="FinishedC" class="tab-pane fade in">
+            <br />
+            <#if finishedContracts?has_content>
+                <#list finishedContracts?sort_by("dateStart")?reverse as finishedContract>
+                    <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 80%;">
 
+                        <div style="display: flex; background: rgba(40,40,40,0.15); width: 100%; height: 100%; border-radius: 15px; padding: 10px; margin-bottom: 10px;">
+                            <div style="padding: 0; display: inline-block; width: 50%" id="Renta">
+                                <a class="AllCar" href="/car/details?id=${finishedContract.getCar().getId()}">Автомобиль</a>
+                                <p style="font-size: 24px; color: black;">${finishedContract.getCar().getBrand()} ${finishedContract.getCar().getModel()!""}</p>
+                                <a href="/contract/details?id=${finishedContract.getId()}" style="font-size: 25px; padding: 0px; width: 100%;">Подробнее</a>
+                            </div>
 
+                            <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">
+                                <p style="font-size: 32px; color: black;">Дата получения</p>
+                                <p style="font-size: 32px; color: #404040;">${(finishedContract.dateStart).format('yyyy-MM-dd HH:mm:ss')}</p>
+                            </div>
 
-<#--                <br />-->
+                            <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">
+                                <p style="font-size: 32px; color: black;">Дата возврата</p>
+                                <p style="font-size: 32px; color: #404040;">${(finishedContract.dateStart).format('yyyy-MM-dd HH:mm:ss')}</p>
+                            </div>
 
-<#--            </div><!-- /End Section Container &ndash;&gt;-->
+                            <div style="display: block; width: 50%;">
+                                <p style="font-size: 32px; color: black;">Доп. опции</p>
+                                <p style="font-size: 20px; color: #404040;">${finishedContract.getAdditionalOptions()}</p>
+                                <p style="font-size: 32px; color: black;">Примечания</p>
+                                <p style="font-size: 20px; color: #404040;">${finishedContract.getNote()}</p>
+                            </div>
 
-<#--        </div>-->
-<#--        <div id="Finishedd" class="tab-pane fade in">-->
-<#--            <br />-->
+                            <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">
+                                <p style="font-size: 32px; color: black;">Цена</p>
+                                <p style="font-size: 32px; color: red;">${finishedContract.getPrice()}</p>
+                                <p style="font-size: 32px; color: black;">Состояние</p>
+                                <p style="font-size: 20px; color: #404040;">${finishedContract.getStatus()}</p>
+                            </div>
+                        </div>
+                        <br />
 
-<#--            <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 80%;">-->
+                    </div><!-- /End Section Container -->
+                <#else >
+                    <h1 style="text-align:center;">У вас ещё не было аренд!</h1>
+                    <br />
+                </#list>
+            </#if>
 
-<#--                <h1 style="text-align:center; margin-bottom: 100px;">Аренд нет(</h1>-->
+        </div>
 
-<#--                <br />-->
+        <div id="Fined" class="tab-pane fade in">
+            <br />
+            <#if finedContracts?has_content>
+                <#list finedContracts?sort_by("dateStart")?reverse as contractFinished>
+                    <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 80%;">
 
-<#--            </div><!-- /End Section Container &ndash;&gt;-->
+                        <div style="display: flex; background: rgba(40,40,40,0.15); width: 100%; height: 100%; border-radius: 15px; padding: 10px; margin-bottom: 10px;">
+                            <div style="padding: 0; display: inline-block; width: 50%" id="Renta">
+                                <a class="AllCar" href="/car/details?id=${contractFinished.getCar().getId()}">Автомобиль</a>
+                                <p style="font-size: 24px; color: black;">${contractFinished.getCar().getBrand()} ${contractFinished.getCar().getModel()!""}</p>
+                                <a href="/contract/details?id=${contractFinished.getId()}" style="font-size: 25px; padding: 0px; width: 100%;">Подробнее</a>
+                            </div>
 
-<#--        </div>-->
+                            <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">
+                                <p style="font-size: 32px; color: black;">Дата получения</p>
+                                <p style="font-size: 32px; color: #404040;">${(contractFinished.dateStart).format('yyyy-MM-dd HH:mm:ss')}</p>
+                            </div>
+
+                            <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">
+                                <p style="font-size: 32px; color: black;">Дата возврата</p>
+                                <p style="font-size: 32px; color: #404040;">${(contractFinished.dateStart).format('yyyy-MM-dd HH:mm:ss')}</p>
+                            </div>
+
+                            <div style="display: block; width: 50%;">
+                                <p style="font-size: 32px; color: black;">Доп. опции</p>
+                                <p style="font-size: 20px; color: #404040;">${contractFinished.getAdditionalOptions()}</p>
+                                <p style="font-size: 32px; color: black;">Примечания</p>
+                                <p style="font-size: 20px; color: #404040;">${contractFinished.getNote()}</p>
+                            </div>
+
+                            <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">
+                                <p style="font-size: 32px; color: black;">Цена</p>
+                                <p style="font-size: 32px; color: red;">${contractFinished.getPrice()}</p>
+                                <p style="font-size: 32px; color: black;">Состояние</p>
+                                <p style="font-size: 20px; color: #404040;">${contractFinished.getStatus()}</p>
+                            </div>
+                        </div>
+                        <br />
+
+                    </div><!-- /End Section Container -->
+                <#else >
+                    <h1 style="text-align:center;">У вас ещё не было аренд!</h1>
+                    <br />
+                </#list>
+            </#if>
+
+        </div>
     </div>
 
     <script>
-        function NotFinish() {
-            var p = document.getElementById('notFinish');
-            p.innerHTML = 'Вы не можете завершить аренду т.к. она ещё не активна.';
+        // Получаем значение параметра "page" из URL
+        const urlParamsContractsForClient = new URLSearchParams(window.location.search);
+        const page = urlParamsContractsForClient.get('page');
+
+        // Находим кнопку с id, соответствующим значению page
+        const button = document.getElementById('page_item_'+page);
+
+        // Если такая кнопка найдена, то эмулируем ее нажатие
+        if (button) {
+            button.classList.add("active");
         }
-
-        //форматирования сроков аренды
-        const pTagStart = document.querySelector("#dateStart");
-        // Исходная дата в формате "yyyy-MM-ddTHH:mm"
-        const dateString = pTagStart.textContent;
-        // Создаем новый объект даты на основе исходной строки
-        const date = new Date(dateString);
-        // Форматируем дату и время в нужный формат "dd-MM-yyyy hh:mm"
-        const formattedDate = date.getDate().toString().padStart(2, '0')
-            + "-" + (date.getMonth() + 1).toString().padStart(2, '0')
-            + "-" + date.getFullYear() + " " + date.getHours().toString().padStart(2, '0')
-            + ":" + date.getMinutes().toString().padStart(2, '0');
-        pTagStart.textContent = formattedDate;
-
-        const pTagEnd = document.querySelector("#dateEnd");
-        const dateStringEnd = pTagEnd.textContent;
-        const dateEnd = new Date(dateStringEnd);
-        const formattedDateEnd = dateEnd.getDate().toString().padStart(2, '0')
-            + "-" + (dateEnd.getMonth() + 1).toString().padStart(2, '0')
-            + "-" + dateEnd.getFullYear() + " " + dateEnd.getHours().toString().padStart(2, '0')
-            + ":" + dateEnd.getMinutes().toString().padStart(2, '0');
-        pTagEnd.textContent = formattedDateEnd;
-
     </script>
 
 

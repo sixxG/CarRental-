@@ -24,8 +24,8 @@
                     <!--"Edit", "Customer", FormMethod.Post, new { enctype = "multipart/form-data", data_restUrl = Url.Action("Edit", "Customer", new { id = Model.Id }) })-->
                     <form action="/account" method="post">
 
-                        <input type="hidden" value="${_csrf.token}" name="_csrf">
-                        <input type="hidden" value="${client.getId()}" name="userId">
+                        <input type="hidden" value="${_csrf.token}" name="_csrf"/>
+                        <input type="hidden" value="${client.getId()}" name="userId"/>
 
                         <div class="form-horizontal">
                             <h4>Ваши данные</h4>
@@ -34,27 +34,27 @@
                             <div class="form-group">
                                 <label class="control-label col-md-2" for="fio">ФИО</label>
                                 <div class="col-md-10">
-                                    <input class="form-control text-box single-line" name="fio" type="text" value="${client.fio!""}"/></div>
+                                    <input class="form-control text-box single-line" name="fio" type="text" value="${client.fio!""}" required/></div>
                             </div>
 
                             <div class="form-group">
                                 <label class="control-label col-md-2" for="birthDate">Дата рождения</label>
                                 <div class="col-md-10">
-                                    <input class="form-control text-box single-line" name="birthDate" type="date" value="${client.birthDate!""}" />
+                                    <input class="form-control text-box single-line" name="birthDate" type="date" value="${client.birthDate!""}" required/>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label class="control-label col-md-2" for="email">Email</label>
                                 <div class="col-md-10">
-                                    <input class="form-control text-box single-line" name="email" type="text" value="${client.email!""}" />
+                                    <input class="form-control text-box single-line" name="email" type="text" value="${client.email!""}" required/>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label class="control-label col-md-2" for="address">Адресс</label>
                                 <div class="col-md-10">
-                                    <input class="form-control text-box single-line" name="address" type="text" value="${client.address!""}" />
+                                    <input class="form-control text-box single-line" name="address" type="text" value="${client.address!""}" required/>
                                 </div>
                             </div>
 
@@ -63,7 +63,7 @@
                             <div class="form-group">
                                 <label class="control-label col-md-2" for="phone">Телефон</label>
                                 <div class="col-md-10">
-                                    <input class="form-control text-box single-line" name="phone" type="text" value="${client.phone!""}" />
+                                    <input class="form-control text-box single-line" name="phone" type="text" value="${client.phone!""}" required/>
                                 </div>
                             </div>
 
@@ -71,7 +71,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-md-2" for="fio">Водительское удостоверение</label>
                                     <div class="col-md-10">
-                                        <input class="form-control text-box single-line" name="driverLicense" type="text" value="${client.driverLicense!""}"/></div>
+                                        <input class="form-control text-box single-line" name="driverLicense" type="text" value="${client.driverLicense!""}" required/></div>
                                 </div>
                             </#if>
 
@@ -96,7 +96,7 @@
                     <dt>Пароль:</dt>
                     <dd>
                         [
-                        <a href="/Manage/ChangePassword">Смена пароля</a>                ]
+                        <a href="/account/change_password">Смена пароля</a>                ]
                     </dd>
 
                 </dl>

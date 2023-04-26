@@ -3,7 +3,7 @@
 
 <@c.page>
 
-    <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 100%;">
+    <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 100%; margin-top: 3%">
 
         <form action="/car" enctype="multipart/form-data" method="post">
             <div class="row" style="margin-top: 3%;">
@@ -12,38 +12,55 @@
                     <input type="hidden" name="_csrf" value="${_csrf.token}">
 
                     <div class="col-md-6">
+
                         <div class="form-group">
                             <label class="control-label col-md-2" for="WIN_Number">WIN</label>
                             <div class="col-md-10">
-                                <input class="form-control text-box single-line <#if (map['WIN_NumberError'])??>is-invalid</#if>"
-                                       value="<#if car??>${car.getWIN_Number()}</#if>" name="WIN_Number" type="text"/>
-
-                                <#if map['WIN_NumberError']??>
+                                <input class="form-control text-box single-line custom-input"
+                                       value="<#if car??>${car.getWIN_Number()}</#if>" name="WIN_Number" type="text" required/>
+                                <#if map['WIN_Number']??>
                                     <div class="invalid-feedback">
-                                        ${map['WIN_NumberError']}
+                                        <#list map['WIN_Number'] as error>
+                                            ${error}
+                                        </#list>
+                                    </div>
+                                </#if>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="control-label col-md-2" for="brand">Марка</label>
+                            <div class="col-md-10">
+                                <input class="form-control text-box single-line" value="<#if car??>${car.getBrand()}</#if>" name="brand" type="text" required/>
+                                <#if map['brand']??>
+                                    <div class="invalid-feedback">
+                                        <#list map['brand'] as error>
+                                            ${error}
+                                        </#list>
                                     </div>
                                 </#if>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-md-2" for="brand">Марка</label>
-                            <div class="col-md-10">
-                                <input class="form-control text-box single-line" name="brand" type="text"/>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
                             <label class="control-label col-md-2" for="model">Модель</label>
                             <div class="col-md-10">
-                                <input class="form-control text-box single-line" name="model" type="text" value="" />
+                                <input class="form-control text-box single-line" value="<#if car??>${car.getModel()}</#if>" name="model" type="text"/>
+                                <#if map['model']??>
+                                    <div class="invalid-feedback">
+                                        <#list map['model'] as error>
+                                            ${error}
+                                        </#list>
+                                    </div>
+                                </#if>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="control-label col-md-2" for="body">Кузов</label>
                             <div class="col-md-10">
-                                <select class="form-control" name="body"><option value="">Кузов</option>
+                                <select class="form-control" onselect="<#if car??>${car.getBody()}</#if>" name="body" required><option value="">Кузов</option>
                                     <option>Купэ</option>
                                     <option>Универсал</option>
                                     <option>Кабриолет</option>
@@ -54,13 +71,20 @@
                                     <option>Пикап</option>
                                     <option>Минивэн</option>
                                 </select>
+                                <#if map['body']??>
+                                    <div class="invalid-feedback">
+                                        <#list map['body'] as error>
+                                            ${error}
+                                        </#list>
+                                    </div>
+                                </#if>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="control-label col-md-2" for="level">Класс</label>
                             <div class="col-md-10">
-                                <select class="form-control" name="level"><option value="">Кузов</option>
+                                <select class="form-control" onselect="<#if car??>${car.getLevel()}</#if>" name="level" required><option value="">Кузов</option>
                                     <option>Эконом</option>
                                     <option>Комфорт</option>
                                     <option>Бизнес</option>
@@ -69,24 +93,40 @@
                                     <option>Минивэны</option>
                                     <option>Уникальные авто</option>
                                 </select>
+                                <#if map['level']??>
+                                    <div class="invalid-feedback">
+                                        <#list map['level'] as error>
+                                            ${error}
+                                        </#list>
+                                    </div>
+                                </#if>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="control-label col-md-2" for="year">Год выпуска</label>
                             <div class="col-md-10">
-                                <input class="form-control text-box single-line" name="year" type="number" value="" />
+                                <input class="form-control text-box single-line" value="<#if car??>${car.getYear()}</#if>" name="year" type="number" required/>
+                                <#if map['year']??>
+                                    <div class="invalid-feedback">
+                                        <#list map['year'] as error>
+                                            ${error}
+                                        </#list>
+                                    </div>
+                                </#if>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="control-label col-md-2" for="mileage">Пробег</label>
                             <div class="col-md-10">
-                                <input class="form-control text-box single-line <#if (map['mileageError'])??>is-invalid</#if>"
-                                       value="<#if car??>${car.getMileage()}</#if>" name="mileage" type="number"/>
-                                <#if map['mileageError']??>
+                                <input class="form-control text-box single-line"
+                                       value="<#if car??>${car.getMileage()}</#if>" name="mileage" type="number" required/>
+                                <#if map['mileage']??>
                                     <div class="invalid-feedback">
-                                        ${map['mileageError']}
+                                        <#list map['mileage'] as error>
+                                            ${error}
+                                        </#list>
                                     </div>
                                 </#if>
                             </div>
@@ -95,29 +135,52 @@
                         <div class="form-group">
                             <label class="control-label col-md-2" for="color">Цвет</label>
                             <div class="col-md-10">
-                                <input class="form-control text-box single-line" name="color" type="text" value="" />
+                                <input class="form-control text-box single-line" value="<#if car??>${car.getColor()}</#if>" name="color" type="text" required/>
+                                <#if map['color']??>
+                                    <div class="invalid-feedback">
+                                        <#list map['color'] as error>
+                                            ${error}
+                                        </#list>
+                                    </div>
+                                </#if>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="control-label col-md-2" for="transmission">КП</label>
                             <div class="col-md-10">
-                                <select class="form-control" name="transmission"><option value="">Трансмиссия</option>
+                                <select class="form-control" name="transmission" onselect="<#if car??>${car.getTransmission()}</#if>" required>
+                                    <option value="">Трансмиссия</option>
                                     <option>Механическая</option>
                                     <option>Автоматическая</option>
                                     <option>Робот</option>
                                 </select>
+                                <#if map['transmission']??>
+                                    <div class="invalid-feedback">
+                                        <#list map['transmission'] as error>
+                                            ${error}
+                                        </#list>
+                                    </div>
+                                </#if>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="control-label col-md-2" for="drive">Привод</label>
                             <div class="col-md-10">
-                                <select class="form-control" name="drive"><option value="">Привод</option>
+                                <select class="form-control" name="drive" onselect="<#if car??>${car.getDrive()}</#if>" required>
+                                    <option value="">Привод</option>
                                     <option>Передний</option>
                                     <option>Задний</option>
                                     <option>Полный</option>
                                 </select>
+                                <#if map['drive']??>
+                                    <div class="invalid-feedback">
+                                        <#list map['drive'] as error>
+                                            ${error}
+                                        </#list>
+                                    </div>
+                                </#if>
                             </div>
                         </div>
 
@@ -128,14 +191,28 @@
                         <div class="form-group">
                             <label class="control-label col-md-2" for="power">Мощность</label>
                             <div class="col-md-10">
-                                <input class="form-control text-box single-line" name="power" type="number" value="0"/>
+                                <input class="form-control text-box single-line" name="power" value="<#if car??>${car.getPower()}</#if>" type="number" required/>
+                                <#if map['power']??>
+                                    <div class="invalid-feedback">
+                                        <#list map['power'] as error>
+                                            ${error}
+                                        </#list>
+                                    </div>
+                                </#if>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="control-label col-md-2" for="price">Цена в день</label>
                             <div class="col-md-10">
-                                <input class="form-control text-box single-line" name="price" type="number" value="0"/>
+                                <input class="form-control text-box single-line" name="price" value="<#if car??>${car.getPrice()}</#if>" type="number" required/>
+                                <#if map['price']??>
+                                    <div class="invalid-feedback">
+                                        <#list map['price'] as error>
+                                            ${error}
+                                        </#list>
+                                    </div>
+                                </#if>
                             </div>
                         </div>
 
@@ -146,13 +223,20 @@
                                 <input name="status" id="free" type="radio" value="Свободна"/>
                                 <label for="bussy">Забронирована</label>
                                 <input name="status" id="bussy" type="radio" value="Забронирована"/>
+                                <#if map['status']??>
+                                    <div class="invalid-feedback">
+                                        <#list map['status'] as error>
+                                            ${error}
+                                        </#list>
+                                    </div>
+                                </#if>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="control-label col-md-2" for="description">Описание</label>
                             <div class="col-md-10">
-                                <input class="form-control text-box single-line" name="description" type="text" value=""/>
+                                <input class="form-control text-box single-line" value="<#if car??>${car.getDescription()}</#if>" name="description" type="text" required/>
                             </div>
                         </div>
                     </div>
@@ -162,12 +246,12 @@
                             <label class="control-label col-md-2" for="image">Фото</label>
                             <div class="col-md-12">
                                 <div id="image-preview" style="margin: 10px; height: 300px; width: 620px"></div>
-                                <input type="file" name="image" id="image-input" accept=".jpg,.jpeg,.png"/>
+                                <input type="file" name="newImage" id="newImage" accept=".jpg,.jpeg,.png" required/>
                             </div>
                         </div>
 
                         <script>
-                            const imageInput = document.getElementById('image-input');
+                            const imageInput = document.getElementById('newImage');
                             const imagePreview = document.getElementById('image-preview');
 
                             imageInput.addEventListener('change', function() {

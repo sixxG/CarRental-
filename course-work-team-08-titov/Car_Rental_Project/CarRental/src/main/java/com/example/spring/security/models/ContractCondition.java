@@ -18,8 +18,8 @@ public enum ContractCondition {
         return title;
     }
 
-    @Override
-    public String toString() {
-        return title;
-    }
+        @Override
+        public String toString() {
+            return title;
+        }
 }

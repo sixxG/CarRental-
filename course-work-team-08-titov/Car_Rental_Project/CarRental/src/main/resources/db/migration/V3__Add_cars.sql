@@ -16,7 +16,7 @@ INSERT INTO cars(id, win_number, body, brand, color, description, drive, image, 
 INSERT INTO cars (id, win_number, body, brand, color, description, drive, image, level,
                   mileage, model, power, price, status, transmission, year)
     VALUES ('4', 'VF7RD5FNABL000004', 'Хетчбэк', 'Skoda', 'Серый', 'Очень экономичный и шустрый автомобиль. Комплектация Black Line, цифровая панель, климат, датчики слепых зон, парктроники, камера заднего вида. Чистый, для не курящих, обслужен, без нареканий.',
-            'Передний', 'shkoda_octavia.jpg', 'Комфорт', '50000', 'Octavia', '175', '3500', 'Свободна', 'Автоматическая',  '2017');
+            'Передний', 'shkoda_octavia.jpg', 'Комфорт', '50000', 'Octavia', '175', '3500', 'Забронирована', 'Автоматическая',  '2017');
 
 INSERT INTO cars (id, win_number, body, brand, color, description, drive, image, level,
                   mileage, model, power, price, status, transmission, year)

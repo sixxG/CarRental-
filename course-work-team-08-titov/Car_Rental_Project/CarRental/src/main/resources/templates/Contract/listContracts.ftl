@@ -16,28 +16,36 @@
         <br />
         <h2 style="margin-top: 5%;">Аренды</h2>
 
+        <#if emptyFIO??>
+            <p style="color: red; font-weight: 600">Заполните поле ФИО на странице аккаунта!</p>
+        </#if>
+
         <!-- Start search -->
-        <form action="search" method="post">
+        <form action="/contract/search" method="post">
             <input type="hidden" name="_csrf" value="${_csrf.token}">
             <div style="display: flex; width: 100%;">
 
                 <div style="padding: 0; display: inline-block; text-align: left; width: 50%;">
                     <label>
-                        <input type="date" style="width: 49%;" class="inputPrice" placeholder="Дата начала" name="DateStart" />
-                        <input type="date" style="width: 49%;" class="inputPrice" placeholder="Дата завершения" name="DateEnd" />
+                        <input type="date" style="width: 49%;" class="inputPrice" placeholder="Дата начала" name="DateStart"
+                                <#if dateStart?has_content> value="${dateStart}" </#if>/>
+                        <input type="date" style="width: 49%;" class="inputPrice" placeholder="Дата завершения" name="DateEnd"
+                                <#if dateEnd?has_content> value="${dateEnd}" </#if>/>
                     </label>
                 </div>
 
                 <div style="padding: 0; display: inline-block; text-align: center; width: 90%;">
 
-                    <input class="inputCar" id="ListClients" name="Client" list="listClients" placeholder="ФИО клиента"/>
+                    <input class="inputCar" id="ListClients" name="Client" list="listClients" placeholder="ФИО клиента"
+                            <#if client?has_content> value="${client}" </#if>/>
                     <datalist id="listClients">
                         <#list users as user>
                             <option>${user}</option>
                         </#list>
                     </datalist>
 
-                    <input class="inputCar" id="ListBrand" name="CarBrand" list="listCarsBrand" placeholder="Брэнд авто"/>
+                    <input class="inputCar" id="ListBrand" name="CarBrand" list="listCarsBrand" placeholder="Брэнд авто"
+                            <#if brand?has_content> value="${brand}" </#if>/>
                     <datalist id="listCarsBrand">
                         <#list cars as car>
                             <option>${car}</option>
@@ -50,65 +58,156 @@
                     <input type="submit" class="icon" value="" style="font-size: 50px; background: url('/image/search.png') no-repeat center; background-size: 50px; width: 70%; height: 55%; border-radius: 15px; border: 1px" />
                 </div>
 
+                <div style="padding: 0; display: inline-block; text-align: center; width: 5%;">
+                    <a href="/contract/list/all?page=1" class="btn btn-danger" style="margin-top: 13px">Сбросить</a>
+                </div>
+
             </div>
         </form>
         <!-- End search -->
 
+        <script>
+            // Получаем значение параметра "page" из URL
+            const urlParamsContractsList = new URLSearchParams(window.location.search);
+            let contractListStatus = urlParamsContractsList.get('status');
+            const contractListPage = "page_item_" + urlParamsContractsList.get('page');
+
+            console.log(contractListPage);
+            let activeLinkWithStatus;
+
+            if (contractListStatus !== null && contractListStatus.includes(" ")) {
+                contractListStatus = contractListStatus.replaceAll(" ", "_");
+                console.log("status: " + contractListStatus);
+            }
+        </script>
+
         <br />
         <ul class="nav nav-tabs">
-            <li class="active">
-                <a data-toggle="tab" href="#ALL" style=" padding: 10px 5px 5px 5px;"><h4>Все</h4></a>
+            <li id="all">
+                <a  href="/contract/list/all?page=1" style=" padding: 10px 5px 5px 5px;"><h4>Все</h4></a>
             </li>
-            <li>
-                <a data-toggle="tab" href="#NotConfirm" style=" padding: 10px 5px 5px 5px;"><h4>Ожидают подтверждения</h4></a>
+            <li id="Не_подтверждён">
+                <a href="/contract/list/all?page=1&status=Не подтверждён" style=" padding: 10px 5px 5px 5px;"><h4>Ожидают подтверждения</h4></a>
             </li>
-            <li>
-                <a data-toggle="tab" href="#Confirm" style=" padding: 10px 5px 5px 5px;"><h4>Подтверждённые</h4></a>
+            <li id="Подтверждён">
+                <a href="/contract/list/all?page=1&status=Подтверждён" style=" padding: 10px 5px 5px 5px;"><h4>Подтверждённые</h4></a>
             </li>
-            <li>
-                <a data-toggle="tab" href="#Work" style=" padding: 10px 5px 5px 5px;"><h4>Действуют</h4></a>
+            <li id="Действует">
+                <a href="/contract/list/all?page=1&status=Действует" style=" padding: 10px 5px 5px 5px;"><h4>Действуют</h4></a>
             </li>
-            <li>
-                <a data-toggle="tab" href="#PaymentFine" style=" padding: 10px 5px 5px 5px;"><h4>Ожидают оплаты штрафа</h4></a>
+            <li id="Ожидает_оплаты_штрафа">
+                <a href="/contract/list/all?page=1&status=Ожидает оплаты штрафа" style=" padding: 10px 5px 5px 5px;"><h4>С штрафом</h4></a>
             </li>
-            <li>
-                <a data-toggle="tab" href="#Completed" style=" padding: 10px 5px 5px 5px;"><h4>Завершённые</h4></a>
+            <li id="Завершён">
+                <a href="/contract/list/all?page=1&status=Завершён" style=" padding: 10px 5px 5px 5px;"><h4>Завершённые</h4></a>
             </li>
-            <li>
-                <a data-toggle="tab" href="#Сancelled" style=" padding: 10px 5px 5px 5px;"><h4>Отменённые</h4></a>
+            <li id="Отменён">
+                <a href="/contract/list/all?page=1&status=Отменён" style=" padding: 10px 5px 5px 5px;"><h4>Отменённые</h4></a>
             </li>
         </ul>
 
+<#--        <ul class="nav nav-tabs">-->
+<#--            <li class="active">-->
+<#--                <a data-toggle="tab" href="#ALL" style=" padding: 10px 5px 5px 5px;"><h4>Все</h4></a>-->
+<#--            </li>-->
+<#--            <li>-->
+<#--                <a href="/contract/list/all?page=1&status=Ожидает оплаты штрафа" style=" padding: 10px 5px 5px 5px;"><h4>Ожидают подтверждения</h4></a>-->
+<#--&lt;#&ndash;                <a data-toggle="tab" href="#NotConfirm" style=" padding: 10px 5px 5px 5px;"><h4>Ожидают подтверждения</h4></a>&ndash;&gt;-->
+<#--            </li>-->
+<#--            <li>-->
+<#--                <a data-toggle="tab" href="#Confirm" style=" padding: 10px 5px 5px 5px;"><h4>Подтверждённые</h4></a>-->
+<#--            </li>-->
+<#--            <li>-->
+<#--                <a data-toggle="tab" href="#Work" style=" padding: 10px 5px 5px 5px;"><h4>Действуют</h4></a>-->
+<#--            </li>-->
+<#--            <li>-->
+<#--                <a data-toggle="tab" href="#PaymentFine" style=" padding: 10px 5px 5px 5px;"><h4>Ожидают оплаты штрафа</h4></a>-->
+<#--            </li>-->
+<#--            <li>-->
+<#--                <a data-toggle="tab" href="#Completed" style=" padding: 10px 5px 5px 5px;"><h4>Завершённые</h4></a>-->
+<#--            </li>-->
+<#--            <li>-->
+<#--                <a data-toggle="tab" href="#Сancelled" style=" padding: 10px 5px 5px 5px;"><h4>Отменённые</h4></a>-->
+<#--            </li>-->
+<#--        </ul>-->
+
         <!--Block-->
+
+        <script>
+            function changeHref(id) {
+                const previouslyHref = document.getElementById(id).getAttribute("href");
+                let currentPath = "/";
+                let whichStatus;
+                if (contractListStatus !== null) {
+                    if (contractListStatus.includes("_")) {
+                        whichStatus = contractListStatus.replaceAll("_", "%20");
+                    } else {
+                        whichStatus = contractListStatus;
+                    }
+                    currentPath = previouslyHref + "&" + "status=" + whichStatus;
+                    document.getElementById(id).setAttribute("href", currentPath);
+                } else {
+                    currentPath = previouslyHref;
+                    document.getElementById(id).setAttribute("href", currentPath);
+                }
+            }
+        </script>
+
         <div class="tab-content">
             <div id="ALL" class="tab-pane fade in active">
+                <#if countPage?has_content && countPage != 0>
+                    <nav aria-label="...">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <a class="page-link" href="/contract/list/all?page=1" id="startLink">Start</a>
+                            </li>
+                            <#list 1..countPage as page>
+                                <li class="page-item" id="page_item_${page}">
+                                    <a class="page-link" id="button_${page}" href="/contract/list/all?page=${page}">${page}</a>
+                                </li>
+                                <script>
+                                    changeHref("button_${page}");
+                                </script>
+                            </#list>
+                            <li class="page-item">
+                                <a class="page-link" href="/contract/list/all?page=${countPage}" id="endLink">End</a>
+                            </li>
+                            <script>
+                                changeHref("startLink");
+                                changeHref("endLink");
+                            </script>
+                        </ul>
+                    </nav>
+                </#if>
                 <@paspartsContract.byStatus contracts=contracts contractStatus="All">
                 </@paspartsContract.byStatus>
             </div>
-            <div id="NotConfirm" class="tab-pane fade in">
-                <@paspartsContract.byStatus contracts=contracts contractStatus="Не подтверждён">
-                </@paspartsContract.byStatus>
-            </div>
-            <div id="Confirm" class="tab-pane fade in">
-                <@paspartsContract.byStatus contracts=contracts contractStatus="Подтверждён">
-                </@paspartsContract.byStatus>
-            </div>
-            <div id="Work" class="tab-pane fade in">
-                <@paspartsContract.byStatus contracts=contracts contractStatus="Действует">
-                </@paspartsContract.byStatus>
-            </div>
-            <div id="PaymentFine" class="tab-pane fade in">
-                <@paspartsContract.byStatus contracts=contracts contractStatus="Ожидает оплаты штрафа">
-                </@paspartsContract.byStatus>
-            </div>
-            <div id="Completed" class="tab-pane fade in">
-                <@paspartsContract.byStatus contracts=contracts contractStatus="Завершён">
-                </@paspartsContract.byStatus>
-            </div>
-            <div id="Сancelled" class="tab-pane fade in">
-                <@paspartsContract.byStatus contracts=contracts contractStatus="Отменён">
-                </@paspartsContract.byStatus>
-            </div>
+
+            <script>
+                if (contractListStatus !== null && contractListStatus.includes(" ")) {
+                    contractListStatus = contractListStatus.replaceAll(" ", "_");
+                    console.log("status: " + contractListStatus);
+                    activeLinkWithStatus = document.getElementById(contractListStatus);
+                } else if (contractListStatus == null) {
+                    activeLinkWithStatus = document.getElementById("all");
+                }
+                else {
+                    console.log("status: " + contractListStatus);
+                    activeLinkWithStatus = document.getElementById(contractListStatus);
+                }
+
+                // Находим кнопку с id, соответствующим значению page
+                const activeButtonPage = document.getElementById(contractListPage);
+
+                // Если такая кнопка найдена, то эмулируем ее нажатие
+                if (activeButtonPage) {
+                    activeButtonPage.classList.add("active");
+                }
+
+                if (activeLinkWithStatus) {
+                    activeLinkWithStatus.classList.add("active");
+                }
+            </script>
         </div>
         <!--Block-->
 

@@ -81,3 +81,27 @@ input {
     text-decoration: none;
     color: #46F046;
 }
+
+.toMapLink {
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #00ff00;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    display: block;
+}
+
+.toMapLink:hover {
+    text-decoration: underline overline;
+    font-size: 16px;
+    font-weight: 600;
+    color: #00ff00;
+}
+
+.toMapLink:visited {
+    font-size: 16px;
+    font-weight: 600;
+    color: #00ff00;
+}

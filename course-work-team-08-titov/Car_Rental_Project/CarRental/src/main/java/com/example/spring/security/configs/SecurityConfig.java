@@ -1,7 +1,6 @@
 package com.example.spring.security.configs;
 
-import com.example.spring.security.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.spring.security.services.UserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -11,26 +10,24 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
+    private final UserDetailsService userDetailsService;
 
-    //extends WebSecurityConfigurerAdapter
-    private UserService userService;
-
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
+    public SecurityConfig(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/", "/static/**").permitAll()
+                .antMatchers("/", "/static/**", "/imageCar/**", "/image/**").permitAll()
+                .antMatchers( "/login", "/about", "/contacts", "/car/**", "/appeal/**", "/car",
+                        "/findCar", "/carbyclass", "/registration").permitAll()
+                .anyRequest().authenticated()
                 .and()
                     .formLogin()
                     .loginPage("/login")
@@ -39,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                     .logout()
                     .logoutSuccessUrl("/")
                     .permitAll();
-//                   .csrf().disable();
+                    //.csrf().disable();
     }
 
     @Bean
@@ -52,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 
         authenticationProvider.setPasswordEncoder(passwordEncoder());
-        authenticationProvider.setUserDetailsService(userService);
+        authenticationProvider.setUserDetailsService(userDetailsService);
 
         return authenticationProvider;
     }
