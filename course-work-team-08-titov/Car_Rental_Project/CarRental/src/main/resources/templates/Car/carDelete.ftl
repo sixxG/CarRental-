@@ -115,7 +115,7 @@
                 <#if !isHasActiveContract>
                     <form action="/car/delete?id=${car.id}" method="post">
 
-                        <input type="hidden" name="_csrf" value="${_csrf.token}">
+                        <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
                         <button type="submit" class="card-link">Удалить</button>
 
                     </form>

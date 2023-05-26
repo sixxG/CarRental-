@@ -9,9 +9,7 @@
     <link href="/static/css/About.css" rel="stylesheet" />
 
     <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 80%;">
-
         <br/>
-
         <!--Slider-->
         <div id="myCarousel" class="carousel slide" data-ride="carousel" style="margin-top: 4%;">
             <!-- Indicators -->
@@ -50,11 +48,9 @@
 
             <!-- Left and right controls -->
             <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-                <!--            <span class="glyphicon glyphicon-chevron-left"></span>-->
                 <span class="sr-only">Previous</span>
             </a>
             <a class="right carousel-control" href="#myCarousel" data-slide="next">
-                <!--            <span class="glyphicon glyphicon-chevron-right"></span>-->
                 <span class="sr-only">Next</span>
             </a>
         </div>
@@ -74,48 +70,7 @@
 
         <div style="width: 100%" id="popular_cars">
             <#list cars as car>
-                <div class="col-xl-3 col-lg-4" data-id="${car.id}">
-                    <div class="bg-info img-rounded shadow-sm">
-
-                        <div style="padding: 15px; margin: 10px">
-                            <img src="/imageCar/${car.image}" width="100%" height="220px" />
-                            <p>
-                                <h4>
-                                    <b>
-                                        ${car.brand} ${car.model}
-                                        , ${car.year?c} ${car.level}
-                                    </b>
-                                </h4>
-                            </p>
-                            <hr />
-
-                            <div class="auto-description-start" style=" vertical-align: top; font-size: 14px; width: 30%; display: inline-block; margin-right: 50px;">
-                                <p class="auto-description">Коробка</p>
-                                <p class="auto-description">Привод</p>
-                                <p class="auto-description">Пробег</p>
-                                <p class="auto-description">Мощность</p>
-                                <p class="auto-description">Тип кузова</p>
-                            </div>
-
-                            <div class="auto-description-edn" style=" vertical-align: top; font-size: 14px; width: 47%; display: inline-block; text-align: right;">
-                                <p class="auto-description">${car.transmission}</p>
-                                <p class="auto-description">${car.drive}</p>
-                                <p class="auto-description">&gt;${car.mileage?c}</p>
-                                <p class="auto-description">${car.power?c} лс.</p>
-                                <p class="auto-description">${car.body}</p>
-                            </div>
-
-                            <div class="bg-info">
-                                <h4><b>от ${car.price?c}</b> / сутки</h4>
-                            </div>
-
-                            <h4 class="text-success text-uppercase" style="text-align: center"></h4>
-                            <div style="width:100%; height:100%; text-align:center;">
-                                <a class="btn-details" href="/car/details?id=${car.id}">Подробнее</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <@carParts.carCardForMainPage car=car></@carParts.carCardForMainPage>
             </#list>
         </div>
 

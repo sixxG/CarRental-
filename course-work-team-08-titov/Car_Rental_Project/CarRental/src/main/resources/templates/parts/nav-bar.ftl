@@ -47,7 +47,7 @@
 
                 <ul>
                     <form action="/logout" class="navbar-right" method="post" id="logoutForm" style="margin-bottom: 0">
-                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                        <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>"/>
                         <ul class="nav navbar-nav navbar-right">
                             <li>
                                 <a style="color: #46F046; text-decoration: none; font-size: 18px; display: block; font-weight: 600" href="tel:+78005553535">+7 (800) 555-35-35</a>

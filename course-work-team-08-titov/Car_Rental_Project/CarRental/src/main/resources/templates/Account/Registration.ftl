@@ -12,7 +12,7 @@
     <form action="/registration" class="form-horizontal" method="post">
         <div class="bloc-log">
 
-            <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+            <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>"/>
 
             <div class="bloc-header">
                 <p class="bloc-header-header">Регистрация</p>

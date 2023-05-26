@@ -4,6 +4,7 @@ import com.example.spring.security.models.Car;
 import com.example.spring.security.models.Contract;
 import com.example.spring.security.models.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.Year;
@@ -22,6 +23,7 @@ public class ReportsService {
         this.userService = userService;
     }
 
+    @Transactional
     public Map<String, Object> reportsByCars() {
         Map<String, Object> response = new HashMap<>();
 
@@ -109,6 +111,7 @@ public class ReportsService {
 
         return response;
     }
+    @Transactional
     public Map<String, Object> reportsByContracts(Map<String, String> form) {
         Map<String, Object> response = new HashMap<>();
 
@@ -231,6 +234,7 @@ public class ReportsService {
 
         return response;
     }
+    @Transactional
     public Map<String, Object> reportsByClients(Map<String, String> form) {
         Map<String, Object> response = new HashMap<>();
 

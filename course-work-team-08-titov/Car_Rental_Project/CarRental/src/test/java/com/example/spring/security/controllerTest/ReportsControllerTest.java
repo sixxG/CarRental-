@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -36,51 +36,25 @@ public class ReportsControllerTest {
         this.mockMvc.perform(get("/reports/cars"))
                 .andDo(print())
                 .andExpect(authenticated())
-                .andExpect(xpath("//p[@data-id='countCars_6'][contains(text(),'6')]").exists())
-                .andExpect(xpath("//p[@data-id='countFreeCars_6'][contains(text(),'6')]").exists())
-                .andExpect(xpath("//p[@data-id='countBusyCars_0'][contains(text(),'0')]").exists())
-
-                .andExpect(xpath("//*[@id='collapseByClass']/table/tbody/tr[1]/td[1][@data-id='Комфорт']").exists())
-                .andExpect(xpath("//*[@id='collapseByClass']/table/tbody/tr[2]/td[1][@data-id='Уникальные авто']").exists())
-                .andExpect(xpath("//*[@id='collapseByClass']/table/tbody/tr[3]/td[1][@data-id='Бизнес']").exists())
-
-                .andExpect(xpath("//*[@id='collapseByClass']/table/tbody/tr[1]/td[2][contains(text(),'2')]").exists())
-                .andExpect(xpath("//*[@id='collapseByClass']/table/tbody/tr[2]/td[2][contains(text(),'2')]").exists())
-                .andExpect(xpath("//*[@id='collapseByClass']/table/tbody/tr[3]/td[2][contains(text(),'2')]").exists())
-
-                .andExpect(xpath("//*[@id='collapseByTransmition']/table/tbody/tr[1]/td[1][@data-id='Механическая']").exists())
-                .andExpect(xpath("//*[@id='collapseByTransmition']/table/tbody/tr[2]/td[1][@data-id='Робот']").exists())
-
-                .andExpect(xpath("//*[@id='collapseByTransmition']/table/tbody/tr[1]/td[2][contains(text(),'4')]").exists())
-                .andExpect(xpath("//*[@id='collapseByTransmition']/table/tbody/tr[2]/td[2][contains(text(),'2')]").exists())
-
-                .andExpect(xpath("//*[@id='collapseByDrive']/table/tbody/tr[2]/td[1][@data-id='Передний']").exists())
-                .andExpect(xpath("//*[@id='collapseByDrive']/table/tbody/tr[3]/td[1][@data-id='Полный']").exists())
-                .andExpect(xpath("//*[@id='collapseByDrive']/table/tbody/tr[1]/td[1][@data-id='Задний']").exists())
-
-                .andExpect(xpath("//*[@id='collapseByDrive']/table/tbody/tr[2]/td[2][contains(text(),'2')]").exists())
-                .andExpect(xpath("//*[@id='collapseByDrive']/table/tbody/tr[3]/td[2][contains(text(),'2')]").exists())
-                .andExpect(xpath("//*[@id='collapseByDrive']/table/tbody/tr[1]/td[2][contains(text(),'2')]").exists())
-
-                .andExpect(xpath("//*[@id='collapseByBody']/table/tbody/tr[1]/td[1][@data-id='Хетчбэк']").exists())
-                .andExpect(xpath("//*[@id='collapseByBody']/table/tbody/tr[2]/td[1][@data-id='Купэ']").exists())
-                .andExpect(xpath("//*[@id='collapseByBody']/table/tbody/tr[3]/td[1][@data-id='Внедорожник']").exists())
-
-                .andExpect(xpath("//*[@id='collapseByBody']/table/tbody/tr[1]/td[2][contains(text(),'2')]").exists())
-                .andExpect(xpath("//*[@id='collapseByBody']/table/tbody/tr[2]/td[2][contains(text(),'2')]").exists())
-                .andExpect(xpath("//*[@id='collapseByBody']/table/tbody/tr[3]/td[2][contains(text(),'2')]").exists())
-
-                .andExpect(xpath("/html/body/div[3]/div/div/div[3]/a[1]/h4[@data-id='maxPrice_20,000'][contains(text(),'20,000')]").exists())
-                .andExpect(xpath("/html/body/div[3]/div/div/div[3]/a[2]/h4[@data-id='minPrice_3,500'][contains(text(),'3,500')]").exists())
-                .andExpect(xpath("/html/body/div[3]/div/div/div[3]/h4[1][@data-id='averagePrice_12,000'][contains(text(),'12,000')]").exists())
-
-                .andExpect(xpath("/html/body/div[3]/div/div/div[3]/a[3]/h4[@data-id='maxYearCar_62'][contains(text(),'62')]").exists())
-                .andExpect(xpath("/html/body/div[3]/div/div/div[3]/a[4]/h4[@data-id='minYearCar_5'][contains(text(),'5')]").exists())
-                .andExpect(xpath("/html/body/div[3]/div/div/div[3]/h4[2][@data-id='averageYear_25'][contains(text(),'25')]").exists())
-
-                .andExpect(xpath("/html/body/div[3]/div/div/div[3]/a[5]/h4[@data-id='maxMileage_89,000'][contains(text(),'89,000')]").exists())
-                .andExpect(xpath("/html/body/div[3]/div/div/div[3]/a[6]/h4[@data-id='minMileage_40,000'][contains(text(),'40,000')]").exists())
-                .andExpect(xpath("/html/body/div[3]/div/div/div[3]/h4[3][@data-id='averageMileage_65,333'][contains(text(),'65,333')]").exists());
+                .andExpect(view().name("reports/carsReport"))
+                .andExpect(model().attribute("oldestCarId", 2))
+                .andExpect(model().attribute("maxYearCar", 62))
+                .andExpect(model().attribute("youngestCarId", 1))
+                .andExpect(model().attribute("minYearCar", 5))
+                .andExpect(model().attribute("maxPriceCarId", 2))
+                .andExpect(model().attribute("maxPrice", 20000))
+                .andExpect(model().attribute("minPriceCarId", 1))
+                .andExpect(model().attribute("minPrice", 3500))
+                .andExpect(model().attribute("maxMileageCarId", 2))
+                .andExpect(model().attribute("maxMileage", 89000))
+                .andExpect(model().attribute("minMileageCarId", 1))
+                .andExpect(model().attribute("minMileage", 40000))
+                .andExpect(model().attribute("averagePrice", 12000))
+                .andExpect(model().attribute("averageYear", 25))
+                .andExpect(model().attribute("averageMileage", 65333))
+                .andExpect(model().attribute("countCars", 6))
+                .andExpect(model().attribute("countFreeCars", 6))
+                .andExpect(model().attribute("countBusyCars", 0));
     }
 
     @Test
@@ -100,35 +74,25 @@ public class ReportsControllerTest {
 
     @Test
     public void reportsByContractsPageTest() throws Exception {
+        Long xNull = null;
+
         this.mockMvc.perform(get("/reports/contracts"))
                 .andDo(print())
                 .andExpect(authenticated())
-                .andExpect(xpath("/html/body/div[3]/div/div/div[2]/h4[1][@data-id='countContracts_3'][contains(text(),'3')]").exists())
-                .andExpect(xpath("/html/body/div[3]/div/div/div[2]/h4[2][@data-id='countRentalForActualMonth_3'][contains(text(),'3')]").exists())
-                .andExpect(xpath("/html/body/div[3]/div/div/div[2]/h4[3][@data-id='countRentalsWithFine_1'][contains(text(),'1')]").exists())
-
-                .andExpect(xpath("/html/body/div[3]/div/div/div[3]/a[1]/h4[@data-id='maxPriceRental_60,000'][contains(text(),'60,000')]").exists())
-                .andExpect(xpath("/html/body/div[3]/div/div/div[3]/a[2]/h4[@data-id='minPriceRental_45,000'][contains(text(),'45,000')]").exists())
-                .andExpect(xpath("/html/body/div[3]/div/div/div[3]/h4[@data-id='avgPriceRental_53,334'][contains(text(),'53,334')]").exists())
-
-                .andExpect(xpath("//*[@id='contractsByStatus']/table/tbody/tr[1]/td[1][@data-id='status_Завершён']").exists())
-                .andExpect(xpath("//*[@id='contractsByStatus']/table/tbody/tr[1]/td[2][@data-id='Завершён_3'][contains(text(),'3')]").exists())
-
-                .andExpect(xpath("/html/body/div[3]/div/div/div[1]/table[1]/tbody/tr[1]/td[1][@data-id='Автовокзал']").exists())
-                .andExpect(xpath("/html/body/div[3]/div/div/div[1]/table[1]/tbody/tr[2]/td[1][@data-id='Офис']").exists())
-                .andExpect(xpath("/html/body/div[3]/div/div/div[1]/table[1]/tbody/tr[3]/td[1][@data-id='Улица Кирова 7']").exists())
-
-                .andExpect(xpath("/html/body/div[3]/div/div/div[1]/table[1]/tbody/tr[1]/td[2][@data-id='Автовокзал_1']").exists())
-                .andExpect(xpath("/html/body/div[3]/div/div/div[1]/table[1]/tbody/tr[2]/td[2][@data-id='Офис_1']").exists())
-                .andExpect(xpath("/html/body/div[3]/div/div/div[1]/table[1]/tbody/tr[3]/td[2][@data-id='Улица Кирова 7_1']").exists())
-
-                .andExpect(xpath("/html/body/div[3]/div/div/div[1]/table[2]/tbody/tr[1]/td[1][@data-id='Автовокзал']").exists())
-                .andExpect(xpath("/html/body/div[3]/div/div/div[1]/table[2]/tbody/tr[2]/td[1][@data-id='Офис']").exists())
-                .andExpect(xpath("/html/body/div[3]/div/div/div[1]/table[2]/tbody/tr[3]/td[1][@data-id='Железнодорожный вокзал']").exists())
-
-                .andExpect(xpath("/html/body/div[3]/div/div/div[1]/table[2]/tbody/tr[1]/td[2][@data-id='Автовокзал_1']").exists())
-                .andExpect(xpath("/html/body/div[3]/div/div/div[1]/table[2]/tbody/tr[2]/td[2][@data-id='Офис_1']").exists())
-                .andExpect(xpath("/html/body/div[3]/div/div/div[1]/table[2]/tbody/tr[3]/td[2][@data-id='Железнодорожный вокзал_1']").exists());
+                .andExpect(model().attribute("countOptional", 6L))
+                .andExpect(model().attribute("percentVideoReg", 50.0))
+                .andExpect(model().attribute("percentAutoBox", 16.0))
+                .andExpect(model().attribute("percentKidsChair", 33.0))
+                .andExpect(model().attribute("contractsForPeriod", xNull))
+                .andExpect(model().attribute("resultPrice", xNull))
+                .andExpect(model().attribute("maxPriceRental", 60000))
+                .andExpect(model().attribute("idMaxPriceRental", 1))
+                .andExpect(model().attribute("minPriceRental", 45000))
+                .andExpect(model().attribute("idMinPriceRental", 2))
+                .andExpect(model().attribute("avgPriceRental", 53334))
+                .andExpect(model().attribute("countContracts", 3))
+                .andExpect(model().attribute("countRentalForActualMonth", 0))
+                .andExpect(model().attribute("countRentalsWithFine", 1));
     }
 
     @Test

@@ -12,7 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity()
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
     private final UserDetailsService userDetailsService;
@@ -25,8 +25,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/", "/static/**", "/imageCar/**", "/image/**").permitAll()
-                .antMatchers( "/login", "/about", "/contacts", "/car/**", "/appeal/**", "/car",
-                        "/findCar", "/carbyclass", "/registration").permitAll()
+                .antMatchers( "/login/**", "/about", "/contacts", "/car/**", "/appeal/**", "/car",
+                        "/findCar", "/carbyclass", "/registration", "/error").permitAll()
                 .anyRequest().authenticated()
                 .and()
                     .formLogin()
@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                     .logout()
                     .logoutSuccessUrl("/")
                     .permitAll();
-                    //.csrf().disable();
+        http.csrf().disable();
     }
 
     @Bean

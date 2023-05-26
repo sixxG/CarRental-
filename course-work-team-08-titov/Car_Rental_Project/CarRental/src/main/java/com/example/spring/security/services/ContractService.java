@@ -7,6 +7,9 @@ import com.example.spring.security.repositories.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.time.Duration;
@@ -77,9 +80,13 @@ public class ContractService {
     public double getAveragePrice() {
         return contractRepository.getAveragePrice();
     }
+    @Transactional
     public void deleteById(int id) {
+        if (contractRepository.findById(id) == null)
+            return;
         contractRepository.deleteById(id);
     }
+    @Transactional
     public void save(Contract contractBeforeEdit) {
         contractRepository.save(contractBeforeEdit);
     }
@@ -230,8 +237,8 @@ public class ContractService {
 
         String client = !Objects.equals(form.get("Client"), "") ? form.get("Client") : null;
         String carBrand = !Objects.equals(form.get("CarBrand"), "") ? form.get("CarBrand") : null;
-        LocalDateTime dateStart = !Objects.equals(form.get("DateStart"), "") ? LocalDateTime.parse(form.get("DateStart")+"T00:00") : null;
-        LocalDateTime dateEnd = !Objects.equals(form.get("DateEnd"), "") ? LocalDateTime.parse(form.get("DateEnd")+"T00:00") : null;
+        LocalDateTime dateStart = !Objects.equals(form.get("DateStart"), "") && form.get("DateStart") != null ? LocalDateTime.parse(form.get("DateStart")+"T00:00") : null;
+        LocalDateTime dateEnd = !Objects.equals(form.get("DateEnd"), "") && form.get("DateEnd") != null  ? LocalDateTime.parse(form.get("DateEnd")+"T00:00") : null;
 
         List<Contract> contracts = contractRepository.findAll();
 
@@ -256,7 +263,10 @@ public class ContractService {
         return response;
     }
 
-    public Map<String, Object> createContract(Map<String, String> form) {
+    //Для предотвращения двойной аренды при тестировании
+    //@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.REPEATABLE_READ)
+    public synchronized Map<String, Object> createContract(Map<String, String> form) {
         Map<String, Object> response = new HashMap<>();
 
         User user = userRepository.findByUsername(form.get("userName"));
@@ -284,6 +294,15 @@ public class ContractService {
         LocalDateTime dateStart = LocalDateTime.parse(Start, formatter);
         LocalDateTime dateEnd = LocalDateTime.parse(End, formatter);
 
+        if (car.getStatus().equals("Забронирована")) {
+            response.put("car", car);
+            response.put("client", user);
+            response.put("dateStart", dateStart);
+            response.put("dateEnd", dateEnd);
+            response.put("errorDate", "Данный автомобиль уже находится в аренде!");
+            return response;
+        }
+
         Duration duration = Duration.between(dateStart, dateEnd);
 
         int registrator = form.get("Registrator") != null ? Integer.parseInt(form.get("Registrator")) : 0;
@@ -310,7 +329,7 @@ public class ContractService {
 
             response.put("errorDate", "Вы можете арендовать автомобиль на срок ОТ 1 дня!");
             if (priceRental < price)
-                response.put("priceRental", "Произошла ошибка при расчёте цены аренда!!");
+                response.put("priceRental", "Произошла ошибка при расчёте цены аренда!");
             return response;
         }
 

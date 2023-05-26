@@ -24,7 +24,7 @@
                     <!--"Edit", "Customer", FormMethod.Post, new { enctype = "multipart/form-data", data_restUrl = Url.Action("Edit", "Customer", new { id = Model.Id }) })-->
                     <form action="/account" method="post">
 
-                        <input type="hidden" value="${_csrf.token}" name="_csrf"/>
+                        <input type="hidden" value="<#if _csrf?has_content>${_csrf.token}</#if>" name="_csrf"/>
                         <input type="hidden" value="${client.getId()}" name="userId"/>
 
                         <div class="form-horizontal">
@@ -137,7 +137,7 @@
                                 <div style="display: flex; width: 100%; justify-content: center">
                                     <form action="/appeal/delete?id=${usersFeedback.id}" method="post">
 
-                                        <input type="hidden" name="_csrf" value="${_csrf.token}">
+                                        <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
 
                                         <button type="submit" style="border: 0px; align-items: center; padding: 5px;">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
@@ -149,7 +149,7 @@
                                     </form>
 
                                     <div style="padding: 0 0 0 15px;">
-                                        <input type="hidden" name="_csrf" value="${_csrf.token}">
+                                        <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
 
                                         <!-- Button trigger modal -->
 
@@ -172,7 +172,7 @@
                                                     <div class="modal-body">
                                                         <form action="/feedback/edit?id=${usersFeedback.getId()}" method="post" style="padding: 10px;">
 
-                                                            <input type="hidden" name="_csrf" value="${_csrf.token}">
+                                                            <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
 
                                                             <div class="mb-3 row">
                                                                 <label for="staticEmail" class="col-form-label" style="text-align: center; width: 100%;">Выберите количество звезд:</label>

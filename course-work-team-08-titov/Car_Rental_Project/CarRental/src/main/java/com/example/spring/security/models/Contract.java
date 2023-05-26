@@ -43,6 +43,21 @@ public class Contract {
     public Contract() {
     }
 
+    public Contract(int id, String fioManager, String additionalOptions, LocalDateTime dateStart, String typeReceipt, LocalDateTime dateEnd, String typeReturn, double price, String status, String note, Car car, User user) {
+        this.id = id;
+        this.fioManager = fioManager;
+        this.additionalOptions = additionalOptions;
+        this.dateStart = dateStart;
+        this.typeReceipt = typeReceipt;
+        this.dateEnd = dateEnd;
+        this.typeReturn = typeReturn;
+        this.price = price;
+        this.status = status;
+        this.note = note;
+        this.car = car;
+        this.user = user;
+    }
+
     public Contract(String fioManager, String additionalOptions, LocalDateTime dateStart, String typeReceipt,
                     LocalDateTime dateEnd, String typeReturn, double price, String status, String note, Car car, User user) {
         this.fioManager = fioManager;

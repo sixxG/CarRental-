@@ -6,7 +6,7 @@
     <div class="container" style="margin-top: 6%; width: 70%; justify-content: center;">
         <form action="change_password" method="post" id="password-form">
 
-            <input type="hidden" value="${_csrf.token}" name="_csrf"/>
+            <input type="hidden" value="<#if _csrf?has_content>${_csrf.token}</#if>" name="_csrf"/>
 
             <#if error??>
                 <p style="color: red; font-weight: 600">

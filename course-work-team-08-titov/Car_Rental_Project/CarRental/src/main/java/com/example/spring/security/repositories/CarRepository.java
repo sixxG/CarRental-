@@ -14,7 +14,7 @@ import java.util.Set;
 @Repository
 public interface CarRepository extends JpaRepository<Car, Integer> {
     Car findById(int id);
-    List<Car> findByStatus(String status);
+    List<Car> findAllByStatus(String status);
     Page<Car> findByLevel(String level, Pageable pageable);
     int countByStatus(String status);
     //reports

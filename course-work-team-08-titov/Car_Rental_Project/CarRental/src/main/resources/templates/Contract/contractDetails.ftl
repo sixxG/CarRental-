@@ -122,7 +122,7 @@
 
                 <div>
                     <textarea class="input" style="margin-top: 10px; height: 80px; font-size: 15px; text-align:inherit; resize: vertical;" readonly>
-                        ${contract.getNote()}
+                        ${contract.getNote()!""}
                     </textarea>
                 </div>
 
@@ -166,7 +166,7 @@
                 <#if isUser>
                     <#if contract.getStatus() = "Не подтверждён">
                         <form action="cancel" method="post">
-                            <input type="hidden" name="_csrf" value="${_csrf.token}">
+                            <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
                             <input type="hidden" name="id" value="${contract.getId()}">
                             <input type="submit" value="Отменить" class="btn-canceled button" style="width: 100%" />
                         </form>
@@ -175,7 +175,7 @@
                     <#if contract.getStatus() = "Действует">
                         <form action="finish" method="post">
                             <button style="font-size: 25px; background: #46F046; margin-bottom: 10px; width: 100%; display: block" class="btn-canceled button" onclick="NotFinish()">
-                                <input type="hidden" name="_csrf" value="${_csrf.token}">
+                                <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
                                 <input type="hidden" name="id" value="${contract.getId()}">
                                 Завершить
                             </button>
@@ -186,7 +186,7 @@
                 <#if isAdmin || isManager>
                     <#if contract.getStatus() = "Не подтверждён">
                         <form action="confirm" method="post">
-                            <input type="hidden" name="_csrf" value="${_csrf.token}">
+                            <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
                             <input type="hidden" name="id" value="${contract.getId()}">
                             <input type="submit" value="Подтвердить" class="btn-confirm button" style="width: 100%" />
                         </form>
@@ -194,7 +194,7 @@
 
                     <#if contract.getStatus() = "Подтверждён">
                         <form action="start" method="post">
-                            <input type="hidden" name="_csrf" value="${_csrf.token}">
+                            <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
                             <input type="hidden" name="id" value="${contract.getId()}">
                             <button style="font-size: 25px; background: #46F046; margin-bottom: 10px; width: 100%; display: block" class="btn-canceled button" onclick="NotFinish()">
                                 Начать
@@ -205,7 +205,7 @@
                     <#if contract.getStatus() = "Действует" || contract.getStatus() = "Ожидает оплаты штрафа">
                         <form action="finish" method="post">
                             <button style="font-size: 25px; background: #46F046; margin-bottom: 10px; width: 100%; display: block" class="btn-canceled button" onclick="NotFinish()">
-                                <input type="hidden" name="_csrf" value="${_csrf.token}">
+                                <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
                                 <input type="hidden" name="id" value="${contract.getId()}">
                                 Завершить
                             </button>
@@ -215,7 +215,7 @@
                     <#if contract.getStatus() = "Действует" || contract.getStatus() = "Завершён">
                         <form action="fine" method="post">
                             <button style="width: 100%;" class="btn-canceled button" onclick="NotFinish()">
-                                <input type="hidden" name="_csrf" value="${_csrf.token}">
+                                <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>}">
                                 <input type="hidden" name="id" value="${contract.getId()}">
                                 Назначить штраф
                             </button>
@@ -225,7 +225,7 @@
                     <#if contract.getStatus() != "Завершён" && contract.getStatus() != "Отменён"
                             && contract.getStatus() != "Ожидает оплаты штрафа" && contract.getStatus() != "Действует">
                         <form action="cancel" method="post">
-                            <input type="hidden" name="_csrf" value="${_csrf.token}">
+                            <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
                             <input type="hidden" name="id" value="${contract.getId()}">
                             <input type="submit" value="Отменить" class="btn-canceled button" style="width: 100%" />
                         </form>

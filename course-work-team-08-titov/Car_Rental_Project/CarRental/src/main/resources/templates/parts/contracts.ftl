@@ -106,7 +106,7 @@
 
                                                     <form action="/contract/delete" method="post">
 
-                                                        <input type="hidden" name="_csrf" value="${_csrf.token}">
+                                                        <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
                                                         <input type="hidden" name="id" value="${contract.getId()}">
 
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">NO</button>

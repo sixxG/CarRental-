@@ -44,59 +44,7 @@
                 <a href="/carbyclass?carClass=Эконом&numberPage=0" class="carClassHeader">Эконом</a>
                 <div class="carsBlock">
                     <#list EconomyCar as car>
-                        <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
-                            <div class="bg-info img-rounded shadow-lg">
-
-                                <div style="padding: 15px; margin: 10px">
-                                    <img src="/imageCar/${car.image}" width="100%" height="220px" alt="carImg"/>
-                                    <p>
-                                    <h4>
-                                        <b>
-                                            ${car.brand}
-                                            ${car.model}
-                                            ,
-                                            ${car.year?c}
-                                            ${car.level}
-                                        </b>
-                                    </h4>
-                                    <hr />
-
-                                    <div class="auto-description-start">
-                                        <p class="auto-description flat">Коробка</p>
-                                        <p class="auto-description flat">Привод</p>
-                                        <p class="auto-description flat">Пробег</p>
-                                        <p class="auto-description flat">Мощность</p>
-                                        <p class="auto-description flat">Тип кузова</p>
-                                    </div>
-
-                                    <div class="auto-description-edn">
-                                        <p class="auto-description">${car.transmission}</p>
-                                        <p class="auto-description">${car.drive}</p>
-                                        <p class="auto-description">&gt;${car.mileage?c}</p>
-                                        <p class="auto-description">${car.power?c} лс.</p>
-                                        <p class="auto-description">${car.body}</p>
-                                    </div>
-
-                                    <div class="bg-info">
-                                        <h4 class="carPrice"><b>от ${car.price?c}</b> / сутки</h4>
-                                    </div>
-
-<#--                                    <#if isAdmin>-->
-                                        <h4 class="text-success text-uppercase" style="text-align: center">
-                                            <#if car.status == "Забронирована">
-                                                <b style="color: red">${car.status}</b>
-                                            <#else >
-                                                <b style="color: green">${car.status}</b>
-                                            </#if>
-                                        </h4>
-<#--                                    </#if>-->
-
-                                    <div style="width:100%; height:100%; text-align:center;">
-                                        <a class="btn-details" href="/car/details?id=${car.id}">Подробнее</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <@carParts.carCard car=car></@carParts.carCard>
                     <#else >
                         <h1 style="display: block; width: 100%; text-align: center">Таких авто нет(</h1>
                     </#list>
@@ -107,59 +55,7 @@
                 <a href="/carbyclass?carClass=Комфорт&numberPage=0" class="carClassHeader">Комфорт</a>
                 <div class="carsBlock">
                     <#list ComfortCar as car>
-                        <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
-                            <div class="bg-info img-rounded shadow-sm">
-
-                                <div style="padding: 15px; margin: 10px">
-                                    <img src="/imageCar/${car.image}" width="100%" height="220px" alt="carImg"/>
-                                    <p>
-                                    <h4>
-                                        <b>
-                                            ${car.brand}
-                                            ${car.model}
-                                            ,
-                                            ${car.year?c}
-                                            ${car.level}
-                                        </b>
-                                    </h4>
-                                    <hr />
-
-                                    <div class="auto-description-start">
-                                        <p class="auto-description flat">Коробка</p>
-                                        <p class="auto-description flat">Привод</p>
-                                        <p class="auto-description flat">Пробег</p>
-                                        <p class="auto-description flat">Мощность</p>
-                                        <p class="auto-description flat">Тип кузова</p>
-                                    </div>
-
-                                    <div class="auto-description-edn">
-                                        <p class="auto-description">${car.transmission}</p>
-                                        <p class="auto-description">${car.drive}</p>
-                                        <p class="auto-description">&gt;${car.mileage?c}</p>
-                                        <p class="auto-description">${car.power?c} лс.</p>
-                                        <p class="auto-description">${car.body}</p>
-                                    </div>
-
-                                    <div class="bg-info">
-                                        <h4 class="carPrice"><b>от ${car.price?c}</b> / сутки</h4>
-                                    </div>
-
-<#--                                    <#if isAdmin>-->
-                                        <h4 class="text-success text-uppercase" style="text-align: center">
-                                            <#if car.status == "Забронирована">
-                                                <b style="color: red">${car.status}</b>
-                                            <#else >
-                                                <b style="color: green">${car.status}</b>
-                                            </#if>
-                                        </h4>
-<#--                                    </#if>-->
-
-                                    <div style="width:100%; height:100%; text-align:center;">
-                                        <a class="btn-details" href="/car/details?id=${car.id}">Подробнее</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <@carParts.carCard car=car></@carParts.carCard>
                     <#else >
                         <h1 style="display: block; width: 100%; text-align: center">Таких авто нет(</h1>
                     </#list>
@@ -170,59 +66,7 @@
                 <a href="/carbyclass?carClass=Бизнес&numberPage=0" class="carClassHeader">Бизнес</a>
                 <div class="carsBlock">
                     <#list BusinessCar as car>
-                        <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
-                            <div class="bg-info img-rounded shadow-sm">
-
-                                <div style="padding: 15px; margin: 10px">
-                                    <img src="/imageCar/${car.image}" width="100%" height="220px" alt="carImg"/>
-                                    <p>
-                                    <h4>
-                                        <b>
-                                            ${car.brand}
-                                            ${car.model}
-                                            ,
-                                            ${car.year?c}
-                                            ${car.level}
-                                        </b>
-                                    </h4>
-                                    <hr />
-
-                                    <div class="auto-description-start">
-                                        <p class="auto-description flat">Коробка</p>
-                                        <p class="auto-description flat">Привод</p>
-                                        <p class="auto-description flat">Пробег</p>
-                                        <p class="auto-description flat">Мощность</p>
-                                        <p class="auto-description flat">Тип кузова</p>
-                                    </div>
-
-                                    <div class="auto-description-edn">
-                                        <p class="auto-description">${car.transmission}</p>
-                                        <p class="auto-description">${car.drive}</p>
-                                        <p class="auto-description">&gt;${car.mileage?c}</p>
-                                        <p class="auto-description">${car.power?c} лс.</p>
-                                        <p class="auto-description">${car.body}</p>
-                                    </div>
-
-                                    <div class="bg-info">
-                                        <h4 class="carPrice"><b>от ${car.price?c}</b> / сутки</h4>
-                                    </div>
-
-<#--                                    <#if isAdmin>-->
-                                        <h4 class="text-success text-uppercase" style="text-align: center">
-                                            <#if car.status == "Забронирована">
-                                                <b style="color: red">${car.status}</b>
-                                            <#else >
-                                                <b style="color: green">${car.status}</b>
-                                            </#if>
-                                        </h4>
-<#--                                    </#if>-->
-
-                                    <div style="width:100%; height:100%; text-align:center;">
-                                        <a class="btn-details" href="/car/details?id=${car.id}">Подробнее</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <@carParts.carCard car=car></@carParts.carCard>
                     <#else >
                         <h1 style="display: block; width: 100%; text-align: center">Таких авто нет(</h1>
                     </#list>
@@ -233,59 +77,7 @@
                 <a href="/carbyclass?carClass=Premium&numberPage=0" class="carClassHeader">Premium</a>
                 <div class="carsBlock">
                     <#list PremiumCar as car>
-                        <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
-                            <div class="bg-info img-rounded shadow-sm">
-
-                                <div style="padding: 15px; margin: 10px">
-                                    <img src="/imageCar/${car.image}" width="100%" height="220px" alt="carImg"/>
-                                    <p>
-                                    <h4>
-                                        <b>
-                                            ${car.brand}
-                                            ${car.model}
-                                            ,
-                                            ${car.year?c}
-                                            ${car.level}
-                                        </b>
-                                    </h4>
-                                    <hr />
-
-                                    <div class="auto-description-start">
-                                        <p class="auto-description flat">Коробка</p>
-                                        <p class="auto-description flat">Привод</p>
-                                        <p class="auto-description flat">Пробег</p>
-                                        <p class="auto-description flat">Мощность</p>
-                                        <p class="auto-description flat">Тип кузова</p>
-                                    </div>
-
-                                    <div class="auto-description-edn">
-                                        <p class="auto-description">${car.transmission}</p>
-                                        <p class="auto-description">${car.drive}</p>
-                                        <p class="auto-description">&gt;${car.mileage?c}</p>
-                                        <p class="auto-description">${car.power?c} лс.</p>
-                                        <p class="auto-description">${car.body}</p>
-                                    </div>
-
-                                    <div class="bg-info">
-                                        <h4 class="carPrice"><b>от ${car.price?c}</b> / сутки</h4>
-                                    </div>
-
-<#--                                    <#if isAdmin>-->
-                                        <h4 class="text-success text-uppercase" style="text-align: center">
-                                            <#if car.status == "Забронирована">
-                                                <b style="color: red">${car.status}</b>
-                                            <#else >
-                                                <b style="color: green">${car.status}</b>
-                                            </#if>
-                                        </h4>
-<#--                                    </#if>-->
-
-                                    <div style="width:100%; height:100%; text-align:center;">
-                                        <a class="btn-details" href="/car/details?id=${car.id}">Подробнее</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <@carParts.carCard car=car></@carParts.carCard>
                     <#else >
                         <h1 style="display: block; width: 100%; text-align: center">Таких авто нет(</h1>
                     </#list>
@@ -296,59 +88,7 @@
                 <a href="/carbyclass?carClass=Внедорожники&numberPage=0" class="carClassHeader">Внедорожники</a>
                 <div class="carsBlock">
                     <#list SuvCar as car>
-                        <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
-                            <div class="bg-info img-rounded shadow-sm">
-
-                                <div style="padding: 15px; margin: 10px">
-                                    <img src="/imageCar/${car.image}" width="100%" height="220px" alt="carImg"/>
-                                    <p>
-                                    <h4>
-                                        <b>
-                                            ${car.brand}
-                                            ${car.model}
-                                            ,
-                                            ${car.year?c}
-                                            ${car.level}
-                                        </b>
-                                    </h4>
-                                    <hr />
-
-                                    <div class="auto-description-start">
-                                        <p class="auto-description flat">Коробка</p>
-                                        <p class="auto-description flat">Привод</p>
-                                        <p class="auto-description flat">Пробег</p>
-                                        <p class="auto-description flat">Мощность</p>
-                                        <p class="auto-description flat">Тип кузова</p>
-                                    </div>
-
-                                    <div class="auto-description-edn">
-                                        <p class="auto-description">${car.transmission}</p>
-                                        <p class="auto-description">${car.drive}</p>
-                                        <p class="auto-description">&gt;${car.mileage?c}</p>
-                                        <p class="auto-description">${car.power?c} лс.</p>
-                                        <p class="auto-description">${car.body}</p>
-                                    </div>
-
-                                    <div class="bg-info">
-                                        <h4 class="carPrice"><b>от ${car.price?c}</b> / сутки</h4>
-                                    </div>
-
-<#--                                    <#if isAdmin>-->
-                                        <h4 class="text-success text-uppercase" style="text-align: center">
-                                            <#if car.status == "Забронирована">
-                                                <b style="color: red">${car.status}</b>
-                                            <#else >
-                                                <b style="color: green">${car.status}</b>
-                                            </#if>
-                                        </h4>
-<#--                                    </#if>-->
-
-                                    <div style="width:100%; height:100%; text-align:center;">
-                                        <a class="btn-details" href="/car/details?id=${car.id}">Подробнее</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <@carParts.carCard car=car></@carParts.carCard>
                     <#else >
                         <h1 style="display: block; width: 100%; text-align: center">Таких авто нет(</h1>
                     </#list>
@@ -359,59 +99,7 @@
                 <a href="/carbyclass?carClass=Минивэны&numberPage=0" class="carClassHeader">Минивэны</a>
                 <div class="carsBlock">
                     <#list BusCar as car>
-                        <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
-                            <div class="bg-info img-rounded shadow-sm">
-
-                                <div style="padding: 15px; margin: 10px">
-                                    <img src="/imageCar/${car.image}" width="100%" height="220px" alt="carImg"/>
-                                    <p>
-                                    <h4>
-                                        <b>
-                                            ${car.brand}
-                                            ${car.model}
-                                            ,
-                                            ${car.year?c}
-                                            ${car.level}
-                                        </b>
-                                    </h4>
-                                    <hr />
-
-                                    <div class="auto-description-start">
-                                        <p class="auto-description flat">Коробка</p>
-                                        <p class="auto-description flat">Привод</p>
-                                        <p class="auto-description flat">Пробег</p>
-                                        <p class="auto-description flat">Мощность</p>
-                                        <p class="auto-description flat">Тип кузова</p>
-                                    </div>
-
-                                    <div class="auto-description-edn">
-                                        <p class="auto-description">${car.transmission}</p>
-                                        <p class="auto-description">${car.drive}</p>
-                                        <p class="auto-description">&gt;${car.mileage?c}</p>
-                                        <p class="auto-description">${car.power?c} лс.</p>
-                                        <p class="auto-description">${car.body}</p>
-                                    </div>
-
-                                    <div class="bg-info">
-                                        <h4 class="carPrice"><b>от ${car.price?c}</b> / сутки</h4>
-                                    </div>
-
-<#--                                    <#if isAdmin>-->
-                                        <h4 class="text-success text-uppercase" style="text-align: center">
-                                            <#if car.status == "Забронирована">
-                                                <b style="color: red">${car.status}</b>
-                                            <#else >
-                                                <b style="color: green">${car.status}</b>
-                                            </#if>
-                                        </h4>
-<#--                                    </#if>-->
-
-                                    <div style="width:100%; height:100%; text-align:center;">
-                                        <a class="btn-details" href="/car/details?id=${car.id}">Подробнее</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <@carParts.carCard car=car></@carParts.carCard>
                     <#else >
                         <h1 style="display: block; width: 100%; text-align: center">Таких авто нет(</h1>
                     </#list>
@@ -422,59 +110,7 @@
                 <a href="/carbyclass?carClass=Уникальные авто&numberPage=0" class="carClassHeader">Уникальные авто</a>
                 <div class="carsBlock">
                     <#list UniqueCar as car>
-                        <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
-                            <div class="bg-info img-rounded shadow-sm">
-
-                                <div style="padding: 15px; margin: 10px">
-                                    <img src="/imageCar/${car.image}" width="100%" height="220px" alt="carImg"/>
-                                    <p>
-                                    <h4>
-                                        <b>
-                                            ${car.brand}
-                                            ${car.model}
-                                            ,
-                                            ${car.year?c}
-                                            ${car.level}
-                                        </b>
-                                    </h4>
-                                    <hr />
-
-                                    <div class="auto-description-start">
-                                        <p class="auto-description flat">Коробка</p>
-                                        <p class="auto-description flat">Привод</p>
-                                        <p class="auto-description flat">Пробег</p>
-                                        <p class="auto-description flat">Мощность</p>
-                                        <p class="auto-description flat">Тип кузова</p>
-                                    </div>
-
-                                    <div class="auto-description-edn">
-                                        <p class="auto-description">${car.transmission}</p>
-                                        <p class="auto-description">${car.drive}</p>
-                                        <p class="auto-description">&gt;${car.mileage?c}</p>
-                                        <p class="auto-description">${car.power?c} лс.</p>
-                                        <p class="auto-description">${car.body}</p>
-                                    </div>
-
-                                    <div class="bg-info">
-                                        <h4 class="carPrice"><b>от ${car.price?c}</b> / сутки</h4>
-                                    </div>
-
-<#--                                    <#if isAdmin>-->
-                                        <h4 class="text-success text-uppercase" style="text-align: center">
-                                            <#if car.status == "Забронирована">
-                                                <b style="color: red">${car.status}</b>
-                                            <#else >
-                                                <b style="color: green">${car.status}</b>
-                                            </#if>
-                                        </h4>
-<#--                                    </#if>-->
-
-                                    <div style="width:100%; height:100%; text-align:center;">
-                                        <a class="btn-details" href="/car/details?id=${car.id}">Подробнее</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <@carParts.carCard car=car></@carParts.carCard>
                     <#else >
                         <h1 style="display: block; width: 100%; text-align: center">Таких авто нет(</h1>
                     </#list>
@@ -485,14 +121,14 @@
 
             </div>
 
-            <#if isAdmin>
+            <#if isManager>
                 <div id="AddCar" class="tab-pane fade in">
 
                     <div style="margin-top: 5%">
                         <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 100%;">
 
                             <form action="/car" enctype="multipart/form-data" method="post">
-                                <input type="hidden" name="_csrf" value="${_csrf.token}">
+                                <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
                                 <@carParts.createForm></@carParts.createForm>
                             </form>
 
@@ -509,42 +145,3 @@
     </div>
 
 </@c.page>
-
-<#--<script>-->
-<#--    const urlParams = new URLSearchParams(window.location.search);-->
-<#--    const carClass = urlParams.get('carClass');-->
-
-<#--    let Element = document.querySelector('#myParam');-->
-<#--    // обращение к интересующему свойству и присвоение нового цвета-->
-<#--    document.getElementById(carClass).style.color = '#00ff00';-->
-<#--    document.getElementById(carClass).style.fontWeight = 600;-->
-
-<#--</script>-->
-
-<#--<script>-->
-<#--    const urlParam = new URLSearchParams(window.location.search);-->
-
-<#--    console.log(urlParam);-->
-
-<#--    const PriceOT = urlParam.get('PriceOT');-->
-<#--    const PriceDO = urlParam.get('PriceDO');-->
-<#--    const ListBrand = urlParam.get('ListBrand');-->
-<#--    const ListTypeTransmition = urlParam.get('ListTypeTransmition');-->
-
-<#--    document.getElementById("PriceOT").value = PriceOT;-->
-<#--    document.getElementById("PriceDO").value = PriceDO;-->
-
-<#--    if (ListBrand === null) {-->
-<#--        document.getElementById("ListBrand").value = "";-->
-<#--    } else {-->
-<#--        document.getElementById("ListBrand").value = ListBrand;-->
-<#--    }-->
-
-<#--    if (ListTypeTransmition === null) {-->
-<#--        document.getElementById("ListTypeTransmition").value = "";-->
-<#--    } else {-->
-<#--        document.getElementById("ListTypeTransmition").value = ListTypeTransmition;-->
-<#--    }-->
-
-
-<#--</script>-->

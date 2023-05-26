@@ -50,7 +50,7 @@ public class UserController {
             @RequestParam Map<String, String> form,
             @RequestParam("userId") int userId, Model model) {
 
-        boolean ifAdded = userService.addUser(userId, form);
+        boolean ifAdded = userService.editeUser(userId, form);
 
         if (ifAdded) {
             return "redirect:/user";

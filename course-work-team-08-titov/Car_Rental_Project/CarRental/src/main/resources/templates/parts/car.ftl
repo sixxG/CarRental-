@@ -1,5 +1,4 @@
 <#macro search>
-
     <!-- Start search -->
     <form method="get" action="/findCar">
         <div style="display: flex; width: 100%;">
@@ -134,7 +133,6 @@
 </#macro>
 
 <#macro classes>
-
     <!--Car classes-->
     <div style="display: flex; width: 100%; justify-content:center; margin-top: 2%;">
 
@@ -422,7 +420,7 @@
 
 <#macro filter>
     <form action="/filterCars" method="post">
-        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+        <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>"/>
         <input type="hidden" name="carsList" value="${cars}"/>
 
         <div class="form-group" style="width: 25%; text-align: left">
@@ -437,4 +435,112 @@
             <button type="submit">Применить</button>
         </div>
     </form>
+</#macro>
+
+<#macro carCardForMainPage car>
+    <div class="col-xl-3 col-lg-4" data-id="${car.id}">
+        <div class="bg-info img-rounded shadow-sm">
+
+            <div style="padding: 15px; margin: 10px">
+                <img src="/imageCar/${car.image}" width="100%" height="220px" />
+                <p>
+                <h4>
+                    <b>
+                        ${car.brand} ${car.model}
+                        , ${car.year?c}
+                    </b>
+                </h4>
+                <h4>
+                    <b style="color: #5394FD; font-weight: 600">
+                        <a href="/carbyclass?carClass=${car.level}&numberPage=0">${car.level}</a>
+                    </b>
+                </h4>
+                </p>
+                <hr />
+
+                <div class="auto-description-start" style=" vertical-align: top; font-size: 14px; width: 30%; display: inline-block; margin-right: 50px;">
+                    <p class="auto-description">Коробка</p>
+                    <p class="auto-description">Привод</p>
+                    <p class="auto-description">Пробег</p>
+                    <p class="auto-description">Мощность</p>
+                    <p class="auto-description">Тип кузова</p>
+                </div>
+
+                <div class="auto-description-edn" style=" vertical-align: top; font-size: 14px; width: 47%; display: inline-block; text-align: right;">
+                    <p class="auto-description">${car.transmission}</p>
+                    <p class="auto-description">${car.drive}</p>
+                    <p class="auto-description">&gt;${car.mileage?c}</p>
+                    <p class="auto-description">${car.power?c} лс.</p>
+                    <p class="auto-description">${car.body}</p>
+                </div>
+
+                <div class="bg-info">
+                    <h4><b>от ${car.price?c}</b> / сутки</h4>
+                </div>
+
+                <h4 class="text-success text-uppercase" style="text-align: center"></h4>
+                <div style="width:100%; height:100%; text-align:center;">
+                    <a class="btn-details" href="/car/details?id=${car.id}">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</#macro>
+
+<#macro carCard car>
+    <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+        <div class="bg-info img-rounded shadow-lg">
+
+            <div style="padding: 15px; margin: 10px">
+                <img src="/imageCar/${car.image}" width="100%" height="220px" alt="carImg"/>
+                <p>
+                <h4>
+                    <b>
+                        ${car.brand}
+                        ${car.model}
+                        ,
+                        ${car.year?c}
+                    </b>
+                </h4>
+                <h4>
+                    <b style="color: #5394FD; font-weight: 600">
+                        <a href="/carbyclass?carClass=${car.level}&numberPage=0">${car.level}</a>
+                    </b>
+                </h4>
+                <hr />
+
+                <div class="auto-description-start">
+                    <p class="auto-description flat">Коробка</p>
+                    <p class="auto-description flat">Привод</p>
+                    <p class="auto-description flat">Пробег</p>
+                    <p class="auto-description flat">Мощность</p>
+                    <p class="auto-description flat">Тип кузова</p>
+                </div>
+
+                <div class="auto-description-edn">
+                    <p class="auto-description">${car.transmission}</p>
+                    <p class="auto-description">${car.drive}</p>
+                    <p class="auto-description">&gt;${car.mileage?c}</p>
+                    <p class="auto-description">${car.power?c} лс.</p>
+                    <p class="auto-description">${car.body}</p>
+                </div>
+
+                <div class="bg-info">
+                    <h4 class="carPrice"><b>от ${car.price?c}</b> / сутки</h4>
+                </div>
+
+                <h4 class="text-success text-uppercase" style="text-align: center">
+                    <#if car.status == "Забронирована">
+                        <b style="color: red">${car.status}</b>
+                    <#else >
+                        <b style="color: green">${car.status}</b>
+                    </#if>
+                </h4>
+
+                <div style="width:100%; height:100%; text-align:center;">
+                    <a class="btn-details" href="/car/details?id=${car.id?c}">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </#macro>

@@ -79,93 +79,99 @@
 
       <a data-toggle="collapse" href="#collapseByClass"><h3 class="reportsBlocksHeader">По классам:</h3></a>
       <div class="collapse requestBody" id="collapseByClass">
-        <table class="table table-striped table-bordered">
-          <thead>
-          <tr>
-            <th>Класс</th>
-            <th>Количество автомобилей</th>
-          </tr>
-          </thead>
-          <tbody>
-          <#list carCounts as count>
-            <tr>
-              <td data-id="${count[0]}">
-                <a class="carLink" href="/carbyclass?carClass=${count[0]}&amp;">${count[0]}</a>
-              </td>
-              <td data-id="${count[1]}">${count[1]}</td>
-            </tr>
-          </#list>
-          </tbody>
-        </table>
+        <div id="containerСountByCarLevel" style="width: 100%; height: 400px; margin: 0 auto;"></div>
+
+<#--        <table class="table table-striped table-bordered">-->
+<#--          <thead>-->
+<#--          <tr>-->
+<#--            <th>Класс</th>-->
+<#--            <th>Количество автомобилей</th>-->
+<#--          </tr>-->
+<#--          </thead>-->
+<#--          <tbody>-->
+<#--          <#list carCounts as count>-->
+<#--            <tr>-->
+<#--              <td data-id="${count[0]}">-->
+<#--                <a class="carLink" href="/carbyclass?carClass=${count[0]}&amp;">${count[0]}</a>-->
+<#--              </td>-->
+<#--              <td data-id="${count[1]}">${count[1]}</td>-->
+<#--            </tr>-->
+<#--          </#list>-->
+<#--          </tbody>-->
+<#--        </table>-->
       </div>
 
       <a data-toggle="collapse" href="#collapseByTransmition"><h3 class="reportsBlocksHeader">По типу КП:</h3></a>
       <div class="collapse requestBody" id="collapseByTransmition">
-        <table class="table table-striped table-bordered">
-          <thead>
-          <tr>
-            <th>Класс</th>
-            <th>Количество автомобилей</th>
-          </tr>
-          </thead>
-          <tbody>
-          <#list countByCarTransmission as count>
-            <tr>
-              <td data-id="${count[0]}">
-                <a class="carLink" href="/findCar?ListTypeTransmition=${count[0]}&amp;">${count[0]}</a>
-                <#--&PriceOT=&PriceDO=&ListBrand=&power=&year=&mileage=-->
-              </td>
-              <td data-id="${count[1]}">${count[1]}</td>
-            </tr>
-          </#list>
-          </tbody>
-        </table>
+        <div id="containerСountByCarTransmission" style="width: 100%; height: 400px; margin: 0 auto;"></div>
+
+<#--        <table class="table table-striped table-bordered">-->
+<#--          <thead>-->
+<#--          <tr>-->
+<#--            <th>Класс</th>-->
+<#--            <th>Количество автомобилей</th>-->
+<#--          </tr>-->
+<#--          </thead>-->
+<#--          <tbody>-->
+<#--          <#list countByCarTransmission as count>-->
+<#--            <tr>-->
+<#--              <td data-id="${count[0]}">-->
+<#--                <a class="carLink" href="/findCar?ListTypeTransmition=${count[0]}&amp;">${count[0]}</a>-->
+<#--                &lt;#&ndash;&PriceOT=&PriceDO=&ListBrand=&power=&year=&mileage=&ndash;&gt;-->
+<#--              </td>-->
+<#--              <td data-id="${count[1]}">${count[1]}</td>-->
+<#--            </tr>-->
+<#--          </#list>-->
+<#--          </tbody>-->
+<#--        </table>-->
       </div>
 
       <a data-toggle="collapse" href="#collapseByDrive"><h3 class="reportsBlocksHeader">По приводу:</h3></a>
       <div class="collapse requestBody" id="collapseByDrive">
-        <table class="table table-striped table-bordered">
-          <thead>
-          <tr>
-            <th>Класс</th>
-            <th>Количество автомобилей</th>
-          </tr>
-          </thead>
-          <tbody>
-          <#list countByCarDrive as count>
-            <tr>
-              <td data-id="${count[0]}">
-                <a class="carLink" href="/findCar?typeDrive=${count[0]}&amp;">${count[0]}</a>
-                <!--&PriceOT=&PriceDO=&ListBrand=&ListTypeTransmition=&power=&year=&mileage=-->
-              </td>
-              <td data-id="${count[1]}">${count[1]}</td>
-            </tr>
-          </#list>
-          </tbody>
-        </table>
+        <div id="containerCountByCarDrive" style="width: 100%; height: 400px; margin: 0 auto;"></div>
+<#--        <table class="table table-striped table-bordered">-->
+<#--          <thead>-->
+<#--          <tr>-->
+<#--            <th>Класс</th>-->
+<#--            <th>Количество автомобилей</th>-->
+<#--          </tr>-->
+<#--          </thead>-->
+<#--          <tbody>-->
+<#--          <#list countByCarDrive as count>-->
+<#--            <tr>-->
+<#--              <td data-id="${count[0]}">-->
+<#--                <a class="carLink" href="/findCar?typeDrive=${count[0]}&amp;">${count[0]}</a>-->
+<#--                <!--&PriceOT=&PriceDO=&ListBrand=&ListTypeTransmition=&power=&year=&mileage=&ndash;&gt;-->
+<#--              </td>-->
+<#--              <td data-id="${count[1]}">${count[1]}</td>-->
+<#--            </tr>-->
+<#--          </#list>-->
+<#--          </tbody>-->
+<#--        </table>-->
       </div>
 
       <a data-toggle="collapse" href="#collapseByBody"><h3 class="reportsBlocksHeader">По кузову:</h3></a>
       <div class="collapse requestBody" id="collapseByBody">
-        <table class="table table-striped table-bordered">
-          <thead>
-          <tr>
-            <th>Класс</th>
-            <th>Количество автомобилей</th>
-          </tr>
-          </thead>
-          <tbody>
-          <#list countByCarBody as count>
-            <tr>
-              <td data-id="${count[0]}">
-                <a class="carLink" href="/findCar?typeBody=${count[0]}&amp;">${count[0]}</a>
-                <!--&PriceOT=&PriceDO=&ListBrand=&ListTypeTransmition=&power=&year=&mileage=-->
-              </td>
-              <td data-id="${count[1]}">${count[1]}</td>
-            </tr>
-          </#list>
-          </tbody>
-        </table>
+        <div id="containerСountByCarBody" style="width: 100%; height: 400px; margin: 0 auto;"></div>
+<#--        <table class="table table-striped table-bordered">-->
+<#--          <thead>-->
+<#--          <tr>-->
+<#--            <th>Класс</th>-->
+<#--            <th>Количество автомобилей</th>-->
+<#--          </tr>-->
+<#--          </thead>-->
+<#--          <tbody>-->
+<#--          <#list countByCarBody as count>-->
+<#--            <tr>-->
+<#--              <td data-id="${count[0]}">-->
+<#--                <a class="carLink" href="/findCar?typeBody=${count[0]}&amp;">${count[0]}</a>-->
+<#--                <!--&PriceOT=&PriceDO=&ListBrand=&ListTypeTransmition=&power=&year=&mileage=&ndash;&gt;-->
+<#--              </td>-->
+<#--              <td data-id="${count[1]}">${count[1]}</td>-->
+<#--            </tr>-->
+<#--          </#list>-->
+<#--          </tbody>-->
+<#--        </table>-->
       </div>
 
     </div>
@@ -216,4 +222,358 @@
     </div>
   </@>
 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script>
+    const carCount = ${countCars};
+
+    const countByCarBodyKeySet = [<#list countByCarBodyKeySet as key>'${key}', </#list>];
+    const countByCarDriveKeySetKeySet = [<#list countByCarDriveKeySet as key>'${key}', </#list>];
+    const countByCarLevelValues = [<#list countByCarLevelValues as value>${value}, </#list>];
+    console.log(countByCarLevelValues);
+    const countByCarTransmissionKeySet = [<#list countByCarTransmissionKeySet as key>'${key}', </#list>];
+
+    //countByCarBodyKeySet
+    $(function(){
+      Highcharts.chart('containerСountByCarBody', {
+        chart: {
+          type: 'column'
+        },
+
+        legend: {
+          itemStyle: {
+            fontSize: "15px"
+          }
+        },
+
+        title: {
+          text: 'CarFY',
+          style: {
+            fontSize:'16px'
+          }
+        },
+        subtitle: {
+          text: 'Автомобили по кузову',
+          style: {
+            fontSize:'25px'
+          }
+        },
+
+        xAxis: {
+          categories: countByCarBodyKeySet,
+          crosshair: true,
+          labels: {
+            style: {
+              color: 'red',
+              fontSize:'16px'
+            }
+          }
+        },
+        yAxis: {
+          min: 0,
+          max: carCount,
+          title: {
+            text: 'Количество',
+            style: {
+              fontSize:'20px'
+            }
+          },
+          labels: {
+            style: {
+              fontSize:'16px'
+            }
+          }
+        },
+        tooltip: {
+          headerFormat: '<span style="font-size:20px">{point.key}</span><table>',
+          pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                  '<td style="padding:0"><b>{point.y:.1f} K</b></td></tr>',
+          footerFormat: '</table>',
+          shared: true,
+          useHTML: true
+        },
+        plotOptions: {
+          column: {
+            pointPadding: 0,
+            borderWidth: 0
+          }
+        },
+        series: [{
+          name: 'Кузов',
+          style: {
+            fontSize:'16px'
+          },
+          data: [
+            <#list countByCarBodyValues as value>
+              <#if value_has_next>
+                ${value},
+                <#else>
+                ${value}
+              </#if>
+            </#list>
+          ]
+        }],
+      });
+    });
+    //countByCarDriveKeySetKeySet
+    $(function(){
+      Highcharts.chart('containerCountByCarDrive', {
+        chart: {
+          type: 'column'
+        },
+
+        legend: {
+          itemStyle: {
+            fontSize: "15px"
+          }
+        },
+
+        title: {
+          text: 'CarFY',
+          style: {
+            fontSize:'16px'
+          }
+        },
+        subtitle: {
+          text: 'Автомобили по приводу',
+          style: {
+            fontSize:'25px'
+          }
+        },
+
+        xAxis: {
+          categories: countByCarDriveKeySetKeySet,
+          crosshair: true,
+          labels: {
+            style: {
+              color: 'red',
+              fontSize:'16px'
+            }
+          }
+        },
+        yAxis: {
+          min: 0,
+          max: carCount,
+          title: {
+            text: 'Количество',
+            style: {
+              fontSize:'20px'
+            }
+          },
+          labels: {
+            style: {
+              fontSize:'16px'
+            }
+          }
+        },
+        tooltip: {
+          headerFormat: '<span style="font-size:20px">{point.key}</span><table>',
+          pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                  '<td style="padding:0"><b>{point.y:.1f} K</b></td></tr>',
+          footerFormat: '</table>',
+          shared: true,
+          useHTML: true
+        },
+        plotOptions: {
+          column: {
+            pointPadding: 0,
+            borderWidth: 0
+          }
+        },
+        series: [{
+          name: 'Привод',
+          style: {
+            fontSize:'16px'
+          },
+          data: [
+            <#list countByCarDriveValues as value>
+              <#if value_has_next>
+              ${value},
+              <#else>
+              ${value}
+              </#if>
+            </#list>
+          ]
+        }],
+      });
+    });
+    //countByCarLevelKeySet
+    $(function(){
+      Highcharts.chart('containerСountByCarTransmission', {
+        chart: {
+          type: 'column'
+        },
+
+        legend: {
+          itemStyle: {
+            fontSize: "15px"
+          }
+        },
+
+        title: {
+          text: 'CarFY',
+          style: {
+            fontSize:'16px'
+          }
+        },
+        subtitle: {
+          text: 'Автомобили по трансмиссии',
+          style: {
+            fontSize:'25px'
+          }
+        },
+
+        xAxis: {
+          categories: countByCarTransmissionKeySet,
+          crosshair: true,
+          labels: {
+            style: {
+              color: 'red',
+              fontSize:'16px'
+            }
+          }
+        },
+        yAxis: {
+          min: 0,
+          max: carCount,
+          title: {
+            text: 'Количество',
+            style: {
+              fontSize:'20px'
+            }
+          },
+          labels: {
+            style: {
+              fontSize:'16px'
+            }
+          }
+        },
+        tooltip: {
+          headerFormat: '<span style="font-size:20px">{point.key}</span><table>',
+          pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                  '<td style="padding:0"><b>{point.y:.1f} K</b></td></tr>',
+          footerFormat: '</table>',
+          shared: true,
+          useHTML: true
+        },
+        plotOptions: {
+          column: {
+            pointPadding: 0,
+            borderWidth: 0
+          }
+        },
+        series: [{
+          name: 'Трансмиссия',
+          style: {
+            fontSize:'16px'
+          },
+          data: [
+            <#list countByCarTransmissionValues as value>
+            <#if value_has_next>
+            ${value},
+            <#else>
+            ${value}
+            </#if>
+            </#list>
+          ]
+        }],
+      });
+    });
+    //countByCarTransmissionKeySet
+    $(function() {
+      Highcharts.chart('containerСountByCarLevel', {
+        chart: {
+          type: 'pie'
+        },
+
+        legend: {
+          itemStyle: {
+            fontSize: "15px"
+          }
+        },
+
+        title: {
+          text: 'CarFY',
+          style: {
+            fontSize:'16px'
+          },
+          align: 'left'
+        },
+        subtitle: {
+          text: 'Количество авто по классам',
+          style: {
+            fontSize:'16px'
+          },
+          align: 'left'
+        },
+
+        accessibility: {
+          announceNewData: {
+            enabled: true
+          }
+        },
+
+        plotOptions: {
+          series: {
+            borderRadius: 3,
+            dataLabels: {
+              enabled: true,
+              format: '{point.name}: {point.y}',
+              style: {
+                fontSize:'14px'
+              },
+            }
+          }
+        },
+
+        tooltip: {
+          headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+          pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> шт<br/>',
+          style: {
+            fontSize:'16px'
+          }
+        },
+
+        series: [
+          {
+            name: 'Автопарк',
+            colorByPoint: true,
+            data: [
+              {
+                name: 'Эконом',
+                y: countByCarLevelValues.at(0)
+              },
+              {
+                name: 'Комфорт',
+                y: countByCarLevelValues.at(1)
+              },
+              {
+                name: 'Бизнес',
+                y: countByCarLevelValues.at(2)
+              },
+              {
+                name: 'Premium',
+                y: countByCarLevelValues.at(3)
+              },
+              {
+                name: 'Внедорожники',
+                y: countByCarLevelValues.at(4)
+              },
+              {
+                name: 'Минивэны',
+                y: countByCarLevelValues.at(5)
+              },
+              {
+                name: 'Уникальные авто',
+                y: countByCarLevelValues.at(6)
+              }
+            ]
+          }
+        ]
+      });
+    });
+
+  </script>
 </@c.page>

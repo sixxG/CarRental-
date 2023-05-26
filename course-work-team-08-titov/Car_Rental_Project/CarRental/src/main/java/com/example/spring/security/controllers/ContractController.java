@@ -1,13 +1,16 @@
 package com.example.spring.security.controllers;
 
 import com.example.spring.security.models.*;
+import com.example.spring.security.repositories.ContractRepository;
 import com.example.spring.security.services.CarService;
 import com.example.spring.security.services.ContractService;
 
 import com.example.spring.security.services.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,11 +31,14 @@ public class ContractController {
     private final ContractService contractService;
     private final CarService carService;
     private final UserService userService;
+    private final ContractRepository contractRepository;
 
-    public ContractController(ContractService contractService, CarService carService, UserService userService) {
+    public ContractController(ContractService contractService, CarService carService, UserService userService,
+                              ContractRepository contractRepository) {
         this.contractService = contractService;
         this.carService = carService;
         this.userService = userService;
+        this.contractRepository = contractRepository;
     }
 
     @GetMapping("")
@@ -41,7 +47,7 @@ public class ContractController {
 
         model.addAttribute("countPage", response.get("countPage"));
 
-        model.addAttribute("rentalHours", response.get("rentalHours"));
+        model.addAttribute("rentalHours", response.get("rentalHours") != null ? response.get("rentalHours").toString() : null);
         model.addAttribute("activeContract", response.get("activeContract"));
 
         model.addAttribute("client", response.get("client"));
@@ -105,6 +111,7 @@ public class ContractController {
     }
 
     @PostMapping("/save")
+    //@Transactional
     public String createContracts(@RequestParam Map<String, String> form, Model model) {
         Map<String, Object> response = contractService.createContract(form);
 
@@ -156,9 +163,7 @@ public class ContractController {
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @PostMapping("/delete")
     public String deleteContract(@RequestParam int id, HttpServletRequest request) {
-
         contractService.deleteById(id);
-
         return "redirect:" + request.getHeader("referer");
     }
 
@@ -167,6 +172,8 @@ public class ContractController {
     public String editContractForm(@RequestParam int id, Model model) {
 
         Contract contract = contractService.findById(id);
+        if (contract == null)
+            return "redirect:/contract/list/all";
 
         LocalDateTime dateStart = contract.getDateStart();
         LocalDateTime dateEnd = contract.getDateEnd();
@@ -185,8 +192,11 @@ public class ContractController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @PostMapping("/edit")
-    public String editContract(@Valid Contract contract) {
+    public String editContract(@Valid Contract contract, BindingResult bindingResult) {
 
+        if (bindingResult.hasErrors()) {
+            return "redirect:details?id=" + contract.getId();
+        }
         Contract contractBeforeEdit = contractService.findById(contract.getId());
 
         contractBeforeEdit.setNote(contract.getNote());
@@ -199,6 +209,8 @@ public class ContractController {
 
     @PostMapping("/confirm")
     public String confirmContract(@RequestParam int id, Principal user) {
+        if (contractService.findById(id) == null)
+            return "redirect:list/all?page=1";
         User manager = userService.findByUsername(user.getName());
         Contract contract = contractService.findById(id);
 
@@ -212,6 +224,8 @@ public class ContractController {
 
     @PostMapping("/cancel")
     public String cancelContract(@RequestParam int id, Principal user) {
+        if (contractService.findById(id) == null || contractService.findById(id).getStatus().equals("Отменён"))
+            return "redirect:/";
 
         Contract contract = contractService.findById(id);
         User client = userService.findByUsername(user.getName());
@@ -234,6 +248,9 @@ public class ContractController {
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @PostMapping("/start")
     public String startContract(@RequestParam int id, Principal user) {
+        if (contractRepository.findById(id) == null)
+            return "redirect:list/all?page=1";
+
         User manager = userService.findByUsername(user.getName());
         Contract contract = contractService.findById(id);
 
@@ -247,6 +264,9 @@ public class ContractController {
 
     @PostMapping("/finish")
     public String finishContract(@RequestParam int id, Principal user) {
+        if (contractService.findById(id) == null)
+            return "redirect:/";
+
         User client = userService.findByUsername(user.getName());
         Contract contract = contractService.findById(id);
 
@@ -268,6 +288,9 @@ public class ContractController {
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @PostMapping("/fine")
     public String fineContract(@RequestParam int id, Principal user) {
+        if (contractService.findById(id) == null)
+            return "redirect:list/all?page=1";
+
         User manager = userService.findByUsername(user.getName());
         Contract contract = contractService.findById(id);
 

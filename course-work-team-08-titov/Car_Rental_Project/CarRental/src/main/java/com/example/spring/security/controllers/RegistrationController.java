@@ -30,6 +30,7 @@ public class RegistrationController {
             return "redirect:/login";
         } else {
             return "Account/Registration";
-        }}
+        }
+    }
 
 }

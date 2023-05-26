@@ -2,8 +2,6 @@ package com.example.spring.security.controllers;
 
 import com.example.spring.security.models.Car;
 import com.example.spring.security.services.CarService;
-import com.example.spring.security.services.UserService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,27 +19,33 @@ import java.util.Map;
 @Controller
 public class CarController {
     private final CarService carService;
-    private final UserService userService;
-    @Value("${upload.path}")
-    private String uploadPath;
 
-    public CarController(CarService carService, UserService userService) {
+    public CarController(CarService carService) {
         this.carService = carService;
-        this.userService = userService;
     }
 
     @GetMapping("/car/all")
-    public String carList(@RequestParam(required = false) int numberPage, Model model) {
+    public String getCarList(@RequestParam(required = false, defaultValue = "0") int numberPage,
+                          @RequestParam(required = false,defaultValue = "") String status, Model model) {
 
-        Map<String, Object> response = carService.getCarList(numberPage, 10);
+        if (status.equals("")) {
+            Map<String, Object> response = carService.getCarList(numberPage, 10);
 
-        model.addAttribute("countPage", response.get("countPage"));
-        model.addAttribute("cars", response.get("cars"));
+            model.addAttribute("countPage", response.get("countPage"));
+            model.addAttribute("cars", response.get("cars"));
 
-        model.addAttribute("carsBrand", response.get("carsBrand"));
+            model.addAttribute("carsBrand", response.get("carsBrand"));
+        } else {
+            Map<String, Object> response = carService.getCarListByStatus(status);
+
+            model.addAttribute("cars", response.get("cars"));
+            model.addAttribute("carsBrand", response.get("carsBrand"));
+            model.addAttribute("countPage", 0);
+        }
 
         return "Car/carList";
     }
+
     @GetMapping("/car")
     public String carListByClass(Model model) {
         Map<String, Object> response = carService.getCarsByClasses();
@@ -58,11 +62,13 @@ public class CarController {
 
         return "Car/carByClass";
     }
+
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @GetMapping("/addCar")
     public String addCarForm() {
         return "Car/carCreate";
     }
+
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @GetMapping("/car/delete")
     public String deleteCarPage(@RequestParam int id, Model model) {
@@ -74,13 +80,15 @@ public class CarController {
 
         return "Car/carDelete";
     }
+
+    //@Transactional
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @PostMapping("/car/delete")
     public String deleteCar(@RequestParam int id) {
         carService.deleteCar(id);
-
         return "redirect:/car";
     }
+
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @GetMapping("/car/edit")
     public String editCarPage(@RequestParam int id, Model model) {
@@ -88,19 +96,25 @@ public class CarController {
 
         return "Car/carEdit";
     }
+
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @PostMapping("/car/edit")
-    public String editCar(@Valid Car car, @RequestParam("newImage") MultipartFile file) throws IOException {
+    public String editCar(@Valid Car car, BindingResult bindingResult, @RequestParam(value = "newImage", required = false) MultipartFile file) throws IOException {
+        if (bindingResult.hasErrors()) {
+            return "redirect:/car/edit?id=" + car.getId();
+        }
         carService.editeCar(car, file);
 
         return "redirect:/car/details?id=" + car.getId();
     }
+
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @PostMapping("/car")
     public String add(@Valid Car car, BindingResult bindingResult,
                       @RequestParam("newImage") MultipartFile file, Model model) throws IOException {
         Map<String, Object> response = carService.addCar(car, bindingResult, file);
         if ((boolean) response.get("ifError")) {
+            model.addAttribute("map", response.get("errorMap"));
             return "Car/carCreate";
         }
         else {
@@ -108,6 +122,7 @@ public class CarController {
             model.addAttribute("cars", response.get("cars"));
 
             if ((boolean)response.get("ifAdded")) {
+
                 return "redirect:/car";
             } else {
                 return "redirect:/addCar";
@@ -142,13 +157,13 @@ public class CarController {
 
     @GetMapping("/carbyclass")
     public String carByClass(@RequestParam String carClass, @RequestParam(defaultValue = "0") int numberPage,  Model model) {
-
         Map<String, Object> response = carService.findCarsByClass(carClass, numberPage, 10);
+        model.addAttribute("cars", response.get("cars"));
 
         model.addAttribute("countPage", response.get("countPage"));
-        model.addAttribute("cars", response.get("cars"));
         model.addAttribute("carsBrand", response.get("carsBrand"));
 
         return "Car/carList";
     }
+
 }

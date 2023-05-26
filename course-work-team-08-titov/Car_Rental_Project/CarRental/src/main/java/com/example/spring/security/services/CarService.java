@@ -10,6 +10,9 @@ import com.example.spring.security.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.multipart.MultipartFile;
@@ -62,6 +65,7 @@ public class CarService {
     public int getAverageMileage() {
         return carRepository.getAverageMileage();
     }
+    @Transactional
     public boolean saveCar(Car car, MultipartFile file) throws IOException {
 
         if (file != null && !file.getOriginalFilename().isEmpty()) {
@@ -86,6 +90,7 @@ public class CarService {
         }
         return true;
     }
+    @Transactional
     public void saveCar(Car car) {
         carRepository.save(car);
     }
@@ -123,7 +128,17 @@ public class CarService {
         List<Car> cars = carRepository.findAll(PageRequest.of(numberPage, countItemOnPage)).stream().toList();
         Set<String> brandList =  carRepository.getCarsBrand();
 
-        response.put("countPage", carRepository.count()/countItemOnPage);
+        response.put("countPage", Math.ceil((double) carRepository.count()/countItemOnPage));
+        response.put("cars", cars);
+        response.put("carsBrand", brandList);
+
+        return response;
+    }
+    public Map<String, Object> getCarListByStatus(String status) {
+        Map<String, Object> response = new HashMap<>();
+        List<Car> cars = carRepository.findAllByStatus(status);
+        Set<String> brandList =  carRepository.getCarsBrand();
+
         response.put("cars", cars);
         response.put("carsBrand", brandList);
 
@@ -189,16 +204,26 @@ public class CarService {
         return response;
     }
 
-    public void deleteCar(int id) {
-        File fileToDelete = new File(uploadPath + "/" + carRepository.findById(id).getImage());
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_UNCOMMITTED)
+    public synchronized void deleteCar(int id) {
+        if (carRepository.findById(id) == null) {
+            return;
+        }
+        Car carToDelete = carRepository.findById(id);
+        File fileToDelete = new File(uploadPath + "/" + carToDelete.getImage());
 
         if (fileToDelete.exists()) {
-            fileToDelete.delete();
+            try {
+                fileToDelete.delete();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         }
 
         carRepository.deleteById(id);
     }
 
+    @Transactional
     public void editeCar(Car car, MultipartFile file) throws IOException {
         if (file.getOriginalFilename().isEmpty()) {
             carRepository.save(car);
@@ -231,13 +256,6 @@ public class CarService {
         }
         else {
             boolean ifAdded = saveCar(car, file);
-
-            List<Car> cars = carRepository.findAll(PageRequest.of(1, 10)).stream().toList();
-
-            Set<String> brandList =  carRepository.getCarsBrand();
-
-//            response.put("carsBrand", brandList.stream().sorted().collect(Collectors.toList()));
-//            response.put("cars", cars);
 
             response.put("ifAdded", ifAdded);
             response.put("ifError", false);
@@ -292,7 +310,7 @@ public class CarService {
             carsByParam = carsByParam.stream().filter(car -> car.getBody().equals(body)).collect(Collectors.toList());
         }
 
-        response.put("countPage", 0);
+        response.put("countPage", Math.ceil((double) carsByParam.size()/10));
         response.put("cars", carsByParam);
         response.put("carsBrand", carRepository.getCarsBrand().stream().sorted().collect(Collectors.toList()));
 
@@ -302,9 +320,9 @@ public class CarService {
     public Map<String, Object> findCarsByClass(String carClass, int numberPage, int countItemOnPage) {
         Map<String, Object> response = new HashMap<>();
         List<Car> cars = carRepository.findByLevel(carClass, PageRequest.of(numberPage, 10)).stream().toList();
-
-        response.put("countPage", carRepository.count()/countItemOnPage);
         response.put("cars", cars);
+
+        response.put("countPage", Math.ceil((double) carRepository.count()/countItemOnPage));
         response.put("carsBrand", carRepository.getCarsBrand());
 
         return response;

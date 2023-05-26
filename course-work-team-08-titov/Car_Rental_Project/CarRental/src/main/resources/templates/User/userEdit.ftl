@@ -10,7 +10,7 @@
     <form action="/user" method="POST">
 
         <input type="hidden" value="${user.id}" name="userId"/>
-        <input type="hidden" value="${_csrf.token}" name="_csrf"/>
+        <input type="hidden" value="<#if _csrf?has_content>${_csrf.token}</#if>" name="_csrf"/>
 
         <div class="form-group row">
             <label for="inputEmail3" class="col-sm-2 col-form-label">User name</label>

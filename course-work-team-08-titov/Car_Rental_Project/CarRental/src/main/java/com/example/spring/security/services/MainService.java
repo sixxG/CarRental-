@@ -2,6 +2,7 @@ package com.example.spring.security.services;
 
 import com.example.spring.security.models.Car;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -14,6 +15,7 @@ public class MainService {
         this.carService = carService;
     }
 
+    @Transactional
     public Map<String, Object> getDataForHomePage() {
         Map<String, Object> response = new HashMap<>();
 

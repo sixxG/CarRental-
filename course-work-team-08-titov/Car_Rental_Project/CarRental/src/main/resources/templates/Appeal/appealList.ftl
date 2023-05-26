@@ -181,7 +181,7 @@
                                 <div class="questionBloc" style="width: 30%; display: flex; margin: 0 auto">
                                     <form action="/feedback" method="post" style="padding: 10px;">
 
-                                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                                        <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>"/>
 
                                         <div class="mb-3 row">
                                             <label for="staticEmail" class="col-form-label" style="text-align: center; width: 100%;">Выберите количество звезд:</label>
@@ -324,7 +324,7 @@
                                         <#if isAdmin>
                                             <form action="/appeal/delete?id=${feedback.id}" method="post">
 
-                                                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                                                <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>"/>
 
                                                 <button type="submit" style="border: 0px; align-items: center; padding: 5px;">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">

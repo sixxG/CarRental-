@@ -22,7 +22,7 @@
 
         <!-- Start search -->
         <form action="/contract/search" method="post">
-            <input type="hidden" name="_csrf" value="${_csrf.token}">
+            <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
             <div style="display: flex; width: 100%;">
 
                 <div style="padding: 0; display: inline-block; text-align: left; width: 50%;">

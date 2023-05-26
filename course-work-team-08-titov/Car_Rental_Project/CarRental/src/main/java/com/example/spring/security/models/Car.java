@@ -77,4 +77,23 @@ public class Car {
         this.image = image;
         this.description = description;
     }
+
+    public Car(int id, String WIN_Number, String brand, String model, String body, String level, int year, int mileage, String color, String transmission, String drive, int power, int price, String status, String image, String description) {
+        this.id = id;
+        this.WIN_Number = WIN_Number;
+        this.brand = brand;
+        this.model = model;
+        this.body = body;
+        this.level = level;
+        this.year = year;
+        this.mileage = mileage;
+        this.color = color;
+        this.transmission = transmission;
+        this.drive = drive;
+        this.power = power;
+        this.price = price;
+        this.status = status;
+        this.image = image;
+        this.description = description;
+    }
 }

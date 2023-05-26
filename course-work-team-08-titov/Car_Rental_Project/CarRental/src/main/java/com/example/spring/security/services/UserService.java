@@ -4,17 +4,14 @@ import com.example.spring.security.models.Role;
 import com.example.spring.security.models.User;
 import com.example.spring.security.repositories.RoleRepository;
 import com.example.spring.security.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,7 +51,8 @@ public class UserService {
     public User findYoungestUser() {
         return userRepository.findYoungestUser();
     }
-    public boolean addUser(int userId, Map<String, String> rolesList) {
+    @Transactional
+    public boolean editeUser(int userId, Map<String, String> rolesList) {
 
         User user = userRepository.findById(userId);
         if (rolesList.get("userName") == null) {
@@ -81,9 +79,11 @@ public class UserService {
 
         return true;
     }
+    @Transactional
     public void saveUser(User user) {
         userRepository.save(user);
     }
+    @Transactional
     public Map<String, Object> changePassword(Map<String, String> form, User user) {
         String oldPassword = form.get("oldPassword");
         String newPassword = form.get("newPassword");

@@ -36,68 +36,15 @@
 
                 <@carParts.classes></@carParts.classes>
                 <br>
-                <select id="sort-select">
-                    <option value="asc">Сортировать по возрастанию цены</option>
-                    <option value="desc">Сортировать по убыванию цены</option>
-                </select>
+
+                <a type="button" class="btn btn-info" href="/car/all?status=Свободна">Свободные</a>
+                <a type="button" class="btn btn-info" href="/car/all?status=Забронирована">Забронированные</a>
                 <br>
                 <!-- Gallery item  -->
                 <div>
 
                     <#list cars?sort_by("price") as car>
-                        <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
-                            <div class="bg-info img-rounded shadow-sm" style="height: 560px; margin-bottom: 5px">
-
-                                <div style="padding: 15px; margin: 10px">
-                                    <img src="/imageCar/${car.image}" width="100%" height="220px" />
-                                    <p>
-                                        <h4>
-                                            <b>
-                                                ${car.brand}
-                                                ${car.model}
-                                                ,
-                                                ${car.year?c}
-                                                ${car.level}
-                                            </b>
-                                        </h4>
-                                    <hr />
-
-                                    <div class="auto-description-start">
-                                        <p class="auto-description flat">Коробка</p>
-                                        <p class="auto-description flat">Привод</p>
-                                        <p class="auto-description flat">Пробег</p>
-                                        <p class="auto-description flat">Мощность</p>
-                                        <p class="auto-description flat">Тип кузова</p>
-                                    </div>
-
-                                    <div class="auto-description-edn">
-                                        <p class="auto-description">${car.transmission}</p>
-                                        <p class="auto-description">${car.drive}</p>
-                                        <p class="auto-description">&gt;${car.mileage?c}</p>
-                                        <p class="auto-description">${car.power?c} лс.</p>
-                                        <p class="auto-description">${car.body}</p>
-                                    </div>
-
-                                    <div class="bg-info">
-                                        <h4 class="carPrice"><b>от ${car.price?c}</b> / сутки</h4>
-                                    </div>
-
-                                    <#if isAdmin>
-                                        <h4 class="text-success text-uppercase" style="text-align: center">
-                                            <#if car.status == "Забронирована">
-                                                <b style="color: red">${car.status}</b>
-                                                <#else >
-                                                    <b style="color: green">${car.status}</b>
-                                            </#if>
-                                        </h4>
-                                    </#if>
-
-                                    <div style="width:100%; text-align:center;">
-                                        <a class="btn-details" href="/car/details?id=${car.id}">Подробнее</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <@carParts.carCard car=car></@carParts.carCard>
                         <#else >
                         <h1 style="display: block; width: 100%; text-align: center">Таких авто нет(</h1>
                     </#list>
@@ -119,7 +66,7 @@
                         <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 100%;">
 
                             <form action="/car" enctype="multipart/form-data" method="post">
-                                <input type="hidden" name="_csrf" value="${_csrf.token}">
+                                <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
                                 <@carParts.createForm></@carParts.createForm>
                             </form>
 
@@ -136,14 +83,17 @@
             <div style="width: 100%; align-items: center;">
 
                 <ul class="pagination" style="position: absolute; left: 45%">
-                    <li id="page_0">
+                    <li>
                         <a href="/car/all?numberPage=0">Start</a>
                     </li>
                         <#list 1..countPage as page>
-                            <li  id="page_${page}">
-                                <a href="/car/all?numberPage=${page}">${page}</a>
+                            <li  id="page_${page-1}">
+                                <a href="/car/all?numberPage=${page-1}">${page}</a>
                             </li>
                         </#list>
+                    <li>
+                        <a href="/car/all?numberPage=${countPage-1}">End</a>
+                    </li>
                 </ul>
 
                 <br />

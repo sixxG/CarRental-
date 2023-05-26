@@ -5,6 +5,7 @@ import com.example.spring.security.repositories.FeedbackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.text.ParseException;
@@ -27,6 +28,7 @@ public class FeedbackService {
     public Feedback findByAuthor(String name) {
         return feedbackRepository.findByAuthor(name);
     }
+    @Transactional
     public void editFeedback(Map<String, String> form, String userName) throws ParseException {
 
         int id = Integer.parseInt(form.get("id"));
@@ -55,7 +57,7 @@ public class FeedbackService {
 
         feedbackRepository.findById(feedbackBefore.getId());
     }
-
+    @Transactional
     public void addFeedback(Map<String, String> form, String userName) throws ParseException {
 
         if (form.get("chekAnonymous") == null || form.get("AppealBody") == null)
@@ -75,6 +77,7 @@ public class FeedbackService {
         }
     }
 
+    @Transactional
     public void deleteById(int id) {
         if (feedbackRepository.findById(id) == null)
             return;

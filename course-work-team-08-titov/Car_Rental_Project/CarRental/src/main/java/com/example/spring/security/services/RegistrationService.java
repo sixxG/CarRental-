@@ -4,6 +4,7 @@ import com.example.spring.security.models.Role;
 import com.example.spring.security.models.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,6 +23,7 @@ public class RegistrationService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional
     public Map<String, Object> addUser(User user) {
         Map<String, Object> response = new HashMap<>();
         response.put("response", true);

@@ -13,8 +13,6 @@ import java.util.List;
 
 @Repository
 public interface FeedbackRepository extends JpaRepository<Feedback, Integer> {
-    Feedback findByScore(int score);
-
     Feedback findById(int id);
 
     Feedback findByAuthor(String author);

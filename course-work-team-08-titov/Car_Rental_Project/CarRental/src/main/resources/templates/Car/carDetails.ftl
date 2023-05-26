@@ -33,7 +33,7 @@
 
                 <form action="/car/edit" method="get">
 
-                    <input type="hidden" name="id" value="${car.getId()}">
+                    <input type="hidden" name="id" value="${car.getId()}"/>
 
                     <button type="submit" data-toggle="modal" data-target="#exampleModalCenter" style="border: 0px; align-items: center; padding: 5px; height: 40px" class="bi-edit">
                         <i class="fas fa-edit" style="font-size: 24px"></i>
@@ -45,6 +45,12 @@
         <!---->
         <div class="container-fluid bloc" style="width: 100%">
             <div class="col-lg-2 bloc-inside bloc-image">
+<#--                <img src="/imageCar/<#if car.image??>-->
+<#--                    ${car.image}-->
+<#--                    <#else>-->
+<#--                    car.png-->
+<#--                </#if>" width="100%" height="100%" style="border-radius: 15px;" />-->
+
                 <img src="/imageCar/${car.image}" width="100%" height="100%" style="border-radius: 15px;" />
             </div>
             <div class="col-lg-2 bloc-inside bloc-info">
@@ -63,7 +69,7 @@
                             <input class="form-control datepicker text-box single-line" id="dateEnd" min="02/15/2023 13:01:18" name="dateEnd" style="width: 100%;" type="datetime-local" value="" />
 
                             <input type="hidden" value="${car.id}" id="car_id" name="car_id">
-                            <input type="hidden" name="_csrf" value="${_csrf.token}">
+                            <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
                         </div>
                     </div>
                     <br />

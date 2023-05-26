@@ -8,7 +8,7 @@ public enum ContractCondition {
     COMPLETED ("Завершён"),
     AWAITING_PAYMENT_FINE("Ожидает оплаты штрафа");
 
-    private String title;
+    private final String title;
 
     ContractCondition(String title) {
         this.title = title;

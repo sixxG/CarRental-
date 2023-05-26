@@ -47,7 +47,7 @@
                     <#if activeContract.getStatus() = "Действует">
                         <form action="/contract/finish" method="post" style="width: 100%;">
                             <button style="font-size: 25px; background: #46F046; margin-bottom: 10px; width: 100%; display: block" class="btn-canceled button" onclick="NotFinish()">
-                                <input type="hidden" name="_csrf" value="${_csrf.token}">
+                                <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
                                 <input type="hidden" name="id" value="${activeContract.getId()}">
                                 Завершить
                             </button>
@@ -57,7 +57,7 @@
                     <#if activeContract.getStatus() = "Не подтверждён">
                         <div id="Canceled" style="width: 90%; display: block;">
                             <form action="contract/cancel" method="post">
-                                <input type="hidden" name="_csrf" value="${_csrf.token}">
+                                <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
                                 <input type="hidden" name="id" value="${activeContract.getId()}">
                                 <input type="submit" value="Отменить" class="btn-canceled button" style="width: 100%" />
                             </form>
@@ -313,10 +313,10 @@
     <script>
         // Получаем значение параметра "page" из URL
         const urlParamsContractsForClient = new URLSearchParams(window.location.search);
-        const page = urlParamsContractsForClient.get('page');
+        const pageContractsForClient = urlParamsContractsForClient.get('page');
 
         // Находим кнопку с id, соответствующим значению page
-        const button = document.getElementById('page_item_'+page);
+        const button = document.getElementById('page_item_'+pageContractsForClient);
 
         // Если такая кнопка найдена, то эмулируем ее нажатие
         if (button) {

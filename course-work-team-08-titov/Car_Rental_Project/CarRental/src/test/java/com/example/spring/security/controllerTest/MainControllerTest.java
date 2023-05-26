@@ -1,5 +1,6 @@
 package com.example.spring.security.controllerTest;
 
+import com.example.spring.security.models.Car;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +12,13 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static org.hamcrest.core.StringContains.containsString;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -45,7 +47,8 @@ public class MainControllerTest {
         this.mockMvc.perform(get("/"))
                 .andDo(print())
                 .andExpect(authenticated())
-                .andExpect(xpath("//div[@id='popular_cars']/div").nodeCount(3));
+                .andExpect(model().attributeExists("cars"))
+                .andExpect(model().attributeExists("carsBrand"));
     }
 
     @Test

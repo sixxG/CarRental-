@@ -10,7 +10,7 @@
 
         <div class="container-fluid bloc" style="background: rgba(40,40,40, 0.15);width: 100%; height: 100%; border-radius: 15px">
             <form action="/contract/edit" method="post">
-                <input type="hidden" name="_csrf" value="${_csrf.token}">
+                <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
                 <input type="hidden" name="id" value="${contract.getId()}">
 
                 <div class="col-lg-2" style="background: #ffffff; border-radius: 15px; margin: 15px; width: 40%; height: 100%; align-content:center;">
