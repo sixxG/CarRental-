@@ -106,33 +106,6 @@
             </li>
         </ul>
 
-<#--        <ul class="nav nav-tabs">-->
-<#--            <li class="active">-->
-<#--                <a data-toggle="tab" href="#ALL" style=" padding: 10px 5px 5px 5px;"><h4>Все</h4></a>-->
-<#--            </li>-->
-<#--            <li>-->
-<#--                <a href="/contract/list/all?page=1&status=Ожидает оплаты штрафа" style=" padding: 10px 5px 5px 5px;"><h4>Ожидают подтверждения</h4></a>-->
-<#--&lt;#&ndash;                <a data-toggle="tab" href="#NotConfirm" style=" padding: 10px 5px 5px 5px;"><h4>Ожидают подтверждения</h4></a>&ndash;&gt;-->
-<#--            </li>-->
-<#--            <li>-->
-<#--                <a data-toggle="tab" href="#Confirm" style=" padding: 10px 5px 5px 5px;"><h4>Подтверждённые</h4></a>-->
-<#--            </li>-->
-<#--            <li>-->
-<#--                <a data-toggle="tab" href="#Work" style=" padding: 10px 5px 5px 5px;"><h4>Действуют</h4></a>-->
-<#--            </li>-->
-<#--            <li>-->
-<#--                <a data-toggle="tab" href="#PaymentFine" style=" padding: 10px 5px 5px 5px;"><h4>Ожидают оплаты штрафа</h4></a>-->
-<#--            </li>-->
-<#--            <li>-->
-<#--                <a data-toggle="tab" href="#Completed" style=" padding: 10px 5px 5px 5px;"><h4>Завершённые</h4></a>-->
-<#--            </li>-->
-<#--            <li>-->
-<#--                <a data-toggle="tab" href="#Сancelled" style=" padding: 10px 5px 5px 5px;"><h4>Отменённые</h4></a>-->
-<#--            </li>-->
-<#--        </ul>-->
-
-        <!--Block-->
-
         <script>
             function changeHref(id) {
                 const previouslyHref = document.getElementById(id).getAttribute("href");
@@ -162,15 +135,15 @@
                                 <a class="page-link" href="/contract/list/all?page=1" id="startLink">Start</a>
                             </li>
                             <#list 1..countPage as page>
-                                <li class="page-item" id="page_item_${page}">
-                                    <a class="page-link" id="button_${page}" href="/contract/list/all?page=${page}">${page}</a>
+                                <li class="page-item" id="page_item_${page?c}">
+                                    <a class="page-link" id="button_${page?c}" href="/contract/list/all?page=${page?c}">${page?c}</a>
                                 </li>
                                 <script>
-                                    changeHref("button_${page}");
+                                    changeHref("button_${page?c}");
                                 </script>
                             </#list>
                             <li class="page-item">
-                                <a class="page-link" href="/contract/list/all?page=${countPage}" id="endLink">End</a>
+                                <a class="page-link" href="/contract/list/all?page=${countPage?c}" id="endLink">End</a>
                             </li>
                             <script>
                                 changeHref("startLink");

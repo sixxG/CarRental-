@@ -1,17 +1,21 @@
 package com.example.spring.security.services;
 
+import com.example.spring.security.models.Car;
+import com.example.spring.security.models.Contract;
 import com.example.spring.security.models.Role;
 import com.example.spring.security.models.User;
+import com.example.spring.security.repositories.CarRepository;
+import com.example.spring.security.repositories.ContractRepository;
 import com.example.spring.security.repositories.RoleRepository;
 import com.example.spring.security.repositories.UserRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,11 +23,15 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final ContractRepository contractRepository;
+    private final CarRepository carRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, ContractRepository contractRepository, CarRepository carRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.contractRepository = contractRepository;
+        this.carRepository = carRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -46,10 +54,12 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
     public User findOldestUser() {
-        return userRepository.findOldestUser();
+        Pageable pageable = PageRequest.of(0, 1);
+        return (User) userRepository.findOldestUser(pageable).getContent().get(0);
     }
     public User findYoungestUser() {
-        return userRepository.findYoungestUser();
+        Pageable pageable = PageRequest.of(0, 1);
+        return (User) userRepository.findYoungestUser(pageable).getContent().get(0);
     }
     @Transactional
     public boolean editeUser(int userId, Map<String, String> rolesList) {
@@ -82,6 +92,24 @@ public class UserService {
     @Transactional
     public void saveUser(User user) {
         userRepository.save(user);
+    }
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void deleteUser(int userID) {
+        if (userRepository.findById(userID) != null) {
+            List<String> statuses = new ArrayList<>(Arrays.asList("Не подтверждён", "Подтверждён", "Действует", "Ожидает оплаты штрафа"));
+            Contract contract = contractRepository.findByUserAndStatusIn(userRepository.findById(userID), statuses);
+            if (contract != null) {
+                contract.setStatus("Отменён");
+                Car car = contract.getCar();
+                car.setStatus("Свободна");
+                carRepository.save(car);
+                contractRepository.save(contract);
+            }
+            User deletedUser = userRepository.findById(6);
+            User user = userRepository.findById(userID);
+            contractRepository.setUserIfUserWasDeleted(deletedUser, user);
+            userRepository.deleteById(userID);
+        }
     }
     @Transactional
     public Map<String, Object> changePassword(Map<String, String> form, User user) {

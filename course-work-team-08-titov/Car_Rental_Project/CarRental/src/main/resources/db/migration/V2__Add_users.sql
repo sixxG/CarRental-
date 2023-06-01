@@ -18,6 +18,10 @@ insert into users (id, email, username, password, fio, birth_date, address, phon
     values (5, 'TestUser@mail.ru', 'test_user', '$2a$12$S2JpVOlJje2dbOaaNM8C0.BXhCYNBnAmy3FtL2a4yttm6ROi9Q4I.',
         'new User', '1990-01-01', 'new Address', '+8 800 555 3535', '1234 5678');
 
+insert into users (id, email, username, password, fio)
+    values (6, 'deletedUser@mail.ru', 'deletedUser', '$2a$12$S2JpVOlJje2dbOaaNM8C0.BXhCYNBnAmy3FtL2a4yttm6ROi9Q4I.',
+            'Пользователь был удалён');
+
 
 insert into roles (id, name)
     values (1, 'ADMIN');

@@ -18,7 +18,7 @@
 
         <div style="display: flex; background: rgba(40,40,40,0.15); width: 100%; height: 100%; border-radius: 15px; padding: 10px; margin-bottom: 10px;">
             <div style="padding: 0; display: inline-block; width: 50%" id="Renta">
-                <a href="/car/details?id=${activeContract.getCar().id}" style="font-size: 32px; color: black; text-align: center;">Автомобиль</a>
+                <a href="/car/details?id=${activeContract.getCar().id?c}" style="font-size: 32px; color: black; text-align: center;">Автомобиль</a>
                 <img src="/imageCar/${activeContract.getCar().image}" width="260" height="160" style="border-radius: 15px;">
                 <p style="font-size: 24px; color: black; font-weight: 600; text-align: center; margin-top: 5px;">${activeContract.getCar().brand} ${activeContract.getCar().model}</p>
             </div>
@@ -48,7 +48,7 @@
                         <form action="/contract/finish" method="post" style="width: 100%;">
                             <button style="font-size: 25px; background: #46F046; margin-bottom: 10px; width: 100%; display: block" class="btn-canceled button" onclick="NotFinish()">
                                 <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
-                                <input type="hidden" name="id" value="${activeContract.getId()}">
+                                <input type="hidden" name="id" value="${activeContract.getId()?c}">
                                 Завершить
                             </button>
                         </form>
@@ -58,7 +58,7 @@
                         <div id="Canceled" style="width: 90%; display: block;">
                             <form action="contract/cancel" method="post">
                                 <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
-                                <input type="hidden" name="id" value="${activeContract.getId()}">
+                                <input type="hidden" name="id" value="${activeContract.getId()?c}">
                                 <input type="submit" value="Отменить" class="btn-canceled button" style="width: 100%" />
                             </form>
                         </div>
@@ -69,7 +69,7 @@
         </div>
             <div style="display: block; width: 100%;">
                 <button style="font-size: 25px; padding: 0px; width: 100%;">
-                    <a href="/contract/details?id=${activeContract.getId()}" style="width: 100%; display: block">Подробнее</a>
+                    <a href="/contract/details?id=${activeContract.getId()?c}" style="width: 100%; display: block">Подробнее</a>
                 </button>
             </div>
 
@@ -107,12 +107,12 @@
                     <a class="page-link" href="/contract?page=1">Start</a>
                 </li>
                 <#list 1..countPage as page>
-                    <li class="page-item" id="page_item_${page}">
-                        <a class="page-link" id="button_${page}" href="/contract?page=${page}">${page}</a>
+                    <li class="page-item" id="page_item_${page?c}">
+                        <a class="page-link" id="button_${page?c}" href="/contract?page=${page?c}">${page?c}</a>
                     </li>
                 </#list>
                 <li class="page-item">
-                    <a class="page-link" href="/contract?page=${countPage}">End</a>
+                    <a class="page-link" href="/contract?page=${countPage?c}">End</a>
                 </li>
             </ul>
         </nav>
@@ -128,7 +128,7 @@
 
                         <div style="display: flex; background: rgba(40,40,40,0.15); width: 100%; height: 100%; border-radius: 15px; padding: 10px; margin-bottom: 10px;">
                             <div style="padding: 0; display: inline-block; width: 50%" id="Renta">
-                                <a href="/car/details?id=${contract.car.id}" style="font-size: 32px; color: black; text-align: center;">Автомобиль</a>
+                                <a href="/car/details?id=${contract.car.id?c}" style="font-size: 32px; color: black; text-align: center;">Автомобиль</a>
                                 <img src="/imageCar/${contract.car.image}" width="260" height="160" style="border-radius: 15px;">
                                 <p style="font-size: 24px; color: black; font-weight: 600; text-align: center; margin-top: 5px;">${contract.car.brand} ${contract.car.model}</p>
                             </div>
@@ -152,7 +152,7 @@
                             <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">
                                 <p style="font-size: 32px; color: black;">Цена</p>
                                 <p style="font-size: 32px; color: red;">${contract.price!"some error"}</p>
-                                <a href="/contract/details?id=${contract.getId()}" style="font-size: 25px; padding: 0px; width: 100%;">Подробнее</a>
+                                <a href="/contract/details?id=${contract.getId()?c}" style="font-size: 25px; padding: 0px; width: 100%;">Подробнее</a>
                             </div>
                         </div>
                         <br />
@@ -173,9 +173,9 @@
                     <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 80%;">
                         <div style="display: flex; background: rgba(40,40,40,0.15); width: 100%; height: 100%; border-radius: 15px; padding: 10px; margin-bottom: 10px;">
                             <div style="padding: 0; display: inline-block; width: 50%" id="Renta">
-                                <a class="AllCar" href="/car/details?id=${contractCanceled.getCar().getId()}">Автомобиль</a>
+                                <a class="AllCar" href="/car/details?id=${contractCanceled.getCar().getId()?c}">Автомобиль</a>
                                 <p style="font-size: 24px; color: black;">${contractCanceled.getCar().getBrand()} ${contractCanceled.getCar().getModel()!""}</p>
-                                <a href="/contract/details?id=${contractCanceled.getId()}" style="font-size: 25px; padding: 0; width: 100%;">Подробнее</a>
+                                <a href="/contract/details?id=${contractCanceled.getId()?c}" style="font-size: 25px; padding: 0; width: 100%;">Подробнее</a>
                             </div>
 
                             <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">
@@ -197,7 +197,7 @@
 
                             <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">
                                 <p style="font-size: 32px; color: black;">Цена</p>
-                                <p style="font-size: 32px; color: red;">${contractCanceled.getPrice()}</p>
+                                <p style="font-size: 32px; color: red;">${contractCanceled.getPrice()?c}</p>
                                 <p style="font-size: 32px; color: black;">Состояние</p>
                                 <p style="font-size: 20px; color: #404040;">${contractCanceled.getStatus()}</p>
                             </div>
@@ -221,9 +221,9 @@
 
                         <div style="display: flex; background: rgba(40,40,40,0.15); width: 100%; height: 100%; border-radius: 15px; padding: 10px; margin-bottom: 10px;">
                             <div style="padding: 0; display: inline-block; width: 50%" id="Renta">
-                                <a class="AllCar" href="/car/details?id=${finishedContract.getCar().getId()}">Автомобиль</a>
+                                <a class="AllCar" href="/car/details?id=${finishedContract.getCar().getId()?c}">Автомобиль</a>
                                 <p style="font-size: 24px; color: black;">${finishedContract.getCar().getBrand()} ${finishedContract.getCar().getModel()!""}</p>
-                                <a href="/contract/details?id=${finishedContract.getId()}" style="font-size: 25px; padding: 0px; width: 100%;">Подробнее</a>
+                                <a href="/contract/details?id=${finishedContract.getId()?c}" style="font-size: 25px; padding: 0px; width: 100%;">Подробнее</a>
                             </div>
 
                             <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">
@@ -245,7 +245,7 @@
 
                             <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">
                                 <p style="font-size: 32px; color: black;">Цена</p>
-                                <p style="font-size: 32px; color: red;">${finishedContract.getPrice()}</p>
+                                <p style="font-size: 32px; color: red;">${finishedContract.getPrice()?c}</p>
                                 <p style="font-size: 32px; color: black;">Состояние</p>
                                 <p style="font-size: 20px; color: #404040;">${finishedContract.getStatus()}</p>
                             </div>
@@ -269,9 +269,9 @@
 
                         <div style="display: flex; background: rgba(40,40,40,0.15); width: 100%; height: 100%; border-radius: 15px; padding: 10px; margin-bottom: 10px;">
                             <div style="padding: 0; display: inline-block; width: 50%" id="Renta">
-                                <a class="AllCar" href="/car/details?id=${contractFinished.getCar().getId()}">Автомобиль</a>
+                                <a class="AllCar" href="/car/details?id=${contractFinished.getCar().getId()?c}">Автомобиль</a>
                                 <p style="font-size: 24px; color: black;">${contractFinished.getCar().getBrand()} ${contractFinished.getCar().getModel()!""}</p>
-                                <a href="/contract/details?id=${contractFinished.getId()}" style="font-size: 25px; padding: 0px; width: 100%;">Подробнее</a>
+                                <a href="/contract/details?id=${contractFinished.getId()?c}" style="font-size: 25px; padding: 0px; width: 100%;">Подробнее</a>
                             </div>
 
                             <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">
@@ -293,7 +293,7 @@
 
                             <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">
                                 <p style="font-size: 32px; color: black;">Цена</p>
-                                <p style="font-size: 32px; color: red;">${contractFinished.getPrice()}</p>
+                                <p style="font-size: 32px; color: red;">${contractFinished.getPrice()?c}</p>
                                 <p style="font-size: 32px; color: black;">Состояние</p>
                                 <p style="font-size: 20px; color: #404040;">${contractFinished.getStatus()}</p>
                             </div>

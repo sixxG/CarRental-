@@ -252,7 +252,6 @@ public class CarService {
             response.put("map", errorMap);
             response.put("car", car);
 
-            return response;
         }
         else {
             boolean ifAdded = saveCar(car, file);
@@ -260,8 +259,8 @@ public class CarService {
             response.put("ifAdded", ifAdded);
             response.put("ifError", false);
 
-            return response;
         }
+        return response;
     }
 
     public Map<String, Object> findCar(Map<String, String> form) {

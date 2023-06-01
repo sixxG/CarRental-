@@ -6,9 +6,6 @@
     <link rel="stylesheet" href="/static/css/Appeal.css">
     <!--Отзывы-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
-    <#--Delete icon-->
-<#--    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
-    <#--Delete icon-->
 
     <script src="/static/js/Appeal.js"></script>
 
@@ -25,7 +22,7 @@
                     <form action="/account" method="post">
 
                         <input type="hidden" value="<#if _csrf?has_content>${_csrf.token}</#if>" name="_csrf"/>
-                        <input type="hidden" value="${client.getId()}" name="userId"/>
+                        <input type="hidden" value="${client.getId()?c}" name="userId"/>
 
                         <div class="form-horizontal">
                             <h4>Ваши данные</h4>
@@ -135,7 +132,7 @@
                                 <p>${usersFeedback.date?string("dd MMMM yyyy")}</p>
 
                                 <div style="display: flex; width: 100%; justify-content: center">
-                                    <form action="/appeal/delete?id=${usersFeedback.id}" method="post">
+                                    <form action="/appeal/delete?id=${usersFeedback.id?c}" method="post">
 
                                         <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
 
@@ -170,7 +167,7 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form action="/feedback/edit?id=${usersFeedback.getId()}" method="post" style="padding: 10px;">
+                                                        <form action="/feedback/edit?id=${usersFeedback.getId()?c}" method="post" style="padding: 10px;">
 
                                                             <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
 

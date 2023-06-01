@@ -18,12 +18,6 @@
                         <option value="${carBrand}">${carBrand}</option>
                     </#list>
                 </datalist>
-<#--                <select class="inputCar" id="ListBrand" name="ListBrand">-->
-<#--                    <option value="">Марка авто</option>-->
-<#--                    <#list carsBrand as carBrand>-->
-<#--                        <option value="${carBrand}">${carBrand}</option>-->
-<#--                    </#list>-->
-<#--                </select>-->
 
                 <select class="inputCar" id="ListTypeTransmition" name="ListTypeTransmition"><option value="">Тип КП</option>
                     <option value="Механическая">Механическая</option>
@@ -32,7 +26,6 @@
                 </select>
 
             </div>
-
 
             <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">
                 <input type="submit" value="Найти автомобиль" style="font-size: 24px; background: #46F046; padding: 10px; border-radius: 15px; border: 2px solid #46F046" />
@@ -438,7 +431,7 @@
 </#macro>
 
 <#macro carCardForMainPage car>
-    <div class="col-xl-3 col-lg-4" data-id="${car.id}">
+    <div class="col-xl-3 col-lg-4" data-id="${car.id?c}">
         <div class="bg-info img-rounded shadow-sm">
 
             <div style="padding: 15px; margin: 10px">
@@ -480,7 +473,7 @@
 
                 <h4 class="text-success text-uppercase" style="text-align: center"></h4>
                 <div style="width:100%; height:100%; text-align:center;">
-                    <a class="btn-details" href="/car/details?id=${car.id}">Подробнее</a>
+                    <a class="btn-details" href="/car/details?id=${car.id?c}">Подробнее</a>
                 </div>
             </div>
         </div>

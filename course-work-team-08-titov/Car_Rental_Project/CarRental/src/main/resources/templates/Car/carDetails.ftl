@@ -20,7 +20,7 @@
             <div style="display: flex; width: 100%; margin: 0 auto; justify-content: center">
                 <form action="/car/delete" method="get" style="margin-right: 10px">
 
-                    <input type="hidden" name="id" value="${car.getId()}">
+                    <input type="hidden" name="id" value="${car.getId()?c}">
 
                     <button type="submit" style="border: 0px; align-items: center; padding: 0px; height: 40px">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
@@ -33,7 +33,7 @@
 
                 <form action="/car/edit" method="get">
 
-                    <input type="hidden" name="id" value="${car.getId()}"/>
+                    <input type="hidden" name="id" value="${car.getId()?c}"/>
 
                     <button type="submit" data-toggle="modal" data-target="#exampleModalCenter" style="border: 0px; align-items: center; padding: 5px; height: 40px" class="bi-edit">
                         <i class="fas fa-edit" style="font-size: 24px"></i>
@@ -68,7 +68,7 @@
                             <br />
                             <input class="form-control datepicker text-box single-line" id="dateEnd" min="02/15/2023 13:01:18" name="dateEnd" style="width: 100%;" type="datetime-local" value="" />
 
-                            <input type="hidden" value="${car.id}" id="car_id" name="car_id">
+                            <input type="hidden" value="${car.id?c}" id="car_id" name="car_id">
                             <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
                         </div>
                     </div>
@@ -105,7 +105,7 @@
                 <hr />
 
                 <span class="period">
-            <b>${car.price}&nbsp;₽</b>
+            <b>${car.price?c}&nbsp;₽</b>
             <span style="font-size: 20px">/ сутки</span>
         </span>
                 <p>

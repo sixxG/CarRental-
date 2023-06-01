@@ -18,7 +18,7 @@
         <#list bestCars as bestCar>
           <tr>
             <td>
-              <a href="/car/details?id=${bestCar[0].id}">
+              <a href="/car/details?id=${bestCar[0].id?c}">
                 <h5>${bestCar[0].brand} ${bestCar[0].model} ${bestCar[0].year?c}</h5>
               </a>
             </td>
@@ -40,7 +40,7 @@
         <#list leastCars as leastCar>
           <tr>
             <td>
-              <a href="/car/details?id=${leastCar[0].id}">
+              <a href="/car/details?id=${leastCar[0].id?c}">
                 <h5>${leastCar[0].brand} ${leastCar[0].model} ${leastCar[0].year?c}</h5>
               </a>
             </td>
@@ -178,12 +178,12 @@
 
     <div class="col-xs-6 col-sm-4">
       <h3 class="reportsBlocksHeader">Максимальная цена аренды за день</h3>
-      <a href="/car/details?id=${maxPriceCarId}">
+      <a href="/car/details?id=${maxPriceCarId?c}">
         <h4 data-id="maxPrice_${maxPrice}">${maxPrice}</h4>
       </a>
 
       <h3 class="reportsBlocksHeader">Минимальная цена аренды за день</h3>
-      <a href="/car/details?id=${minPriceCarId}">
+      <a href="/car/details?id=${minPriceCarId?c}">
         <h4 data-id="minPrice_${minPrice}">${minPrice}</h4>
       </a>
 
@@ -193,12 +193,12 @@
       <hr style="background: #00ff00; height: 1px;"/>
 
       <h3 class="reportsBlocksHeader">Максимальный возраст авто</h3>
-      <a href="/car/details?id=${oldestCarId}">
+      <a href="/car/details?id=${oldestCarId?c}">
         <h4 data-id="maxYearCar_${maxYearCar}">${maxYearCar}</h4>
       </a>
 
       <h3 class="reportsBlocksHeader">Минимальный возраст авто</h3>
-      <a href="/car/details?id=${youngestCarId}">
+      <a href="/car/details?id=${youngestCarId?c}">
         <h4 data-id="minYearCar_${minYearCar}">${minYearCar}</h4>
       </a>
 
@@ -208,12 +208,12 @@
       <hr style="background: #00ff00; height: 1px;"/>
 
       <h3 class="reportsBlocksHeader">Максимальный пробег авто</h3>
-      <a href="/car/details?id=${maxMileageCarId}">
+      <a href="/car/details?id=${maxMileageCarId?c}">
         <h4 data-id="maxMileage_${maxMileage}">${maxMileage}</h4>
       </a>
 
       <h3 class="reportsBlocksHeader">Минимальный пробег авто</h3>
-      <a href="/car/details?id=${minMileageCarId}">
+      <a href="/car/details?id=${minMileageCarId?c}">
         <h4 data-id="minMileage_${minMileage}">${minMileage}</h4>
       </a>
 

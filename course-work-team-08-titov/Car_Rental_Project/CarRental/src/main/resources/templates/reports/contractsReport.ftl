@@ -120,7 +120,7 @@
                 <#list contractsForPeriod as count>
                     <tr>
                         <td data-id="${count.getId()}">
-                            <a class="carLink" href="/contract/details?id=${count.getId()}">${i}</a>
+                            <a class="carLink" href="/contract/details?id=${count.getId()?c}">${i}</a>
                         </td>
                         <td>${(count.dateStart).format('yyyy-MM-dd HH:mm:ss')}</td>
                         <td>${(count.dateEnd).format('yyyy-MM-dd HH:mm:ss')}</td>
@@ -164,11 +164,11 @@
 
     <div class="col-xs-6 col-sm-4">
         <h3 class="reportsBlocksHeader">Максимальная цена аренды</h3>
-        <a href="/contract/details?id=${idMaxPriceRental}">
+        <a href="/contract/details?id=${idMaxPriceRental?c}">
             <h4 data-id="maxPriceRental_${maxPriceRental}">${maxPriceRental} рублей</h4>
         </a>
         <h3 class="reportsBlocksHeader">Минимальная цена аренды</h3>
-        <a href="/contract/details?id=${idMinPriceRental}">
+        <a href="/contract/details?id=${idMinPriceRental?c}">
             <h4 data-id="minPriceRental_${minPriceRental}">${minPriceRental} рублей</h4>
         </a>
         <h3 class="reportsBlocksHeader">Средняя цена аренды</h3>

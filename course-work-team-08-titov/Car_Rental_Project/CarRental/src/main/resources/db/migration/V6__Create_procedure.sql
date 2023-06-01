@@ -44,3 +44,24 @@ SET
     username = "test_user"
 WHERE id = 5;
 END;
+
+DELIMITER ;;
+CREATE PROCEDURE generateUsers()
+BEGIN
+	declare v1 INT default 1;
+    declare id INT default 1;
+    WHILE v1 <= 25 do
+		INSERT INTO users (email, password, username, fio, birth_date, address, phone, driver_license)
+
+        VALUES (CONCAT('userEmail_', v1, ''), '$2a$12$S2JpVOlJje2dbOaaNM8C0.BXhCYNBnAmy3FtL2a4yttm6ROi9Q4I.', CONCAT('test_newUser_', v1, ''), '1', '1990-01-01', 'new Address', '+8 800 555 3535', '1234 5678');
+
+        set v1 = v1 + 1;
+        set id = last_insert_id();
+
+    INSERT INTO users_roles (user_id, role_id)
+    VALUES (id, '2');
+    END WHILE;
+END;;
+DELIMITER ;
+
+

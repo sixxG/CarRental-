@@ -138,7 +138,15 @@ public class ContractService {
             if (activeContract != null) {
                 LocalDateTime dateStart = activeContract.getDateStart();
                 LocalDateTime dateEnd = activeContract.getDateEnd();
-                Duration duration = Duration.between(dateStart, dateEnd);
+
+                LocalDateTime dateNow = LocalDateTime.now();
+                Duration duration;
+
+                if (dateStart.isAfter(dateNow)) {
+                    duration = Duration.between(dateStart, dateEnd);
+                } else {
+                    duration = Duration.between(dateNow, dateEnd);
+                }
 
                 long rentalHours = duration.toHours();
 

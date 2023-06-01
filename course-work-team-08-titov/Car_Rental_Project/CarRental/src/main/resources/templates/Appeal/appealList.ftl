@@ -290,7 +290,7 @@
                         <div class="sagestim-lonials">
 
                             <#list feedbacks as feedback>
-                                <div class="vemotau-vokusipol" data-id="feedback_${feedback.id}">
+                                <div class="vemotau-vokusipol" data-id="feedback_${feedback.id?c}">
                                     <div class="testimonial">
                                         <#if feedback.author = "Анонимный пользователь">
                                             <img src="https://avatars.mds.yandex.net/i?id=e2a359ae13e92835fdc492a249a50c30683f7429-8485986-images-thumbs&n=13" alt="">
@@ -387,9 +387,9 @@
                         <ul class="pagination" style="position: absolute; left: 45%">
                             <#list 1..countPage as page>
                                 <li  id="page_${page-1}">
-                                <a href="?numberPage=${page-1}" id="a_${page}">${page}</a>
+                                <a href="?numberPage=${page-1}" id="a_${page?c}">${page?c}</a>
                                     <script>
-                                        changeHref("a_${page}");
+                                        changeHref("a_${page?c}");
                                     </script>
                             </li>
                             </#list>

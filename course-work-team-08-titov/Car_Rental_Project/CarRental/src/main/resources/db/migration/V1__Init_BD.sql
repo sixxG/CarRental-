@@ -72,7 +72,7 @@ create table contracts (
    note varchar(255),
    price double precision not null,
    car_id integer not null,
-   client_id integer not null,
+   client_id integer,
    primary key (id)
 );
 
@@ -82,4 +82,5 @@ alter table contracts
 
 alter table contracts
     add constraint contracts_client_id
-    foreign key (client_id) references users (id);
+    foreign key (client_id) references users (id)
+    on delete set null;

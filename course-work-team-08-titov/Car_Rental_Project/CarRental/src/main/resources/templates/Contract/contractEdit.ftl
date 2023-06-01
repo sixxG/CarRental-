@@ -11,7 +11,7 @@
         <div class="container-fluid bloc" style="background: rgba(40,40,40, 0.15);width: 100%; height: 100%; border-radius: 15px">
             <form action="/contract/edit" method="post">
                 <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
-                <input type="hidden" name="id" value="${contract.getId()}">
+                <input type="hidden" name="id" value="${contract.getId()?c}">
 
                 <div class="col-lg-2" style="background: #ffffff; border-radius: 15px; margin: 15px; width: 40%; height: 100%; align-content:center;">
 
@@ -95,8 +95,8 @@
                 <div class="col-lg-2" style="background: #ffffff; border-radius: 15px; margin: 15px; width: 54%; height: 100%; align-content:center;">
 
                     <img src="/imageCar/${contract.getCar().getImage()}" style="width: 100%; height:350px; border-radius: 15px" />
-                    <a class="AllCar" href="/car/details?id=${contract.getCar().getId()}">Автомобиль</a>
-                    <p style="font-size: 24px; color: black; width: 100%; text-align:left; margin: 0;">${contract.getCar().getBrand()} ${contract.getCar().getModel()}, ${contract.getCar().getYear()}</p>
+                    <a class="AllCar" href="/car/details?id=${contract.getCar().getId()?c}">Автомобиль</a>
+                    <p style="font-size: 24px; color: black; width: 100%; text-align:left; margin: 0;">${contract.getCar().getBrand()} ${contract.getCar().getModel()}, ${contract.getCar().getYear()?c}</p>
 
                     <hr style="color: #5394FD; margin: 5px" />
 

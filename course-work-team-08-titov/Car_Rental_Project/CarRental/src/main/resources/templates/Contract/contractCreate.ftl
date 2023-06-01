@@ -331,7 +331,7 @@
                             <input type="number" value="${car.getPrice()?c}" id="PricePerDay" readonly="readonly" />
                         </div>
                     </div>
-                    <input type="hidden" value="${car.id}" name="car_id" id="car_id">
+                    <input type="hidden" value="${car.id?c}" name="car_id" id="car_id">
                 </form>
             </div>
             <div id="CarDetails" class="tab-pane fade in" style="width: 100%;">
@@ -365,7 +365,7 @@
                             <hr />
 
                             <span class="period">
-            <b>${car.price}&nbsp;₽</b>
+            <b>${car.price?c}&nbsp;₽</b>
             <span style="font-size: 20px">/ сутки</span>
         </span>
                             <p>
@@ -440,7 +440,7 @@
                                     <label>Мощность</label>
                                 </div>
                                 <div class="col-lg-2 character-data">
-                                    <label>${car.power}</label>
+                                    <label>${car.power?c}</label>
                                 </div>
                             </div>
                             <div style="display: flex; width: 100%;">
@@ -465,7 +465,7 @@
                                     <label>Год выпуска</label>
                                 </div>
                                 <div class="col-lg-2 character-data">
-                                    <label>${car.year}</label>
+                                    <label>${car.year?c}</label>
                                 </div>
                             </div>
                             <div style="display: flex; width: 100%;">
@@ -473,7 +473,7 @@
                                     <label>Пробег</label>
                                 </div>
                                 <div class="col-lg-2 character-data">
-                                    <label>${car.mileage}</label>
+                                    <label>${car.mileage?c}</label>
                                 </div>
                             </div>
                         </div>

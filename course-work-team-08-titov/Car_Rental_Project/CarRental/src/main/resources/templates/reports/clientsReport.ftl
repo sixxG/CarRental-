@@ -24,12 +24,12 @@
 
         <div class="col-xs-6 col-sm-4">
             <h3 class="reportsBlocksHeader">Максимальный возраст клиента</h3>
-            <a href="/user/${oldestUser}">
+            <a href="/user/${oldestUser?c}">
                 <h4 data-id="maxAgeClients_${maxAgeClients}">${maxAgeClients} лет</h4>
             </a>
 
             <h3 class="reportsBlocksHeader">Минимальный возраст клиента</h3>
-            <a href="/user/${youngestUser}">
+            <a href="/user/${youngestUser?c}">
                 <h4 data-id="minAgeClients_${minAgeClients}">${minAgeClients} лет</h4>
             </a>
 

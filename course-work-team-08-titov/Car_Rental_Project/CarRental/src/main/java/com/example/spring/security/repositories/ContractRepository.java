@@ -7,9 +7,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,6 +20,10 @@ public interface ContractRepository extends JpaRepository<Contract, Integer> {
     Long countByUser(User user);
     Page<Contract> findByUser(User user, Pageable pageable);
     Contract findByUserAndStatusIn(User user, List<String> conditions);
+    @Modifying
+    @Transactional
+    @Query("UPDATE Contract c SET c.user = :deletedUser WHERE c.user = :client")
+    void setUserIfUserWasDeleted(User deletedUser, User client);
     //reports
     @Query("SELECT c.car, COUNT(c.car) as rentalCount FROM Contract c GROUP BY c.car ORDER BY rentalCount DESC")
     List<Object[]> findMostRentedCarWithCount();
