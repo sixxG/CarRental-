@@ -30,6 +30,10 @@ public class UserDetailsService implements org.springframework.security.core.use
             throw  new UsernameNotFoundException(String.format("User '%s' not found", username));
         }
 
+        if (user.getActivationCode() != null) {
+            throw new IllegalStateException("User not activated");
+        }
+
         //Перегоняем юзеров наших в юзеров для Spring Security
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                 mapRolesToAuthorities(user.getRoles()));

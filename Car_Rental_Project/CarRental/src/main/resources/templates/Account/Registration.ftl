@@ -19,13 +19,6 @@
                 <p class="bloc-header-info">Заполните регистрационную форму</p>
             </div>
 
-            <!--            <hr style="color: #5394FD; margin: 5px" />-->
-
-            <!--            <div class="validation-summary-valid text-danger" data-valmsg-summary="true">-->
-            <!--                <ul>-->
-            <!--                    <li style="display:none"></li>-->
-            <!--                </ul>-->
-            <!--            </div>-->
             <span style="color: red; font-weight: 600; font-size: 14px; text-align: center; width: 100%;">${message?if_exists}</span>
 
             <div class="form-group" style="width: 100%; margin: 0 auto;">
@@ -37,7 +30,7 @@
             <div class="form-group" style="width: 100%; margin: 0 auto;">
                 <label class="bloc-input">Email</label>
                 <div class="bloc-input-info">
-                    <input type="email" name="email" class="bloc-input-input"/>
+                    <input type="email" name="email" class="bloc-input-input" placeholder="yourEmail@some.re"/>
                 </div>
             </div>
             <div class="form-group" style="width: 100%; margin: 0 auto;">

@@ -5,7 +5,6 @@ import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 
 @Entity
 @Data
@@ -14,21 +13,14 @@ public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     private String username;
-
     private String password;
-
     private String email;
-
+    private String activationCode;
     private String fio;
-
     private LocalDate birthDate;
-
     private String address;
-
     private String phone;
-
     private String driverLicense;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -123,6 +115,14 @@ public class User{
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getActivationCode() {
+        return activationCode;
+    }
+
+    public void setActivationCode(String activationCode) {
+        this.activationCode = activationCode;
     }
 
     @Override

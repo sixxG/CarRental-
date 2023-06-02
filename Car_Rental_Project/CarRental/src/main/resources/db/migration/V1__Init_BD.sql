@@ -43,6 +43,7 @@ create table users (
    address varchar(255) default '',
    phone varchar(255) default '',
    driver_license varchar(255) default '',
+   activation_Code varchar(255) default null,
 
    primary key (id)
 );

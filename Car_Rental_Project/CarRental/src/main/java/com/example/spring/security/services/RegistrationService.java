@@ -2,25 +2,28 @@ package com.example.spring.security.services;
 
 import com.example.spring.security.models.Role;
 import com.example.spring.security.models.User;
+import com.example.spring.security.repositories.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class RegistrationService {
     private final UserService userService;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
+    private final MailSender mailSender;
+    private final UserRepository userRepository;
 
-    public RegistrationService(UserService userService, RoleService roleService, PasswordEncoder passwordEncoder) {
+    public RegistrationService(UserService userService, RoleService roleService, PasswordEncoder passwordEncoder, MailSender mailSender,
+                               UserRepository userRepository) {
         this.userService = userService;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
+        this.mailSender = mailSender;
+        this.userRepository = userRepository;
     }
 
     @Transactional
@@ -46,9 +49,34 @@ public class RegistrationService {
 
         user.setRoles(roles);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setActivationCode(UUID.randomUUID().toString());
 
         userService.saveUser(user);
 
+        if (user.getEmail() != null && !user.getEmail().equals("")) {
+            String message = String.format(
+                    "Приветствую, %s! \n" +
+                            "Добро пожаловать в приложения CarFY! Пожалуйста, для активации вашего аккаунта, перейдите по следующей ссылке" +
+                            " http://localhost:8079/activate/%s",
+                    user.getUsername(),
+                    user.getActivationCode()
+            );
+            mailSender.send(user.getEmail(), "Код активации", message);
+        }
+
         return response;
+    }
+
+    public boolean activateUser(String code) {
+        User user = userRepository.findByActivationCode(code);
+
+        if (user == null) {
+            return false;
+        }
+
+        user.setActivationCode(null);
+        userRepository.save(user);
+
+        return true;
     }
 }

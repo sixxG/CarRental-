@@ -18,6 +18,8 @@
         <hr style="color: #5394FD; margin: 5px" />
         <br />
 
+        <h3 style="color: white; font-weight: 300; text-align: center">${message?if_exists}</h3>
+        <h3 style="color: white; font-weight: 300; text-align: center">${errorMessage?if_exists}</h3>
         <form action="/login" class="form-horizontal" method="post">
             <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
             <div class="form-group" style="width: 100%; margin: 0 auto;">
@@ -38,6 +40,7 @@
             <br />
             <hr style="color: #5394FD; margin: 5px" />
             <br />
+
             <div class="form-group" style="text-align: center; width: 100%; margin: 0 auto">
                 <input type="submit" value="ВОЙТИ" data-id="ВОЙТИ" class="log-btn" />
             </div>
@@ -55,5 +58,6 @@
     <br />
 
 </div>
+
 
 </@c.page>

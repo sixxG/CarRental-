@@ -23,4 +23,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Page findYoungestUser(Pageable pageable);
     @Query("SELECT AVG(YEAR(CURRENT_DATE) - YEAR(u.birthDate)) FROM User u JOIN u.roles r WHERE r.name = 'USER'")
     Double getAverageAge();
+
+    User findByActivationCode(String code);
 }
