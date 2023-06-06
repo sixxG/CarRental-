@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Service
 public class RegistrationService {
@@ -51,18 +53,24 @@ public class RegistrationService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setActivationCode(UUID.randomUUID().toString());
 
-        userService.saveUser(user);
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
 
-        if (user.getEmail() != null && !user.getEmail().equals("")) {
-            String message = String.format(
-                    "Приветствую, %s! \n" +
-                            "Добро пожаловать в приложения CarFY! Пожалуйста, для активации вашего аккаунта, перейдите по следующей ссылке" +
-                            " http://localhost:8079/activate/%s",
-                    user.getUsername(),
-                    user.getActivationCode()
-            );
-            mailSender.send(user.getEmail(), "Код активации", message);
-        }
+        executorService.execute(() -> {
+            userService.saveUser(user);
+        });
+
+        executorService.execute(() -> {
+            if (user.getEmail() != null && !user.getEmail().equals("")) {
+                String message = String.format(
+                        "Приветствую, %s! \n" +
+                                "Добро пожаловать в приложения CarFY! Пожалуйста, для активации вашего аккаунта, перейдите по следующей ссылке" +
+                                " http://localhost:8079/activate/%s",
+                        user.getUsername(),
+                        user.getActivationCode()
+                );
+                mailSender.send(user.getEmail(), "Код активации", message);
+            }
+        });
 
         return response;
     }

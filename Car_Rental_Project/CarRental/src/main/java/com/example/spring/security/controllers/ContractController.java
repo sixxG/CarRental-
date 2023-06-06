@@ -5,10 +5,10 @@ import com.example.spring.security.repositories.ContractRepository;
 import com.example.spring.security.services.CarService;
 import com.example.spring.security.services.ContractService;
 
+import com.example.spring.security.services.MailSender;
 import com.example.spring.security.services.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +23,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Controller
 @RequestMapping("/contract")
@@ -32,13 +34,15 @@ public class ContractController {
     private final CarService carService;
     private final UserService userService;
     private final ContractRepository contractRepository;
+    private final MailSender mailSender;
 
     public ContractController(ContractService contractService, CarService carService, UserService userService,
-                              ContractRepository contractRepository) {
+                              ContractRepository contractRepository, MailSender mailSender) {
         this.contractService = contractService;
         this.carService = carService;
         this.userService = userService;
         this.contractRepository = contractRepository;
+        this.mailSender = mailSender;
     }
 
     @GetMapping("")
@@ -211,13 +215,39 @@ public class ContractController {
     public String confirmContract(@RequestParam int id, Principal user) {
         if (contractService.findById(id) == null)
             return "redirect:list/all?page=1";
+
         User manager = userService.findByUsername(user.getName());
         Contract contract = contractService.findById(id);
 
-        contract.setFioManager(manager.getFio());
-        contract.setStatus(ContractCondition.CONFIRMED.toString());
+        // Создание ExecutorService с двумя потоками
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
 
-        contractService.save(contract);
+        // Первый поток для отправки письма
+        executorService.execute(() -> {
+            String message = String.format(
+                    "Уважаемый клиент, %s! \n" +
+                            "Ваша заявка на аренду автомобиля %s на период с %s по %s подтверждена! \n" +
+                            "Теперь вам необходимо оплатить аренду при получении автомобиля. \n" +
+                            "%s \n" +
+                            "Насладитесь поездкой!",
+                    contract.getUser().getFio(),
+                    contract.getCar().getBrand() + " " + contract.getCar().getModel(),
+                    contract.getDateStart().toString(),
+                    contract.getDateEnd().toString(),
+                    " http://localhost:8079/"
+            );
+            mailSender.send(contract.getUser().getEmail(), "Заявка на аренду подтверждена", message);
+        });
+
+        // Второй поток для обновления контракта
+        executorService.execute(() -> {
+            contract.setFioManager(manager.getFio());
+            contract.setStatus(ContractCondition.CONFIRMED.toString());
+            contractService.save(contract);
+        });
+
+        // Завершение работы ExecutorService
+        executorService.shutdown();
 
         return "redirect:list/all?page=1";
     }
@@ -238,9 +268,31 @@ public class ContractController {
             contractService.save(contract);
             return "redirect:/contract?page=1";
         } else {
-            contract.setFioManager(client.getFio());
-            contract.setStatus(ContractCondition.CANCELED.toString());
-            contractService.save(contract);
+            ExecutorService executorService = Executors.newFixedThreadPool(2);
+
+            executorService.execute(() -> {
+                String message = String.format(
+                        "Уважаемый клиент, %s! \n" +
+                                "Ваша заявка на аренду автомобиля %s на период с %s по %s отменена! \n" +
+                                "Проверьте корректность указанных данных и оставьте заявку повторно. \n" +
+                                "%s",
+                        contract.getUser().getFio(),
+                        contract.getCar().getBrand() + " " + contract.getCar().getModel(),
+                        contract.getDateStart().toString(),
+                        contract.getDateEnd().toString(),
+                        " http://localhost:8079/"
+                );
+                mailSender.send(contract.getUser().getEmail(), "Заявка на аренду отменена", message);
+            });
+
+            executorService.execute(() -> {
+                contract.setFioManager(client.getFio());
+                contract.setStatus(ContractCondition.CANCELED.toString());
+                contractService.save(contract);
+            });
+
+            executorService.shutdown();
+
             return "redirect:list/all?page=1";
         }
     }
@@ -278,9 +330,31 @@ public class ContractController {
             contractService.save(contract);
             return "redirect:/contract?page=1";
         } else {
-            contract.setFioManager(client.getFio());
-            contract.setStatus(ContractCondition.COMPLETED.toString());
-            contractService.save(contract);
+            ExecutorService executorService = Executors.newFixedThreadPool(2);
+
+            executorService.execute(() -> {
+                String message = String.format(
+                        "Уважаемый клиент, %s! \n" +
+                                "Ваша аренда автомобиля %s на период с %s по %s завершена! \n" +
+                                "Вы можете оставить отзыв о наше компании! И конечно же мы ждём вас снова!\n" +
+                                "%s",
+                        contract.getUser().getFio(),
+                        contract.getCar().getBrand() + " " + contract.getCar().getModel(),
+                        contract.getDateStart().toString(),
+                        contract.getDateEnd().toString(),
+                        " http://localhost:8079/"
+                );
+                mailSender.send(contract.getUser().getEmail(), "Аренда завершена", message);
+            });
+
+            executorService.execute(() -> {
+                contract.setFioManager(client.getFio());
+                contract.setStatus(ContractCondition.COMPLETED.toString());
+                contractService.save(contract);
+            });
+
+            executorService.shutdown();
+
             return "redirect:list/all?page=1";
         }
     }
@@ -294,10 +368,32 @@ public class ContractController {
         User manager = userService.findByUsername(user.getName());
         Contract contract = contractService.findById(id);
 
-        contract.setFioManager(manager.getFio());
-        contract.setStatus(ContractCondition.AWAITING_PAYMENT_FINE.toString());
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
 
-        contractService.save(contract);
+        executorService.execute(() -> {
+            String message = String.format(
+                    "Уважаемый клиент, %s! \n" +
+                            "На вашу аренду автомобиля %s на период с %s по %s назначен штраф! \n" +
+                            "Для получения подробной информации, посетите страницу \"Мои аренды\". \n" +
+                            "Вам необходимо оплатить штраф не позднее чем через 10 дней после его установления! \n" +
+                            "%s",
+                    contract.getUser().getFio(),
+                    contract.getCar().getBrand() + " " + contract.getCar().getModel(),
+                    contract.getDateStart().toString(),
+                    contract.getDateEnd().toString(),
+                    " http://localhost:8079/"
+            );
+            mailSender.send(contract.getUser().getEmail(), "Назначен штраф на аренду", message);
+        });
+
+        executorService.execute(() -> {
+            contract.setFioManager(manager.getFio());
+            contract.setStatus(ContractCondition.AWAITING_PAYMENT_FINE.toString());
+
+            contractService.save(contract);
+        });
+
+        executorService.shutdown();
 
         return "redirect:list/all?page=1";
     }

@@ -34,7 +34,7 @@
                 <p style="font-size: 32px; color: black;">Дата возврата</p>
                 <p style="font-size: 26px; color: #404040;" id="dateEnd">${(activeContract.dateEnd).format('yyyy-MM-dd HH:mm:ss')}</p>
                 <p style="font-size: 32px; color: black;">Примечания</p>
-                <p style="font-size: 20px; color: #404040;">Хочу автомобиль</p>
+                <p style="font-size: 20px; color: #404040;">${activeContract.note!"some error"}</p>
             </div>
 
             <div style="padding: 0; display: inline-block; text-align: center; width: 50%;">
