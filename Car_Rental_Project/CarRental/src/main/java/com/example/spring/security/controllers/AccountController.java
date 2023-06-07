@@ -4,6 +4,7 @@ import com.example.spring.security.models.User;
 import com.example.spring.security.services.FeedbackService;
 import com.example.spring.security.services.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +42,6 @@ public class AccountController {
                                @RequestParam("userId") User user, Model model) {
         user.setFio(form.get("fio"));
         user.setBirthDate(LocalDate.parse(form.get("birthDate")));
-        user.setEmail(form.get("email"));
         user.setAddress(form.get("address"));
         user.setPhone(form.get("phone"));
         user.setDriverLicense(form.get("driverLicense"));
@@ -73,5 +73,32 @@ public class AccountController {
             model.addAttribute("error", response.get("error"));
         }
         return "User/userChangePassword";
+    }
+
+    @GetMapping("/change_email")
+    public String getChangeEmailForm(Model model, Principal principal) {
+
+        User user = userService.findByUsername(principal.getName());
+
+        model.addAttribute("usersID", user.getId());
+        model.addAttribute("userEmail", user.getEmail());
+
+        return "User/userChangeEmail";
+    }
+
+    @PostMapping("/change_email")
+    public String changeUsersEmail(@RequestParam Map<String, String> form, Model model) {
+
+        Map<String, Object> response = userService.changeEmail(form);
+
+        model.addAttribute("usersID", form.get("usersID"));
+        model.addAttribute("userEmail", form.get("newEmail"));
+
+        if ((boolean) response.get("response")) {
+            model.addAttribute("successEmail", response.get("successEmail"));
+        } else {
+            model.addAttribute("error", response.get("error"));
+        }
+        return "User/userChangeEmail";
     }
 }

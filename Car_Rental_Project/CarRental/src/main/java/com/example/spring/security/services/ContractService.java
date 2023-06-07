@@ -271,8 +271,6 @@ public class ContractService {
         return response;
     }
 
-    //Для предотвращения двойной аренды при тестировании
-    //@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
     @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.REPEATABLE_READ)
     public synchronized Map<String, Object> createContract(Map<String, String> form) {
         Map<String, Object> response = new HashMap<>();

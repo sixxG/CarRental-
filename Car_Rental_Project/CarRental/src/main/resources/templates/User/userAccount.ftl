@@ -44,7 +44,7 @@
                             <div class="form-group">
                                 <label class="control-label col-md-2" for="email">Email</label>
                                 <div class="col-md-10">
-                                    <input class="form-control text-box single-line" name="email" type="text" value="${client.email!""}" required/>
+                                    <input class="form-control text-box single-line" name="email" type="text" value="${client.email!""}" disabled="disabled"/>
                                 </div>
                             </div>
 
@@ -94,6 +94,14 @@
                     <dd>
                         [
                         <a href="/account/change_password">Смена пароля</a>                ]
+                    </dd>
+
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Почта:</dt>
+                    <dd>
+                        [
+                        <a href="/account/change_email">Смена почты</a>                ]
                     </dd>
 
                 </dl>

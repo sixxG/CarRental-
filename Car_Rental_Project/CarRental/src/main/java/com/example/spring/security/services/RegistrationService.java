@@ -72,6 +72,8 @@ public class RegistrationService {
             }
         });
 
+        executorService.shutdown();
+
         return response;
     }
 
