@@ -369,12 +369,20 @@ public class ContractController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @PostMapping("/fine")
-    public String fineContract(@RequestParam int id, Principal user) {
+    public String fineContract(@RequestParam int id, @RequestParam Map<String, String> form, Principal user) {
         if (contractService.findById(id) == null)
             return "redirect:list/all?page=1";
+        String reasonCancel = form.get("otherReasonCancel") == null || form.get("otherReasonCancel").equals("")
+                ? form.get("reasonCancel") : form.get("otherReasonCancel");
 
         User manager = userService.findByUsername(user.getName());
         Contract contract = contractService.findById(id);
+
+        if (contract.getNote() == null || contract.getNote().equals("")) {
+            contract.setNote(reasonCancel);
+        } else {
+            contract.setNote(reasonCancel + "   |--Назначен штраф--|    " + contract.getNote());
+        }
 
         ExecutorService executorService = Executors.newFixedThreadPool(2);
 
@@ -397,7 +405,6 @@ public class ContractController {
         executorService.execute(() -> {
             contract.setFioManager(manager.getFio());
             contract.setStatus(ContractCondition.AWAITING_PAYMENT_FINE.toString());
-
             contractService.save(contract);
         });
 

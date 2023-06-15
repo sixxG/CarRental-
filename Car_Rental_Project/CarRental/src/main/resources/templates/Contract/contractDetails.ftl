@@ -292,11 +292,92 @@
 
                     <#if contract.getStatus() = "Действует" || contract.getStatus() = "Завершён">
                         <form action="fine" method="post">
-                            <button style="width: 100%;" class="btn-canceled button" onclick="NotFinish()">
-                                <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>}">
-                                <input type="hidden" name="id" value="${contract.getId()?c}">
+                            <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>}">
+                            <input type="hidden" name="id" value="${contract.getId()?c}">
+
+
+                            <button type="button" class="btn-canceled button" style="width: 100%"  data-toggle="modal" data-target="#rent_penalty">
                                 Назначить штраф
                             </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="rent_penalty" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title" id="exampleModalLongTitle" style="text-align: center">Тип штрафа.</h3>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <p style="text-align: center; font-size: 24px; font-weight: 600">Укажите тип фртафа:</p>
+                                            <div class="modal-footer" style="width: 90%; text-align: inherit">
+                                                <div class="form-check" onclick="otherReasonPenaltyForClientHide()">
+                                                    <input class="form-check-input" type="radio" name="reasonCancel" id="reasonCancelForClient1" value="Штраф: Повреждение автомобиля в результате аварии или неосторожного обращения.
+                                                    Стоимость штрафа зависит от величины ущерба и будет определена после оценки повреждений." checked>
+                                                    <label class="form-check-label" for="reasonCancelForClient1">
+                                                        Штраф: Повреждение автомобиля в результате аварии или неосторожного обращения.
+                                                        Стоимость штрафа зависит от величины ущерба и будет определена после оценки повреждений.
+                                                    </label>
+                                                </div>
+                                                <div class="form-check" onclick="otherReasonPenaltyForClientHide()">
+                                                    <input class="form-check-input" type="radio" name="reasonCancel" id="reasonCancelForClient2" value="Штраф: Невозвращение автомобиля с полным баком топлива.
+                                                    Стоимость штрафа будет рассчитана исходя из необходимого количества топлива для заполнения бака.">
+                                                    <label class="form-check-label" for="reasonCancelForClient2">
+                                                        Штраф: Невозвращение автомобиля с полным баком топлива.
+                                                        Стоимость штрафа будет рассчитана исходя из необходимого количества топлива для заполнения бака.
+                                                    </label>
+                                                </div>
+                                                <div class="form-check" onclick="otherReasonPenaltyForClientHide()">
+                                                    <input class="form-check-input" type="radio" name="reasonCancel" id="reasonCancelForClient3" value="Штраф: Нарушение правил эксплуатации автомобиля, включая курение внутри салона, загрязнение или повреждение интерьера и неправильное использование автомобиля.
+                                                     Стоимость штрафа зависит от характера нарушения и требуется индивидуальная оценка.">
+                                                    <label class="form-check-label" for="reasonCancelForClient3">
+                                                        Штраф: Нарушение правил эксплуатации автомобиля, включая курение внутри салона, загрязнение или повреждение интерьера и неправильное использование автомобиля.
+                                                        Стоимость штрафа зависит от характера нарушения и требуется индивидуальная оценка.
+                                                    </label>
+                                                </div>
+                                                <div class="form-check" onclick="otherReasonPenaltyForClientShow()">
+                                                    <input class="form-check-input" type="radio" name="reasonCancel" id="otherForClient" value="otherForClient">
+                                                    <label class="form-check-label" for="otherForClient">
+                                                        Другое
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div id="otherReasonPenalty" style="display: none;">
+                                                <div class="form-group">
+                                                    <label for="otherReasonPenaltyForClient">Укажите тип штрафа:</label>
+                                                    <input class="form-control" id="otherReasonPenaltyText" name="otherReasonCancel"/>
+                                                </div>
+                                            </div>
+
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Выйти</button>
+                                            <button type="submit" class="btn btn-primary">Сохранить</button>
+                                        </div>
+
+                                        <script>
+                                            function otherReasonPenaltyForClientShow() {
+                                                // При выборе радио-кнопки "Другое"
+                                                $('#otherForClient').change(function() {
+                                                    if ($(this).is(':checked')) {
+                                                        $('#otherReasonPenalty').show();
+                                                    } else {
+                                                        $('#otherReasonPenalty').hide();
+                                                    }
+                                                });
+                                            }
+                                            function otherReasonPenaltyForClientHide() {
+                                                document.getElementById("otherReasonPenaltyText").value = null;
+                                                $('#otherReasonPenalty').hide();
+                                            }
+                                        </script>
+
+                                    </div>
+                                </div>
+                            </div>
+
                         </form>
                     </#if>
 
