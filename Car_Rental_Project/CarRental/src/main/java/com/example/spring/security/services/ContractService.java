@@ -159,12 +159,15 @@ public class ContractService {
 
             response.put("canceledContracts", contracts.stream()
                     .filter(contract -> contract.getStatus().equals(ContractCondition.CANCELED.toString()))
+                    .sorted(Comparator.comparing(Contract::getDateStart))
                     .collect(Collectors.toList()));
             response.put("finishedContracts", contracts.stream()
                     .filter(contract -> contract.getStatus().equals(ContractCondition.COMPLETED.toString()))
+                    .sorted(Comparator.comparing(Contract::getDateStart))
                     .collect(Collectors.toList()));
             response.put("finedContracts", contracts.stream()
                     .filter(contract -> contract.getStatus().equals(ContractCondition.AWAITING_PAYMENT_FINE.toString()))
+                    .sorted(Comparator.comparing(Contract::getDateStart))
                     .collect(Collectors.toList()));
         }
         return response;

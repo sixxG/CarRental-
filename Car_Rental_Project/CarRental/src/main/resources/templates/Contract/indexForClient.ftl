@@ -27,7 +27,7 @@
                 <p style="font-size: 32px; color: black;">Дата получения</p>
                 <p style="font-size: 26px; color: #404040;">${(activeContract.dateStart).format('yyyy-MM-dd HH:mm:ss')}</p>
                 <p style="font-size: 32px; color: black;">Доп. опции</p>
-                <p style="font-size: 20px; color: #404040;">Видеорегистратор;<br> Автобокс; <br> Детское-кресло;3</p>
+                <p style="font-size: 20px; color: #404040;">${(activeContract.additionalOptions)!""}</p>
             </div>
 
             <div style="padding: 0; display: inline-block; width: 50%; margin-left: 15px;">
@@ -59,7 +59,83 @@
                             <form action="contract/cancel" method="post">
                                 <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
                                 <input type="hidden" name="id" value="${activeContract.getId()?c}">
-                                <input type="submit" value="Отменить" class="btn-canceled button" style="width: 100%" />
+
+                                <button type="button" class="btn-canceled button" style="width: 100%"  data-toggle="modal" data-target="#reason_cancel">
+                                    Отменить
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="reason_cancel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title" id="exampleModalLongTitle" style="text-align: center">Причина отмены заявки.</h3>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <p style="text-align: center; font-size: 24px; font-weight: 600">Укажите причину отмены заявки:</p>
+                                                <div class="modal-footer" style="width: 90%; text-align: initial">
+                                                    <div class="form-check" onclick="otherReasonForClientHide()">
+                                                        <input class="form-check-input" type="radio" name="reasonCancel" id="reasonCancelForClient1" value="Изменились планы" checked>
+                                                        <label class="form-check-label" for="reasonCancelForClient1">
+                                                            Изменились планы
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check" onclick="otherReasonForClientHide()">
+                                                        <input class="form-check-input" type="radio" name="reasonCancel" id="reasonCancelForClient2" value="Обнаружил несоответствия в информации об автомобиле или условиях аренды!">
+                                                        <label class="form-check-label" for="reasonCancelForClient2">
+                                                            Обнаружил несоответствия в информации об автомобиле или условиях аренды!
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check" onclick="otherReasonForClientHide()">
+                                                        <input class="form-check-input" type="radio" name="reasonCancel" id="reasonCancelForClient3" value="Возникли непредвиденные обстоятельства!">
+                                                        <label class="form-check-label" for="reasonCancelForClient3">
+                                                            Возникли непредвиденные обстоятельства!
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check" onclick="otherReasonForClientShow()">
+                                                        <input class="form-check-input" type="radio" name="reasonCancel" id="otherForClient" value="otherForClient">
+                                                        <label class="form-check-label" for="otherForClient">
+                                                            Другое
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                                <div id="otherReasonForClient" style="display: none;">
+                                                    <div class="form-group">
+                                                        <label for="otherReasonForClientText">Укажите причину отмены:</label>
+                                                        <input class="form-control" id="otherReasonForClientText" name="otherReasonCancel"/>
+                                                    </div>
+                                                </div>
+
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Выйти</button>
+                                                <button type="submit" class="btn btn-primary">Сохранить</button>
+                                            </div>
+
+                                            <script>
+                                                function otherReasonForClientShow() {
+                                                    // При выборе радио-кнопки "Другое"
+                                                    $('#otherForClient').change(function() {
+                                                        if ($(this).is(':checked')) {
+                                                            $('#otherReasonForClient').show();
+                                                        } else {
+                                                            $('#otherReasonForClient').hide();
+                                                        }
+                                                    });
+                                                }
+                                                function otherReasonForClientHide() {
+                                                    document.getElementById("otherReasonForClientText").value = null;
+                                                    $('#otherReasonForClient').hide();
+                                                }
+                                            </script>
+
+                                        </div>
+                                    </div>
+                                </div>
+
                             </form>
                         </div>
                     </#if>
@@ -137,14 +213,14 @@
                                 <p style="font-size: 32px; color: black;">Дата получения</p>
                                 <p style="font-size: 26px; color: #404040;">${(contract.dateStart).format('yyyy-MM-dd HH:mm:ss')}</p>
                                 <p style="font-size: 32px; color: black;">Доп. опции</p>
-                                <p style="font-size: 20px; color: #404040;">Видеорегистратор;<br> Автобокс; <br> Детское-кресло;3</p>
+                                <p style="font-size: 20px; color: #404040;">${(contract.additionalOptions)!""}</p>
                             </div>
 
                             <div style="padding: 0; display: inline-block; width: 50%; margin-left: 15px;">
                                 <p style="font-size: 32px; color: black;">Дата возврата</p>
                                 <p style="font-size: 26px; color: #404040;">${(contract.dateEnd).format('yyyy-MM-dd HH:mm:ss')}</p>
                                 <p style="font-size: 32px; color: black;">Примечания</p>
-                                <p style="font-size: 20px; color: #404040;">Хочу автомобиль</p>
+                                <p style="font-size: 20px; color: #404040;">${(contract.note)!""}</p>
                                 <p style="font-size: 32px; color: black;">Статус</p>
                                 <p style="font-size: 26px; color: #404040;">${contract.status!"some error"}</p>
                             </div>
@@ -169,7 +245,7 @@
         <div id="CanceledContract" class="tab-pane fade in">
             <br />
             <#if canceledContracts?has_content>
-                <#list canceledContracts?sort_by("dateStart")?reverse as contractCanceled>
+                <#list canceledContracts as contractCanceled>
                     <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 80%;">
                         <div style="display: flex; background: rgba(40,40,40,0.15); width: 100%; height: 100%; border-radius: 15px; padding: 10px; margin-bottom: 10px;">
                             <div style="padding: 0; display: inline-block; width: 50%" id="Renta">

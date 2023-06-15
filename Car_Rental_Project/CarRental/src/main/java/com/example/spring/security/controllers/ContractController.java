@@ -253,9 +253,11 @@ public class ContractController {
     }
 
     @PostMapping("/cancel")
-    public String cancelContract(@RequestParam int id, Principal user) {
+    public String cancelContract(@RequestParam int id, @RequestParam Map<String, String> form, Principal user) {
         if (contractService.findById(id) == null || contractService.findById(id).getStatus().equals("Отменён"))
             return "redirect:/";
+        String reasonCancel = form.get("otherReasonCancel") == null || form.get("otherReasonCancel").equals("")
+                ? form.get("reasonCancel") : form.get("otherReasonCancel");
 
         Contract contract = contractService.findById(id);
         User client = userService.findByUsername(user.getName());
@@ -263,8 +265,15 @@ public class ContractController {
         contract.getCar().setStatus("Свободна");
         carService.saveCar(contract.getCar());
 
+        contract.setStatus(ContractCondition.CANCELED.toString());
+
+        if (contract.getNote() == null) {
+            contract.setNote(reasonCancel);
+        } else {
+            contract.setNote(reasonCancel + "   |--Отмена--|    " + contract.getNote());
+        }
+
         if (client.getRoles().contains(new Role(2, "USER"))) {
-            contract.setStatus(ContractCondition.CANCELED.toString());
             contractService.save(contract);
             return "redirect:/contract?page=1";
         } else {
@@ -287,7 +296,6 @@ public class ContractController {
 
             executorService.execute(() -> {
                 contract.setFioManager(client.getFio());
-                contract.setStatus(ContractCondition.CANCELED.toString());
                 contractService.save(contract);
             });
 

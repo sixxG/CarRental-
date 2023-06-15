@@ -87,12 +87,12 @@
                         <a href="/car/all?numberPage=0">Start</a>
                     </li>
                         <#list 1..countPage as page>
-                            <li  id="page_${page-1?c}">
-                                <a href="/car/all?numberPage=${page-1?c}">${page?c}</a>
+                            <li  id="page_${page-1}">
+                                <a href="/car/all?numberPage=${page-1}">${page?c}</a>
                             </li>
                         </#list>
                     <li>
-                        <a href="/car/all?numberPage=${countPage-1?c}">End</a>
+                        <a href="/car/all?numberPage=${countPage-1}">End</a>
                     </li>
                 </ul>
 

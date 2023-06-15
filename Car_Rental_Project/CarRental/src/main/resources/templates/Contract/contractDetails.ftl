@@ -6,6 +6,8 @@
 
     <link href="/static/css/ContractDetails.css" rel="stylesheet" />
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <div class="container body-content" style="display: flex; flex-direction: column; min-height: 100%; width: 80%;">
 
 
@@ -168,7 +170,83 @@
                         <form action="cancel" method="post">
                             <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
                             <input type="hidden" name="id" value="${contract.getId()?c}">
-                            <input type="submit" value="Отменить" class="btn-canceled button" style="width: 100%" />
+
+                            <button type="button" class="btn-canceled button" style="width: 100%"  data-toggle="modal" data-target="#reason_cancel">
+                                Отменить
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="reason_cancel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title" id="exampleModalLongTitle" style="text-align: center">Причина отмены заявки.</h3>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <p style="text-align: center; font-size: 24px; font-weight: 600">Укажите причину отмены заявки:</p>
+                                            <div class="modal-footer" style="width: 90%; text-align: inherit">
+                                                <div class="form-check" onclick="otherReasonForClientHide()">
+                                                    <input class="form-check-input" type="radio" name="reasonCancel" id="reasonCancelForClient1" value="Изменились планы" checked>
+                                                    <label class="form-check-label" for="reasonCancelForClient1">
+                                                        Изменились планы
+                                                    </label>
+                                                </div>
+                                                <div class="form-check" onclick="otherReasonForClientHide()">
+                                                    <input class="form-check-input" type="radio" name="reasonCancel" id="reasonCancelForClient2" value="Обнаружил несоответствия в информации об автомобиле или условиях аренды!">
+                                                    <label class="form-check-label" for="reasonCancelForClient2">
+                                                        Обнаружил несоответствия в информации об автомобиле или условиях аренды!
+                                                    </label>
+                                                </div>
+                                                <div class="form-check" onclick="otherReasonForClientHide()">
+                                                    <input class="form-check-input" type="radio" name="reasonCancel" id="reasonCancelForClient3" value="Возникли непредвиденные обстоятельства!">
+                                                    <label class="form-check-label" for="reasonCancelForClient3">
+                                                        Возникли непредвиденные обстоятельства!
+                                                    </label>
+                                                </div>
+                                                <div class="form-check" onclick="otherReasonForClientShow()">
+                                                    <input class="form-check-input" type="radio" name="reasonCancel" id="otherForClient" value="otherForClient">
+                                                    <label class="form-check-label" for="otherForClient">
+                                                        Другое
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div id="otherReasonForClient" style="display: none;">
+                                                <div class="form-group">
+                                                    <label for="otherReasonForClientText">Укажите причину отмены:</label>
+                                                    <input class="form-control" id="otherReasonForClientText" name="otherReasonCancel"/>
+                                                </div>
+                                            </div>
+
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Выйти</button>
+                                            <button type="submit" class="btn btn-primary">Сохранить</button>
+                                        </div>
+
+                                        <script>
+                                            function otherReasonForClientShow() {
+                                                // При выборе радио-кнопки "Другое"
+                                                $('#otherForClient').change(function() {
+                                                    if ($(this).is(':checked')) {
+                                                        $('#otherReasonForClient').show();
+                                                    } else {
+                                                        $('#otherReasonForClient').hide();
+                                                    }
+                                                });
+                                            }
+                                            function otherReasonForClientHide() {
+                                                document.getElementById("otherReasonForClientText").value = null;
+                                                $('#otherReasonForClient').hide();
+                                            }
+                                        </script>
+
+                                    </div>
+                                </div>
+                            </div>
+
                         </form>
                     </#if>
 
@@ -227,7 +305,83 @@
                         <form action="cancel" method="post">
                             <input type="hidden" name="_csrf" value="<#if _csrf?has_content>${_csrf.token}</#if>">
                             <input type="hidden" name="id" value="${contract.getId()?c}">
-                            <input type="submit" value="Отменить" class="btn-canceled button" style="width: 100%" />
+
+                            <button type="button" class="btn-canceled button" style="width: 100%"  data-toggle="modal" data-target="#reason_cancel">
+                                Отменить
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="reason_cancel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title" id="exampleModalLongTitle" style="text-align: center">Причина отмены заявки.</h3>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <p style="text-align: center; font-size: 24px; font-weight: 600">Укажите причину отмены заявки:</p>
+                                            <div class="modal-footer" style="width: 90%; text-align: inherit">
+                                                <div class="form-check" onclick="otherReasonHide()">
+                                                    <input class="form-check-input" type="radio" name="reasonCancel" id="exampleRadios1" value="Некорректные личные данные клиента!" checked>
+                                                    <label class="form-check-label" for="exampleRadios1">
+                                                        Некорректные личные данные клиента!
+                                                    </label>
+                                                </div>
+                                                <div class="form-check" onclick="otherReasonHide()">
+                                                    <input class="form-check-input" type="radio" name="reasonCancel" id="exampleRadios2" value="Невалидные данные доставки/получения автомобиля!">
+                                                    <label class="form-check-label" for="exampleRadios2">
+                                                        Невалидные данные доставки/получения автомобиля!
+                                                    </label>
+                                                </div>
+                                                <div class="form-check" onclick="otherReasonHide()">
+                                                    <input class="form-check-input" type="radio" name="reasonCancel" id="exampleRadios3" value="Ошибка со стороны компании!">
+                                                    <label class="form-check-label" for="exampleRadios3">
+                                                        Ошибка со стороны компании!
+                                                    </label>
+                                                </div>
+                                                <div class="form-check" onclick="otherReasonShow()">
+                                                    <input class="form-check-input" type="radio" name="reasonCancel" id="other" value="other">
+                                                    <label class="form-check-label" for="other">
+                                                        Другое
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div id="otherReason" style="display: none;">
+                                                <div class="form-group">
+                                                    <label for="otherReasonText">Укажите причину отмены:</label>
+                                                    <input class="form-control" id="otherReasonText" name="otherReasonCancel"></input>
+                                                </div>
+                                            </div>
+
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Выйти</button>
+                                            <button type="submit" class="btn btn-primary">Сохранить</button>
+                                        </div>
+
+                                        <script>
+                                            function otherReasonShow() {
+                                                // При выборе радио-кнопки "Другое"
+                                                $('#other').change(function() {
+                                                    if ($(this).is(':checked')) {
+                                                        $('#otherReason').show();
+                                                    } else {
+                                                        $('#otherReason').hide();
+                                                    }
+                                                });
+                                            }
+                                            function otherReasonHide() {
+                                                document.getElementById("otherReasonText").value = null;
+                                                $('#otherReason').hide();
+                                            }
+                                        </script>
+
+                                    </div>
+                                </div>
+                            </div>
+
                         </form>
                     </#if>
                 </#if>
